@@ -42,7 +42,7 @@ def is_model_on_hub(model_name: str, revision: str, token: str = None, trust_rem
         config = AutoConfig.from_pretrained(model_name, revision=revision, trust_remote_code=trust_remote_code, token=token)
         if test_tokenizer:
             tokenizer_config = get_tokenizer_config(model_name) 
-            if tokenizer_config is not None:
+            if tokenizer_config not in [None, {}]:
                 tokenizer_class_candidate = tokenizer_config.get("tokenizer_class", None)
             else:
                 tokenizer_class_candidate = config.tokenizer_class 
