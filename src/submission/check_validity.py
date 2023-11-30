@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, timezone
 import huggingface_hub
 from huggingface_hub import ModelCard
 from huggingface_hub.hf_api import ModelInfo
-from transformers import AutoConfig
+from transformers import AutoConfig, AutoTokenizer
 from transformers.models.auto.tokenization_auto import tokenizer_class_from_name, get_tokenizer_config
 
 from src.envs import HAS_HIGHER_RATE_LIMIT
@@ -41,18 +41,12 @@ def is_model_on_hub(model_name: str, revision: str, token: str = None, trust_rem
     try:
         config = AutoConfig.from_pretrained(model_name, revision=revision, trust_remote_code=trust_remote_code, token=token)
         if test_tokenizer:
-            tokenizer_config = get_tokenizer_config(model_name) 
-            if tokenizer_config not in [None, {}]:
-                tokenizer_class_candidate = tokenizer_config.get("tokenizer_class", None)
-            else:
-                tokenizer_class_candidate = config.tokenizer_class 
-
-
-            tokenizer_class = tokenizer_class_from_name(tokenizer_class_candidate)
-            if tokenizer_class is None:
+            try:
+                AutoTokenizer.from_pretrained(model_name, revision=revision, trust_remote_code=trust_remote_code, token=token)
+            except ValueError as e:
                 return (
                     False,
-                    f"uses {tokenizer_class_candidate}, which is not in a transformers release, therefore not supported at the moment.",
+                    f"uses a tokenizer which is not in a transformers release: {e}",
                     None
                 )
         return True, None, config
