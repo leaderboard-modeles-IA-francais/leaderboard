@@ -20,7 +20,6 @@ class Tasks(Enum):
     truthfulqa = Task("truthfulqa:mc", "mc2", "TruthfulQA")
     winogrande = Task("winogrande", "acc", "Winogrande")
     gsm8k = Task("gsm8k", "acc", "GSM8K")
-    drop = Task("drop", "f1", "DROP")
 
 # These classes are for user facing column names,
 # to avoid having to change them all around the code
@@ -79,7 +78,6 @@ baseline_row = {
     AutoEvalColumn.truthfulqa.name: 25.0,
     AutoEvalColumn.winogrande.name: 50.0,
     AutoEvalColumn.gsm8k.name: 0.21,
-    AutoEvalColumn.drop.name: 0.47,
     AutoEvalColumn.dummy.name: "baseline",
     AutoEvalColumn.model_type.name: "",
 }
@@ -89,7 +87,6 @@ baseline_row = {
 # HellaSwag human baseline is 0.95 (source: https://deepgram.com/learn/hellaswag-llm-benchmark-guide)
 # MMLU human baseline is 0.898 (source: https://openreview.net/forum?id=d7KBjmI3GmQ)
 # TruthfulQA human baseline is 0.94(source: https://arxiv.org/pdf/2109.07958.pdf)
-# Drop: https://leaderboard.allenai.org/drop/submissions/public
 # Winogrande: https://leaderboard.allenai.org/winogrande/submissions/public
 # GSM8K: paper
 # Define the human baselines
@@ -104,7 +101,6 @@ human_baseline_row = {
     AutoEvalColumn.truthfulqa.name: 94.0,
     AutoEvalColumn.winogrande.name: 94.0,
     AutoEvalColumn.gsm8k.name: 100,
-    AutoEvalColumn.drop.name: 96.42,
     AutoEvalColumn.dummy.name: "human_baseline",
     AutoEvalColumn.model_type.name: "",
 }
