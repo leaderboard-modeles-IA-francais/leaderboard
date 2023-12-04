@@ -9,6 +9,7 @@ from src.display.about import (
     EVALUATION_QUEUE_TEXT,
     INTRODUCTION_TEXT,
     LLM_BENCHMARKS_TEXT,
+    FAQ_TEXT,
     TITLE,
 )
 from src.display.css_html_js import custom_css
@@ -269,6 +270,7 @@ with demo:
                     gr.Plot(value=chart, min_width=500) 
         with gr.TabItem("📝 About", elem_id="llm-benchmark-tab-table", id=2):
             gr.Markdown(LLM_BENCHMARKS_TEXT, elem_classes="markdown-text")
+            gr.Markdown(FAQ_TEXT, elem_classes="markdown-text")
 
         with gr.TabItem("🚀 Submit here! ", elem_id="llm-benchmark-tab-table", id=3):
             with gr.Column():
