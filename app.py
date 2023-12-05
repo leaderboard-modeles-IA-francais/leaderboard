@@ -378,9 +378,9 @@ scheduler.start()
 # Both launches the space and its CI
 configure_space_ci(
     demo.queue(default_concurrency_limit=40),
-    trusted_authors=["clefourrier", "SaylorTwift", "thomwolf"],  # space owners + manually trusted authors
+    trusted_authors=[],  # add manually trusted authors
     private="True",  # ephemeral spaces will have same visibility as the main space. Otherwise, set to `True` or `False` explicitly.
-    variables="auto",  # same variables as the main space. Otherwise, set to a `Dict[str, str]`.
+    variables={},  # We overwrite HF_HOME as tmp CI spaces will have no cache 
     secrets=["HF_TOKEN", "H4_TOKEN"],  # which secret do I want to copy from the main space? Can be a `List[str]`.
     hardware=None,  # "cpu-basic" by default. Otherwise set to "auto" to have same hardware as the main space or any valid string value.
     storage=None,  # no storage by default. Otherwise set to "auto" to have same storage as the main space or any valid string value.
