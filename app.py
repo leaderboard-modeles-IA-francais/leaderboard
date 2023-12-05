@@ -378,7 +378,7 @@ scheduler.start()
 # Both launches the space and its CI
 configure_space_ci(
     demo.queue(default_concurrency_limit=40),
-    trusted_authors=[],  # space owners + manually trusted authors
+    trusted_authors=["clefourrier", "SaylorTwift", "thomwolf"],  # space owners + manually trusted authors
     private="True",  # ephemeral spaces will have same visibility as the main space. Otherwise, set to `True` or `False` explicitly.
     variables="auto",  # same variables as the main space. Otherwise, set to a `Dict[str, str]`.
     secrets=["HF_TOKEN", "H4_TOKEN"],  # which secret do I want to copy from the main space? Can be a `List[str]`.
