@@ -42,13 +42,15 @@ def is_model_on_hub(model_name: str, revision: str, token: str = None, trust_rem
         config = AutoConfig.from_pretrained(model_name, revision=revision, trust_remote_code=trust_remote_code, token=token)
         if test_tokenizer:
             try:
-                AutoTokenizer.from_pretrained(model_name, revision=revision, trust_remote_code=trust_remote_code, token=token)
+                tk = AutoTokenizer.from_pretrained(model_name, revision=revision, trust_remote_code=trust_remote_code, token=token)
             except ValueError as e:
                 return (
                     False,
                     f"uses a tokenizer which is not in a transformers release: {e}",
                     None
                 )
+            except Exception as e:
+                return (False, "'s tokenizer cannot be loaded. Is your tokenizer class in a stable transformers release, and correctly configured?", None)
         return True, None, config
 
     except ValueError:
