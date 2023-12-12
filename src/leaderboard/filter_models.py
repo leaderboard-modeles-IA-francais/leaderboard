@@ -14,12 +14,15 @@ FLAGGED_MODELS = {
     "AIDC-ai-business/Marcoroni-13B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/287",
     "AIDC-ai-business/Marcoroni-7B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/287",
     "TigerResearch/tigerbot-70b-chat-v4-4k": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/438",
-    "TigerResearch/tigerbot-70b-chat-v2": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/438"
+    "TigerResearch/tigerbot-70b-chat-v2": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/438",
 }
 
 # Models which have been requested by orgs to not be submitted on the leaderboard
 DO_NOT_SUBMIT_MODELS = [
     "Voicelab/trurl-2-13b",  # trained on MMLU
+    "TigerResearch/tigerbot-70b-chat", # per authors request
+    "TigerResearch/tigerbot-70b-chat-v2", # per authors request
+    "TigerResearch/tigerbot-70b-chat-v4-4k", # per authors request
 ]
 
 
