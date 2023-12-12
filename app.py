@@ -176,7 +176,7 @@ with demo:
                         )
                     with gr.Row():
                         deleted_models_visibility = gr.Checkbox(
-                            value=False, label="Show gated/private/deleted models", interactive=True
+                            value=False, label="Show private/deleted models", interactive=True
                         )
                 with gr.Column(min_width=320):
                     #with gr.Box(elem_id="box-filter"):
