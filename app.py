@@ -86,6 +86,11 @@ def update_table(
     return df
 
 
+def load_query(request: gr.Request):  # triggered only once at startup => read query parameter if it exists
+    query = request.query_params.get("query") or ""
+    return query, query # return one for the "search_bar", one for a hidden component that triggers a reload only if value has changed
+
+
 def search_table(df: pd.DataFrame, query: str) -> pd.DataFrame:
     return df[(df[AutoEvalColumn.dummy.name].str.contains(query, case=False))]
 
@@ -236,6 +241,25 @@ with demo:
                 ],
                 leaderboard_table,
             )
+
+            # Define a hidden component that will trigger a reload only if a query parameter has be set
+            hidden_search_bar = gr.Textbox(value="", visible=False)
+            hidden_search_bar.change(
+                update_table,
+                [
+                    hidden_leaderboard_table_for_search,
+                    shown_columns,
+                    filter_columns_type,
+                    filter_columns_precision,
+                    filter_columns_size,
+                    deleted_models_visibility,
+                    search_bar,
+                ],
+                leaderboard_table,
+            )
+            # Check query parameter once at startup and update search bar + hidden component
+            demo.load(load_query, inputs=[], outputs=[search_bar, hidden_search_bar])
+            
             for selector in [shown_columns, filter_columns_type, filter_columns_precision, filter_columns_size, deleted_models_visibility]:
                 selector.change(
                     update_table,
