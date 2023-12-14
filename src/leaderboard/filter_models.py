@@ -13,8 +13,7 @@ FLAGGED_MODELS = {
     "AIDC-ai-business/Marcoroni-70B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/287",
     "AIDC-ai-business/Marcoroni-13B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/287",
     "AIDC-ai-business/Marcoroni-7B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/287",
-    "TigerResearch/tigerbot-70b-chat-v4-4k": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/438",
-    "TigerResearch/tigerbot-70b-chat-v2": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/438",
+    "fblgit/una-xaberius-34b-v1beta": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/444",
 }
 
 # Models which have been requested by orgs to not be submitted on the leaderboard
