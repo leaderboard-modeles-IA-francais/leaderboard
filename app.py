@@ -218,7 +218,7 @@ with demo:
                 elem_id="leaderboard-table",
                 interactive=False,
                 visible=True,
-                column_widths=["2%", "33%"] 
+                #column_widths=["2%", "33%"] 
             )
 
             # Dummy leaderboard for handling the case when the user uses backspace key
