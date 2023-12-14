@@ -348,7 +348,7 @@ with demo:
                         choices=[t.to_str(" : ") for t in ModelType if t != ModelType.Unknown],
                         label="Model type",
                         multiselect=False,
-                        value=None,
+                        value=ModelType.FT.to_str(" : "),
                         interactive=True,
                     )
 
