@@ -28,6 +28,15 @@ FLAGGED_MODELS = {
     "mncai/mistral-7b-dpo-merge-v1.1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "mncai/mistral-7b-dpo-v6": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "Toten5/LeoScorpius-GreenNode-7B-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "GreenNode/GreenNodeLM-7B-v1olet":  "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "quantumaikr/quantum-dpo-v0.1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "quantumaikr/quantum-v0.01": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "mncai/mistral-7b-dpo-v5": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "cookinai/BruinHermes": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "jan-ai/Pandora-10.7B-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "v1olet/v1olet_marcoroni-go-bruins-merge-7B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "rwitz2/pee": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+
 }
 
 # Models which have been requested by orgs to not be submitted on the leaderboard
