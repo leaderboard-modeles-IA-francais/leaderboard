@@ -51,6 +51,7 @@ auto_eval_column_dict.append(["params", ColumnContent, ColumnContent("#Params (B
 auto_eval_column_dict.append(["likes", ColumnContent, ColumnContent("Hub ❤️", "number", False)])
 auto_eval_column_dict.append(["still_on_hub", ColumnContent, ColumnContent("Available on the hub", "bool", False)])
 auto_eval_column_dict.append(["revision", ColumnContent, ColumnContent("Model sha", "str", False, False)])
+auto_eval_column_dict.append(["flagged", ColumnContent, ColumnContent("Flagged", "bool", False, False)])
 # Dummy column for the search bar (hidden by the custom CSS)
 auto_eval_column_dict.append(["dummy", ColumnContent, ColumnContent("model_name_for_query", "str", False, dummy=True)])
 
@@ -80,6 +81,7 @@ baseline_row = {
     AutoEvalColumn.gsm8k.name: 0.21,
     AutoEvalColumn.dummy.name: "baseline",
     AutoEvalColumn.model_type.name: "",
+    AutoEvalColumn.flagged.name: False,
 }
 
 # Average ⬆️ human baseline is 0.897 (source: averaging human baselines below)

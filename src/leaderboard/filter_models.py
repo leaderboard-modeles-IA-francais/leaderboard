@@ -14,6 +14,17 @@ FLAGGED_MODELS = {
     "AIDC-ai-business/Marcoroni-13B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/287",
     "AIDC-ai-business/Marcoroni-7B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/287",
     "fblgit/una-xaberius-34b-v1beta": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/444",
+    "jan-hq/trinity-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "rwitz2/go-bruins-v2.1.1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "rwitz2/go-bruins-v2.1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "GreenNode/GreenNodeLM-v3olet-7B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "GreenNode/GreenNodeLM-7B-v4leo": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "GreenNode/LeoScorpius-GreenNode-7B-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "viethq188/LeoScorpius-7B-Chat-DPO": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "GreenNode/GreenNodeLM-7B-v2leo": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "janai-hq/trinity-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "ignos/LeoScorpius-GreenNode-Alpaca-7B-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "fblgit/una-cybertron-7b-v3-OMA": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
 }
 
 # Models which have been requested by orgs to not be submitted on the leaderboard
@@ -36,6 +47,9 @@ def flag_models(leaderboard_data: list[dict]):
             model_data[
                 AutoEvalColumn.model.name
             ] = f"{model_data[AutoEvalColumn.model.name]} has been flagged! {issue_link}"
+            model_data[AutoEvalColumn.flagged.name] = True
+        else:
+            model_data[AutoEvalColumn.flagged.name] = False
 
 
 def remove_forbidden_models(leaderboard_data: list[dict]):
