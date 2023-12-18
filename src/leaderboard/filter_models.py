@@ -25,6 +25,8 @@ FLAGGED_MODELS = {
     "janai-hq/trinity-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "ignos/LeoScorpius-GreenNode-Alpaca-7B-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "fblgit/una-cybertron-7b-v3-OMA": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "mncai/mistral-7b-dpo-merge-v1.1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "mncai/mistral-7b-dpo-v6": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
 }
 
 # Models which have been requested by orgs to not be submitted on the leaderboard
