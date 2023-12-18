@@ -159,6 +159,9 @@ This is a leaderboard for Open LLMs, and we'd love for as many people as possibl
 ### 4) Fill up your model card
 When we add extra information about models to the leaderboard, it will be automatically taken from the model card
 
+### 5) Select the correct precision
+Not all models are converted properly from `float16` to `bfloat16`, and selecting the wrong precision can sometimes cause evaluation error (as loading a `bf16` model in `fp16` can sometimes generate NaNs, depending on the weight range).
+
 ## In case of model failure
 If your model is displayed in the `FAILED` category, its execution stopped.
 Make sure you have followed the above steps first.
