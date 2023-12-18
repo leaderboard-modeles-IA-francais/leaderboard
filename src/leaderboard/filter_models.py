@@ -31,7 +31,7 @@ FLAGGED_MODELS = {
     "GreenNode/GreenNodeLM-7B-v1olet":  "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "quantumaikr/quantum-dpo-v0.1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "quantumaikr/quantum-v0.01": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
-    "quantumaikr/quantum-trinity-v0.01": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "quantumaikr/quantum-trinity-v0.1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "mncai/mistral-7b-dpo-v5": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "cookinai/BruinHermes": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "jan-ai/Pandora-10.7B-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
