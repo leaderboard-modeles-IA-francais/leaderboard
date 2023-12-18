@@ -36,6 +36,7 @@ FLAGGED_MODELS = {
     "cookinai/BruinHermes": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "jan-ai/Pandora-10.7B-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "v1olet/v1olet_marcoroni-go-bruins-merge-7B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "v1olet/v1olet_merged_dpo_7B_v3": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "rwitz2/pee": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
 }
 
