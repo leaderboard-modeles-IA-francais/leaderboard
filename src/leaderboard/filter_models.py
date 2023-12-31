@@ -38,7 +38,8 @@ FLAGGED_MODELS = {
     "v1olet/v1olet_marcoroni-go-bruins-merge-7B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "v1olet/v1olet_merged_dpo_7B_v3": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "rwitz2/pee": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
-    "zyh3826 / GML-Mistral-merged-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/503"
+    "zyh3826 / GML-Mistral-merged-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/503",
+    "dillfrescott/trinity-medium": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
 }
 
 # Models which have been requested by orgs to not be submitted on the leaderboard
