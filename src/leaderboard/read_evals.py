@@ -138,7 +138,7 @@ class EvalResult:
             "eval_name": self.eval_name,  # not a column, just a save name,
             AutoEvalColumn.precision.name: self.precision.value.name,
             AutoEvalColumn.model_type.name: self.model_type.value.name,
-            AutoEvalColumn.merge.name: self.merge,
+            AutoEvalColumn.merged.name: self.merge,
             AutoEvalColumn.model_type_symbol.name: self.model_type.value.symbol,
             AutoEvalColumn.weight_type.name: self.weight_type.value.name,
             AutoEvalColumn.architecture.name: self.architecture,

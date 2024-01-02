@@ -78,10 +78,11 @@ def update_table(
     precision_query: str,
     size_query: list,
     show_deleted: bool,
+    show_merges: bool,
     show_flagged: bool,
     query: str,
 ):
-    filtered_df = filter_models(hidden_df, type_query, size_query, precision_query, show_deleted, show_flagged)
+    filtered_df = filter_models(hidden_df, type_query, size_query, precision_query, show_deleted, show_merges, show_flagged)
     filtered_df = filter_queries(query, filtered_df)
     df = select_columns(filtered_df, columns)
     return df
@@ -129,13 +130,16 @@ def filter_queries(query: str, filtered_df: pd.DataFrame):
 
 
 def filter_models(
-    df: pd.DataFrame, type_query: list, size_query: list, precision_query: list, show_deleted: bool, show_flagged: bool
+    df: pd.DataFrame, type_query: list, size_query: list, precision_query: list, show_deleted: bool, show_merges: bool, show_flagged: bool
 ) -> pd.DataFrame:
     # Show all models
     if show_deleted:
         filtered_df = df
     else:  # Show only still on the hub models
         filtered_df = df[df[AutoEvalColumn.still_on_hub.name] == True]
+
+    if not show_merges:
+        filtered_df = filtered_df[filtered_df[AutoEvalColumn.merged.name] == False]
 
     if not show_flagged:
         filtered_df = filtered_df[filtered_df[AutoEvalColumn.flagged.name] == False]
@@ -151,7 +155,7 @@ def filter_models(
 
     return filtered_df
 
-leaderboard_df = filter_models(leaderboard_df, [t.to_str(" : ") for t in ModelType], list(NUMERIC_INTERVALS.keys()), [i.value.name for i in Precision], False, False)
+leaderboard_df = filter_models(leaderboard_df, [t.to_str(" : ") for t in ModelType], list(NUMERIC_INTERVALS.keys()), [i.value.name for i in Precision], False, False, False)
 
 demo = gr.Blocks(css=custom_css)
 with demo:
@@ -187,6 +191,9 @@ with demo:
                     with gr.Row():
                         deleted_models_visibility = gr.Checkbox(
                             value=False, label="Show private/deleted models", interactive=True
+                        )
+                        merged_models_visibility = gr.Checkbox(
+                            value=False, label="Show merges", interactive=True
                         )
                         flagged_models_visibility = gr.Checkbox(
                             value=False, label="Show flagged models", interactive=True
@@ -245,6 +252,7 @@ with demo:
                     filter_columns_precision,
                     filter_columns_size,
                     deleted_models_visibility,
+                    merged_models_visibility,
                     flagged_models_visibility,
                     search_bar,
                 ],
@@ -262,6 +270,7 @@ with demo:
                     filter_columns_precision,
                     filter_columns_size,
                     deleted_models_visibility,
+                    merged_models_visibility,
                     flagged_models_visibility,
                     search_bar,
                 ],
@@ -270,7 +279,7 @@ with demo:
             # Check query parameter once at startup and update search bar + hidden component
             demo.load(load_query, inputs=[], outputs=[search_bar, hidden_search_bar])
             
-            for selector in [shown_columns, filter_columns_type, filter_columns_precision, filter_columns_size, deleted_models_visibility, flagged_models_visibility]:
+            for selector in [shown_columns, filter_columns_type, filter_columns_precision, filter_columns_size, deleted_models_visibility, merged_models_visibility, flagged_models_visibility]:
                 selector.change(
                     update_table,
                     [
@@ -280,6 +289,7 @@ with demo:
                         filter_columns_precision,
                         filter_columns_size,
                         deleted_models_visibility,
+                        merged_models_visibility,
                         flagged_models_visibility,
                         search_bar,
                     ],

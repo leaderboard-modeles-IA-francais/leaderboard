@@ -46,7 +46,7 @@ auto_eval_column_dict.append(["model_type", ColumnContent, ColumnContent("Type",
 auto_eval_column_dict.append(["architecture", ColumnContent, ColumnContent("Architecture", "str", False)])
 auto_eval_column_dict.append(["weight_type", ColumnContent, ColumnContent("Weight type", "str", False, True)])
 auto_eval_column_dict.append(["precision", ColumnContent, ColumnContent("Precision", "str", False)])
-auto_eval_column_dict.append(["merge", ColumnContent, ColumnContent("Merged", "bool", False)])
+auto_eval_column_dict.append(["merged", ColumnContent, ColumnContent("Merged", "bool", False)])
 auto_eval_column_dict.append(["license", ColumnContent, ColumnContent("Hub License", "str", False)])
 auto_eval_column_dict.append(["params", ColumnContent, ColumnContent("#Params (B)", "number", False)])
 auto_eval_column_dict.append(["likes", ColumnContent, ColumnContent("Hub ❤️", "number", False)])
@@ -73,7 +73,7 @@ baseline_row = {
     AutoEvalColumn.model.name: "<p>Baseline</p>",
     AutoEvalColumn.revision.name: "N/A",
     AutoEvalColumn.precision.name: None,
-    AutoEvalColumn.merge.name: False,
+    AutoEvalColumn.merged.name: False,
     AutoEvalColumn.average.name: 31.0,
     AutoEvalColumn.arc.name: 25.0,
     AutoEvalColumn.hellaswag.name: 25.0,
@@ -99,7 +99,7 @@ human_baseline_row = {
     AutoEvalColumn.revision.name: "N/A",
     AutoEvalColumn.precision.name: None,
     AutoEvalColumn.average.name: 92.75,
-    AutoEvalColumn.merge.name: False,
+    AutoEvalColumn.merged.name: False,
     AutoEvalColumn.arc.name: 80.0,
     AutoEvalColumn.hellaswag.name: 95.0,
     AutoEvalColumn.mmlu.name: 89.8,
