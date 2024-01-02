@@ -1,5 +1,24 @@
 custom_css = """
+/* Hides the final AutoEvalColumn */
+#llm-benchmark-tab-table table td:last-child,
+#llm-benchmark-tab-table table th:last-child {
+    display: none;
+}
 
+/* Limit the width of the first AutoEvalColumn so that names don't expand too much */
+table td:first-child,
+table th:first-child {
+    max-width: 400px;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+/* Full width space */
+.gradio-container {
+  max-width: 95%!important;
+}
+
+/* Text style and margins */
 .markdown-text {
     font-size: 16px !important;
 }
@@ -21,14 +40,6 @@ custom_css = """
     transform: scale(1.3);
 }
 
-#leaderboard-table {
-    margin-top: 15px
-}
-
-#leaderboard-table-lite {
-    margin-top: 15px
-}
-
 #search-bar-table-box > div:first-child {
     background: none;
     border: none;
@@ -38,36 +49,11 @@ custom_css = """
     padding: 0px;
 }
 
-/* Hides the final AutoEvalColumn */
-#llm-benchmark-tab-table table td:last-child,
-#llm-benchmark-tab-table table th:last-child {
-    display: none;
-}
-
-/* Limit the width of the first AutoEvalColumn so that names don't expand too much */
-table td:first-child,
-table th:first-child {
-    max-width: 400px;
-    overflow: auto;
-    white-space: nowrap;
-}
-
 .tab-buttons button {
     font-size: 20px;
 }
 
-#scale-logo {
-    border-style: none !important;
-    box-shadow: none;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 600px;
-}
-
-#scale-logo .download {
-    display: none;
-}
+/* Filters style */
 #filter_type{
     border: 0;
     padding-left: 0;
