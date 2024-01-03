@@ -40,6 +40,7 @@ FLAGGED_MODELS = {
     "rwitz2/pee": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "zyh3826 / GML-Mistral-merged-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/503",
     "dillfrescott/trinity-medium": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "merged": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
 }
 
 # Models which have been requested by orgs to not be submitted on the leaderboard
@@ -53,10 +54,16 @@ DO_NOT_SUBMIT_MODELS = [
 
 def flag_models(leaderboard_data: list[dict]):
     for model_data in leaderboard_data:
-        if model_data["model_name_for_query"] in FLAGGED_MODELS:
-            issue_num = FLAGGED_MODELS[model_data["model_name_for_query"]].split("/")[-1]
+        # Merges are flagged automatically
+        if model_data[AutoEvalColumn.flagged.name] == True:
+            flag_key = "merged"
+        else:
+            flag_key = model_data["model_name_for_query"]
+
+        if flag_key in FLAGGED_MODELS:
+            issue_num = FLAGGED_MODELS[flag_key].split("/")[-1]
             issue_link = model_hyperlink(
-                FLAGGED_MODELS[model_data["model_name_for_query"]],
+                FLAGGED_MODELS[flag_key],
                 f"See discussion #{issue_num}",
             )
             model_data[

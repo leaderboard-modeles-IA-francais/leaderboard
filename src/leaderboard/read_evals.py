@@ -11,7 +11,7 @@ from huggingface_hub import ModelCard
 
 from src.display.formatting import make_clickable_model
 from src.display.utils import AutoEvalColumn, ModelType, Tasks, Precision, WeightType
-from src.submission.check_validity import is_model_on_hub
+from src.submission.check_validity import is_model_on_hub, check_model_card
 
 
 @dataclass
@@ -32,7 +32,8 @@ class EvalResult:
     num_params: int = 0
     date: str = "" # submission date of request file
     still_on_hub: bool = False
-    merge: bool = False
+    is_merge: bool = False
+    flagged: bool = False
 
     @classmethod
     def init_from_json_file(self, json_filepath):
@@ -60,11 +61,6 @@ class EvalResult:
             result_key = f"{org}_{model}_{precision.value.name}"
         full_model = "/".join(org_and_model)
 
-        try:
-            merge = any(t in ["merge", "mergedlm"] for t in ModelCard.load(full_model).data.tags)
-        except Exception:
-            merge = False
-
         still_on_hub, error, model_config = is_model_on_hub(
             full_model, config.get("model_sha", "main"), trust_remote_code=True, test_tokenizer=False
         )
@@ -73,6 +69,28 @@ class EvalResult:
             architectures = getattr(model_config, "architectures", None)
             if architectures:
                 architecture = ";".join(architectures)
+
+        # If the model doesn't have a model card or a license, we consider it's deleted
+        if still_on_hub:
+            try:
+                if check_model_card(full_model)[0] is False:
+                    still_on_hub = False
+            except Exception:
+                still_on_hub = False
+
+        # Check if the model is a merge
+        is_merge_from_metadata = False
+        flagged = False
+        if still_on_hub:
+            model_card = ModelCard.load(full_model)
+
+            if model_card.data.tags:
+                is_merge_from_metadata = "merge" in model_card.data.tags
+            merge_keywords = ["mergekit", "merged model", "merge model"]
+            # If the model is a merge but not saying it in the metadata, we flag it
+            is_merge_from_model_card = any(keyword in model_card.text.lower() for keyword in merge_keywords)
+            flagged = is_merge_from_model_card and not is_merge_from_metadata
+
 
         # Extract results available in this file (some results are split in several files)
         results = {}
@@ -112,7 +130,8 @@ class EvalResult:
             revision= config.get("model_sha", ""),
             still_on_hub=still_on_hub,
             architecture=architecture,
-            merge=merge
+            is_merge=is_merge_from_metadata,
+            flagged=flagged,
         )
 
     def update_with_request_file(self, requests_path):
@@ -138,8 +157,8 @@ class EvalResult:
             "eval_name": self.eval_name,  # not a column, just a save name,
             AutoEvalColumn.precision.name: self.precision.value.name,
             AutoEvalColumn.model_type.name: self.model_type.value.name,
-            AutoEvalColumn.merged.name: self.merge,
-            AutoEvalColumn.model_type_symbol.name: self.model_type.value.symbol,
+            AutoEvalColumn.merged.name: self.is_merge,
+            AutoEvalColumn.model_type_symbol.name: self.model_type.value.symbol, # + "🥦" if self.is_merge,
             AutoEvalColumn.weight_type.name: self.weight_type.value.name,
             AutoEvalColumn.architecture.name: self.architecture,
             AutoEvalColumn.model.name: make_clickable_model(self.full_model),
@@ -150,6 +169,8 @@ class EvalResult:
             AutoEvalColumn.likes.name: self.likes,
             AutoEvalColumn.params.name: self.num_params,
             AutoEvalColumn.still_on_hub.name: self.still_on_hub,
+            AutoEvalColumn.flagged.name: self.flagged
+
         }
 
         for task in Tasks:

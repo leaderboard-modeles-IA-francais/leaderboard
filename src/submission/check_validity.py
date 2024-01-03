@@ -8,7 +8,6 @@ import huggingface_hub
 from huggingface_hub import ModelCard
 from huggingface_hub.hf_api import ModelInfo
 from transformers import AutoConfig, AutoTokenizer
-from transformers.models.auto.tokenization_auto import tokenizer_class_from_name, get_tokenizer_config
 
 from src.envs import HAS_HIGHER_RATE_LIMIT
 
@@ -39,7 +38,7 @@ def check_model_card(repo_id: str) -> tuple[bool, str]:
 
 def is_model_on_hub(model_name: str, revision: str, token: str = None, trust_remote_code=False, test_tokenizer=False) -> tuple[bool, str]:
     try:
-        config = AutoConfig.from_pretrained(model_name, revision=revision, trust_remote_code=trust_remote_code, token=token)
+        config = AutoConfig.from_pretrained(model_name, revision=revision, trust_remote_code=trust_remote_code, token=token) #, force_download=True)
         if test_tokenizer:
             try:
                 tk = AutoTokenizer.from_pretrained(model_name, revision=revision, trust_remote_code=trust_remote_code, token=token)
