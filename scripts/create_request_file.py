@@ -17,7 +17,7 @@ weight_types = ("Original", "Delta", "Adapter")
 
 
 def get_model_size(model_info, precision: str):
-    size_pattern = size_pattern = re.compile(r"(\d\.)?\d+(b|m)")
+    size_pattern =  re.compile(r"(\d+\.)?\d+(b|m)")
     try:
         model_size = round(model_info.safetensors["total"] / 1e9, 3)
     except (AttributeError, TypeError):
