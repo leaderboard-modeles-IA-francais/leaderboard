@@ -417,7 +417,7 @@ with demo:
             )
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(restart_space, "interval", seconds=1800)
+scheduler.add_job(restart_space, "interval", seconds=3600)
 scheduler.start()
 
 # Both launches the space and its CI
