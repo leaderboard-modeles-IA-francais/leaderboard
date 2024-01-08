@@ -38,7 +38,7 @@ from src.tools.plots import (
 )
 
 # Start ephemeral Spaces on PRs (see config in README.md)
-enable_space_ci()
+#enable_space_ci()
 
 def restart_space():
     API.restart_space(repo_id=REPO_ID, token=H4_TOKEN)
