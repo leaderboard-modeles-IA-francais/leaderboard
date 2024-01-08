@@ -2,7 +2,7 @@ import gradio as gr
 import pandas as pd
 from apscheduler.schedulers.background import BackgroundScheduler
 from huggingface_hub import snapshot_download
-from gradio_space_ci import configure_space_ci # FOR CI
+from gradio_space_ci import enable_space_ci
 
 from src.display.about import (
     CITATION_BUTTON_LABEL,
@@ -37,6 +37,8 @@ from src.tools.plots import (
     create_scores_df,
 )
 
+# Start ephemeral Spaces on PRs (see config in README.md)
+enable_space_ci()
 
 def restart_space():
     API.restart_space(repo_id=REPO_ID, token=H4_TOKEN)
@@ -420,13 +422,4 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(restart_space, "interval", seconds=10800)
 scheduler.start()
 
-# Both launches the space and its CI
-configure_space_ci(
-    demo.queue(default_concurrency_limit=40),
-    trusted_authors=[],  # add manually trusted authors
-    private="True",  # ephemeral spaces will have same visibility as the main space. Otherwise, set to `True` or `False` explicitly.
-    variables={},  # We overwrite HF_HOME as tmp CI spaces will have no cache 
-    secrets=["HF_TOKEN", "H4_TOKEN"],  # which secret do I want to copy from the main space? Can be a `List[str]`.
-    hardware=None,  # "cpu-basic" by default. Otherwise set to "auto" to have same hardware as the main space or any valid string value.
-    storage=None,  # no storage by default. Otherwise set to "auto" to have same storage as the main space or any valid string value.
-).launch()
+demo.queue(default_concurrency_limit=40).launch()
