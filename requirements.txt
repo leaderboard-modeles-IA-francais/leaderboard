@@ -15,4 +15,4 @@ sentencepiece
 tqdm==4.65.0
 transformers==4.36.0
 tokenizers>=0.15.0
-gradio-space-ci @ git+https://huggingface.co/spaces/Wauplin/gradio-space-ci@0.2.0 # CI !!!
+gradio-space-ci @ git+https://huggingface.co/spaces/Wauplin/gradio-space-ci@0.2.1 # CI !!!
