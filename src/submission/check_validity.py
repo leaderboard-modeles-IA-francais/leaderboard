@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, timezone
 
 import huggingface_hub
 from huggingface_hub import ModelCard
-from huggingface_hub.hf_api import ModelInfo
+from huggingface_hub.hf_api import ModelInfo, get_safetensors_metadata
 from transformers import AutoConfig, AutoTokenizer
 
 from src.envs import HAS_HIGHER_RATE_LIMIT
@@ -36,7 +36,7 @@ def check_model_card(repo_id: str) -> tuple[bool, str]:
     return True, ""
 
 
-def is_model_on_hub(model_name: str, revision: str, token: str = None, trust_remote_code=False, test_tokenizer=False) -> tuple[bool, str]:
+def is_model_on_hub(model_name: str, revision: str, token: str = None, trust_remote_code=False, test_tokenizer=False) -> tuple[bool, str, AutoConfig]:
     try:
         config = AutoConfig.from_pretrained(model_name, revision=revision, trust_remote_code=trust_remote_code, token=token) #, force_download=True)
         if test_tokenizer:
@@ -65,17 +65,23 @@ def is_model_on_hub(model_name: str, revision: str, token: str = None, trust_rem
 
 def get_model_size(model_info: ModelInfo, precision: str):
     size_pattern = re.compile(r"(\d+\.)?\d+(b|m)")
+    safetensors = None
     try:
-        model_size = round(model_info.safetensors["total"] / 1e9, 3)
-    except (AttributeError, TypeError ):
+        safetensors = get_safetensors_metadata(model_info.id)
+    except Exception as e:
+        print(e)
+
+    if safetensors is not None:
+        model_size = round(sum(safetensors.parameter_count.values()) / 1e9, 3)
+    else:
         try:
-            size_match = re.search(size_pattern, model_info.modelId.lower())
+            size_match = re.search(size_pattern, model_info.id.lower())
             model_size = size_match.group(0)
             model_size = round(float(model_size[:-1]) if model_size[-1] == "b" else float(model_size[:-1]) / 1e3, 3)
-        except AttributeError:
+        except AttributeError as e:
             return 0  # Unknown model sizes are indicated as 0, see NUMERIC_INTERVALS in app.py
 
-    size_factor = 8 if (precision == "GPTQ" or "gptq" in model_info.modelId.lower()) else 1
+    size_factor = 8 if (precision == "GPTQ" or "gptq" in model_info.id.lower()) else 1
     model_size = size_factor * model_size
     return model_size
 

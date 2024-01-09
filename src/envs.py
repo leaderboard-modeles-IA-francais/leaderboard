@@ -7,6 +7,7 @@ H4_TOKEN = os.environ.get("H4_TOKEN", None)
 
 REPO_ID = "HuggingFaceH4/open_llm_leaderboard"
 QUEUE_REPO = "open-llm-leaderboard/requests"
+DYNAMIC_INFO_REPO = "open-llm-leaderboard/dynamic_model_information"
 RESULTS_REPO = "open-llm-leaderboard/results"
 
 PRIVATE_QUEUE_REPO = "open-llm-leaderboard/private-requests"
@@ -18,6 +19,8 @@ CACHE_PATH=os.getenv("HF_HOME", ".")
 
 EVAL_REQUESTS_PATH = os.path.join(CACHE_PATH, "eval-queue")
 EVAL_RESULTS_PATH = os.path.join(CACHE_PATH, "eval-results")
+DYNAMIC_INFO_PATH = os.path.join(CACHE_PATH, "dynamic-info")
+DYNAMIC_INFO_FILE_PATH = os.path.join(DYNAMIC_INFO_PATH, "model_infos.json")
 
 EVAL_REQUESTS_PATH_PRIVATE = "eval-queue-private"
 EVAL_RESULTS_PATH_PRIVATE = "eval-results-private"

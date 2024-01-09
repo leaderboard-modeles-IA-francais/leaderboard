@@ -27,7 +27,7 @@ from src.display.utils import (
     WeightType,
     Precision
 )
-from src.envs import API, EVAL_REQUESTS_PATH, EVAL_RESULTS_PATH, H4_TOKEN, IS_PUBLIC, QUEUE_REPO, REPO_ID, RESULTS_REPO
+from src.envs import API, EVAL_REQUESTS_PATH, DYNAMIC_INFO_REPO, DYNAMIC_INFO_FILE_PATH, DYNAMIC_INFO_PATH, EVAL_RESULTS_PATH, H4_TOKEN, IS_PUBLIC, QUEUE_REPO, REPO_ID, RESULTS_REPO
 from src.populate import get_evaluation_queue_df, get_leaderboard_df
 from src.submission.submit import add_new_eval
 from src.tools.collections import update_collections
@@ -43,33 +43,52 @@ enable_space_ci()
 def restart_space():
     API.restart_space(repo_id=REPO_ID, token=H4_TOKEN)
 
-try:
-    print(EVAL_REQUESTS_PATH)
-    snapshot_download(
-        repo_id=QUEUE_REPO, local_dir=EVAL_REQUESTS_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
+
+def init_space():
+    try:
+        print(EVAL_REQUESTS_PATH)
+        snapshot_download(
+            repo_id=QUEUE_REPO, local_dir=EVAL_REQUESTS_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
+        )
+    except Exception:
+        restart_space()
+    try:
+        print(DYNAMIC_INFO_PATH)
+        snapshot_download(
+            repo_id=DYNAMIC_INFO_REPO, local_dir=DYNAMIC_INFO_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
+        )
+    except Exception:
+        restart_space()
+    try:
+        print(EVAL_RESULTS_PATH)
+        snapshot_download(
+            repo_id=RESULTS_REPO, local_dir=EVAL_RESULTS_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
+        )
+    except Exception:
+        restart_space()
+
+
+    raw_data, original_df = get_leaderboard_df(
+        results_path=EVAL_RESULTS_PATH, 
+        requests_path=EVAL_REQUESTS_PATH, 
+        dynamic_path=DYNAMIC_INFO_FILE_PATH, 
+        cols=COLS, 
+        benchmark_cols=BENCHMARK_COLS
     )
-except Exception:
-    restart_space()
-try:
-    print(EVAL_RESULTS_PATH)
-    snapshot_download(
-        repo_id=RESULTS_REPO, local_dir=EVAL_RESULTS_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
-    )
-except Exception:
-    restart_space()
+    update_collections(original_df.copy())
+    leaderboard_df = original_df.copy()
 
+    plot_df = create_plot_df(create_scores_df(raw_data))
 
-raw_data, original_df = get_leaderboard_df(EVAL_RESULTS_PATH, EVAL_REQUESTS_PATH, COLS, BENCHMARK_COLS)
-update_collections(original_df.copy())
-leaderboard_df = original_df.copy()
+    (
+        finished_eval_queue_df,
+        running_eval_queue_df,
+        pending_eval_queue_df,
+    ) = get_evaluation_queue_df(EVAL_REQUESTS_PATH, EVAL_COLS)
 
-plot_df = create_plot_df(create_scores_df(raw_data))
+    return leaderboard_df, original_df, plot_df, finished_eval_queue_df, running_eval_queue_df, pending_eval_queue_df
 
-(
-    finished_eval_queue_df,
-    running_eval_queue_df,
-    pending_eval_queue_df,
-) = get_evaluation_queue_df(EVAL_REQUESTS_PATH, EVAL_COLS)
+leaderboard_df, original_df, plot_df, finished_eval_queue_df, running_eval_queue_df, pending_eval_queue_df = init_space()
 
 
 # Searching and filtering

@@ -2,8 +2,10 @@ import json
 import os
 from datetime import datetime, timezone
 
+from huggingface_hub import ModelCard
+
 from src.display.formatting import styled_error, styled_message, styled_warning
-from src.envs import API, EVAL_REQUESTS_PATH, H4_TOKEN, QUEUE_REPO, RATE_LIMIT_PERIOD, RATE_LIMIT_QUOTA
+from src.envs import API, EVAL_REQUESTS_PATH, DYNAMIC_INFO_PATH, DYNAMIC_INFO_FILE_PATH, DYNAMIC_INFO_REPO, H4_TOKEN, QUEUE_REPO, RATE_LIMIT_PERIOD, RATE_LIMIT_QUOTA
 from src.leaderboard.filter_models import DO_NOT_SUBMIT_MODELS
 from src.submission.check_validity import (
     already_submitted_models,
@@ -65,9 +67,15 @@ def add_new_eval(
             return styled_error(f'Base model "{base_model}" {error}')
 
     if not weight_type == "Adapter":
-        model_on_hub, error, _ = is_model_on_hub(model_name=model, revision=revision, test_tokenizer=True)
+        model_on_hub, error, model_config = is_model_on_hub(model_name=model, revision=revision, test_tokenizer=True)
         if not model_on_hub:
             return styled_error(f'Model "{model}" {error}')
+        architecture = "?"
+        if model_config is not None:
+            architectures = getattr(model_config, "architectures", None)
+            if architectures:
+                architecture = ";".join(architectures)
+
 
     # Is the model info correctly filled?
     try:
@@ -86,6 +94,22 @@ def add_new_eval(
     modelcard_OK, error_msg = check_model_card(model)
     if not modelcard_OK:
         return styled_error(error_msg)
+    
+    # Storing the model tags
+    tags = []
+
+    model_card = ModelCard.load(model)
+    is_merge_from_metadata = "merge" in model_card.data.tags if model_card.data.tags else False
+    merge_keywords = ["mergekit", "merged model", "merge model", "merging"]
+    # If the model is a merge but not saying it in the metadata, we flag it
+    is_merge_from_model_card = any(keyword in model_card.text.lower() for keyword in merge_keywords)
+    if is_merge_from_model_card:
+        tags.append("merge")
+        if not is_merge_from_metadata:
+            tags.append("flagged:undisclosed_merge")
+    if "moe" in model_card.data.tags:
+        tags.append("moe")
+
 
     # Seems good, creating the eval
     print("Adding new eval")
@@ -96,13 +120,21 @@ def add_new_eval(
         "revision": revision,
         "private": private,
         "precision": precision,
+        "params": model_size,
+        "architectures": architecture,
         "weight_type": weight_type,
         "status": "PENDING",
         "submitted_time": current_time,
         "model_type": model_type,
+        "job_id": -1,
+        "job_start_time": None,
+    }
+
+    supplementary_info = {
         "likes": model_info.likes,
-        "params": model_size,
         "license": license,
+        "still_on_hub": True,
+        "tags": tags,
     }
 
     # Check for duplicate submission
@@ -125,6 +157,23 @@ def add_new_eval(
         repo_type="dataset",
         commit_message=f"Add {model} to eval queue",
     )
+
+    with open(DYNAMIC_INFO_FILE_PATH) as f:
+        all_supplementary_info = json.load(f)
+
+    all_supplementary_info[model] = supplementary_info
+    with open(DYNAMIC_INFO_FILE_PATH, "w") as f:
+        json.dump(all_supplementary_info, f, indent=2)
+
+    API.upload_file(
+        path_or_fileobj=DYNAMIC_INFO_FILE_PATH,
+        path_in_repo=DYNAMIC_INFO_FILE_PATH.split("/")[-1],
+        repo_id=DYNAMIC_INFO_REPO,
+        repo_type="dataset",
+        commit_message=f"Add {model} to dynamic info queue",
+    )
+
+    
 
     # Remove the local file
     os.remove(out_path)

@@ -1,36 +1,21 @@
 import json
 import os
 import pprint
-import re
 from datetime import datetime, timezone
 
 import click
 from colorama import Fore
 from huggingface_hub import HfApi, snapshot_download
 
+from src.submission.check_validity import get_model_size
+from src.display.utils import ModelType, WeightType
+
 EVAL_REQUESTS_PATH = "eval-queue"
 QUEUE_REPO = "open-llm-leaderboard/requests"
 
 precisions = ("float16", "bfloat16", "8bit (LLM.int8)", "4bit (QLoRA / FP4)", "GPTQ")
-model_types = ("pretrained", "fine-tuned", "RL-tuned", "instruction-tuned")
-weight_types = ("Original", "Delta", "Adapter")
-
-
-def get_model_size(model_info, precision: str):
-    size_pattern =  re.compile(r"(\d+\.)?\d+(b|m)")
-    try:
-        model_size = round(model_info.safetensors["total"] / 1e9, 3)
-    except (AttributeError, TypeError):
-        try:
-            size_match = re.search(size_pattern, model_info.modelId.lower())
-            model_size = size_match.group(0)
-            model_size = round(float(model_size[:-1]) if model_size[-1] == "b" else float(model_size[:-1]) / 1e3, 3)
-        except AttributeError:
-            return 0  # Unknown model sizes are indicated as 0, see NUMERIC_INTERVALS in app.py
-
-    size_factor = 8 if (precision == "GPTQ" or "gptq" in model_info.modelId.lower()) else 1
-    model_size = size_factor * model_size
-    return model_size
+model_types = [e.name for e in ModelType]
+weight_types = [e.name for e in WeightType]
 
 
 def main():

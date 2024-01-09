@@ -11,7 +11,6 @@ from huggingface_hub import ModelCard
 
 from src.display.formatting import make_clickable_model
 from src.display.utils import AutoEvalColumn, ModelType, Tasks, Precision, WeightType
-from src.submission.check_validity import is_model_on_hub, check_model_card
 
 
 @dataclass
@@ -34,6 +33,7 @@ class EvalResult:
     still_on_hub: bool = False
     is_merge: bool = False
     flagged: bool = False
+    tags: list = None
 
     @classmethod
     def init_from_json_file(self, json_filepath):
@@ -42,13 +42,13 @@ class EvalResult:
             data = json.load(fp)
 
         # We manage the legacy config format
-        config = data.get("config", data.get("config_general", None))
+        config = data.get("config_general")
 
         # Precision
         precision = Precision.from_str(config.get("model_dtype"))
 
         # Get model and org
-        org_and_model = config.get("model_name", config.get("model_args", None))
+        org_and_model = config.get("model_name")
         org_and_model = org_and_model.split("/", 1)
 
         if len(org_and_model) == 1:
@@ -60,37 +60,6 @@ class EvalResult:
             model = org_and_model[1]
             result_key = f"{org}_{model}_{precision.value.name}"
         full_model = "/".join(org_and_model)
-
-        still_on_hub, error, model_config = is_model_on_hub(
-            full_model, config.get("model_sha", "main"), trust_remote_code=True, test_tokenizer=False
-        )
-        architecture = "?"
-        if model_config is not None:
-            architectures = getattr(model_config, "architectures", None)
-            if architectures:
-                architecture = ";".join(architectures)
-
-        # If the model doesn't have a model card or a license, we consider it's deleted
-        if still_on_hub:
-            try:
-                if check_model_card(full_model)[0] is False:
-                    still_on_hub = False
-            except Exception:
-                still_on_hub = False
-
-        # Check if the model is a merge
-        is_merge_from_metadata = False
-        flagged = False
-        if still_on_hub:
-            model_card = ModelCard.load(full_model)
-
-            if model_card.data.tags:
-                is_merge_from_metadata = "merge" in model_card.data.tags
-            merge_keywords = ["mergekit", "merged model", "merge model", "merging"]
-            # If the model is a merge but not saying it in the metadata, we flag it
-            is_merge_from_model_card = any(keyword in model_card.text.lower() for keyword in merge_keywords)
-            flagged = is_merge_from_model_card and not is_merge_from_metadata
-
 
         # Extract results available in this file (some results are split in several files)
         results = {}
@@ -128,10 +97,6 @@ class EvalResult:
             results=results,
             precision=precision,  
             revision= config.get("model_sha", ""),
-            still_on_hub=still_on_hub,
-            architecture=architecture,
-            is_merge=is_merge_from_metadata,
-            flagged=flagged,
         )
 
     def update_with_request_file(self, requests_path):
@@ -143,12 +108,20 @@ class EvalResult:
                 request = json.load(f)
             self.model_type = ModelType.from_str(request.get("model_type", ""))
             self.weight_type = WeightType[request.get("weight_type", "Original")]
-            self.license = request.get("license", "?")
-            self.likes = request.get("likes", 0)
             self.num_params = request.get("params", 0)
             self.date = request.get("submitted_time", "")
+            self.architecture = request["architectures"]
         except Exception:
             print(f"Could not find request file for {self.org}/{self.model}")
+
+    def update_with_dynamic_file_dict(self, file_dict):
+        self.license = file_dict.get("license", "?")
+        self.likes = file_dict.get("likes", 0)
+        self.still_on_hub = file_dict["still_on_hub"]
+        self.flagged = any("flagged" in tag for tag in file_dict["tags"])
+        self.is_merge = "merge" in file_dict["tags"]
+        self.tags = file_dict["tags"]
+        
 
     def to_dict(self):
         """Converts the Eval Result to a dict compatible with our dataframe display"""
@@ -158,7 +131,7 @@ class EvalResult:
             AutoEvalColumn.precision.name: self.precision.value.name,
             AutoEvalColumn.model_type.name: self.model_type.value.name,
             AutoEvalColumn.merged.name: self.is_merge,
-            AutoEvalColumn.model_type_symbol.name: self.model_type.value.symbol, # + "🥦" if self.is_merge,
+            AutoEvalColumn.model_type_symbol.name: self.model_type.value.symbol,
             AutoEvalColumn.weight_type.name: self.weight_type.value.name,
             AutoEvalColumn.architecture.name: self.architecture,
             AutoEvalColumn.model.name: make_clickable_model(self.full_model),
@@ -170,7 +143,6 @@ class EvalResult:
             AutoEvalColumn.params.name: self.num_params,
             AutoEvalColumn.still_on_hub.name: self.still_on_hub,
             AutoEvalColumn.flagged.name: self.flagged
-
         }
 
         for task in Tasks:
@@ -201,7 +173,7 @@ def get_request_file_for_model(requests_path, model_name, precision):
     return request_file
 
 
-def get_raw_eval_results(results_path: str, requests_path: str) -> list[EvalResult]:
+def get_raw_eval_results(results_path: str, requests_path: str, dynamic_path: str) -> list[EvalResult]:
     """From the path of the results folder root, extract all needed info for results"""
     model_result_filepaths = []
 
@@ -219,11 +191,15 @@ def get_raw_eval_results(results_path: str, requests_path: str) -> list[EvalResu
         for file in files:
             model_result_filepaths.append(os.path.join(root, file))
 
+    with open(dynamic_path) as f:
+        dynamic_data = json.load(f)
+
     eval_results = {}
     for model_result_filepath in model_result_filepaths:
         # Creation of result
         eval_result = EvalResult.init_from_json_file(model_result_filepath)
         eval_result.update_with_request_file(requests_path)
+        eval_result.update_with_dynamic_file_dict(dynamic_data[eval_result.full_model])
 
         # Store results of same eval together
         eval_name = eval_result.eval_name
