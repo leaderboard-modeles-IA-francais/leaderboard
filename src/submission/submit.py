@@ -99,7 +99,12 @@ def add_new_eval(
     tags = []
 
     model_card = ModelCard.load(model)
-    is_merge_from_metadata = "merge" in model_card.data.tags if model_card.data.tags else False
+    is_merge_from_metadata = False
+    if model_card.data.tags:
+        is_merge_from_metadata = "merge" in model_card.data.tags 
+        if "moe" in model_card.data.tags:
+            tags.append("moe")
+
     merge_keywords = ["mergekit", "merged model", "merge model", "merging"]
     # If the model is a merge but not saying it in the metadata, we flag it
     is_merge_from_model_card = any(keyword in model_card.text.lower() for keyword in merge_keywords)
@@ -107,8 +112,6 @@ def add_new_eval(
         tags.append("merge")
         if not is_merge_from_metadata:
             tags.append("flagged:undisclosed_merge")
-    if "moe" in model_card.data.tags:
-        tags.append("moe")
 
 
     # Seems good, creating the eval
