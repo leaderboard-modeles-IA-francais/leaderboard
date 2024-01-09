@@ -52,7 +52,7 @@ def is_model_on_hub(model_name: str, revision: str, token: str = None, trust_rem
                 return (False, "'s tokenizer cannot be loaded. Is your tokenizer class in a stable transformers release, and correctly configured?", None)
         return True, None, config
 
-    except ValueError:
+    except ValueError as e:
         return (
             False,
             "needs to be launched with `trust_remote_code=True`. For safety reason, we do not allow these models to be automatically submitted to the leaderboard.",

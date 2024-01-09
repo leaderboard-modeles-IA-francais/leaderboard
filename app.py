@@ -30,6 +30,7 @@ from src.display.utils import (
 from src.envs import API, EVAL_REQUESTS_PATH, DYNAMIC_INFO_REPO, DYNAMIC_INFO_FILE_PATH, DYNAMIC_INFO_PATH, EVAL_RESULTS_PATH, H4_TOKEN, IS_PUBLIC, QUEUE_REPO, REPO_ID, RESULTS_REPO
 from src.populate import get_evaluation_queue_df, get_leaderboard_df
 from src.submission.submit import add_new_eval
+from src.scripts.update_all_request_files import update_dynamic_files
 from src.tools.collections import update_collections
 from src.tools.plots import (
     create_metric_plot_obj,
@@ -100,10 +101,11 @@ def update_table(
     size_query: list,
     show_deleted: bool,
     show_merges: bool,
+    show_moe: bool,
     show_flagged: bool,
     query: str,
 ):
-    filtered_df = filter_models(hidden_df, type_query, size_query, precision_query, show_deleted, show_merges, show_flagged)
+    filtered_df = filter_models(hidden_df, type_query, size_query, precision_query, show_deleted, show_merges, show_moe, show_flagged)
     filtered_df = filter_queries(query, filtered_df)
     df = select_columns(filtered_df, columns)
     return df
@@ -119,13 +121,13 @@ def search_table(df: pd.DataFrame, query: str) -> pd.DataFrame:
 
 
 def select_columns(df: pd.DataFrame, columns: list) -> pd.DataFrame:
-    always_here_cols = [
-        AutoEvalColumn.model_type_symbol.name,
-        AutoEvalColumn.model.name,
-    ]
+    always_here_cols = [c.name for c in fields(AutoEvalColumn) if c.never_hidden]
+    dummy_col = [AutoEvalColumn.dummy.name]
+        #AutoEvalColumn.model_type_symbol.name,
+        #AutoEvalColumn.model.name,
     # We use COLS to maintain sorting
     filtered_df = df[
-        always_here_cols + [c for c in COLS if c in df.columns and c in columns] + [AutoEvalColumn.dummy.name]
+        always_here_cols + [c for c in COLS if c in df.columns and c in columns] + dummy_col
     ]
     return filtered_df
 
@@ -151,7 +153,7 @@ def filter_queries(query: str, filtered_df: pd.DataFrame):
 
 
 def filter_models(
-    df: pd.DataFrame, type_query: list, size_query: list, precision_query: list, show_deleted: bool, show_merges: bool, show_flagged: bool
+    df: pd.DataFrame, type_query: list, size_query: list, precision_query: list, show_deleted: bool, show_merges: bool, show_moe:bool, show_flagged: bool
 ) -> pd.DataFrame:
     # Show all models
     if show_deleted:
@@ -161,6 +163,9 @@ def filter_models(
 
     if not show_merges:
         filtered_df = filtered_df[filtered_df[AutoEvalColumn.merged.name] == False]
+
+    if not show_moe:
+        filtered_df = filtered_df[filtered_df[AutoEvalColumn.moe.name] == False]
 
     if not show_flagged:
         filtered_df = filtered_df[filtered_df[AutoEvalColumn.flagged.name] == False]
@@ -176,7 +181,16 @@ def filter_models(
 
     return filtered_df
 
-leaderboard_df = filter_models(leaderboard_df, [t.to_str(" : ") for t in ModelType], list(NUMERIC_INTERVALS.keys()), [i.value.name for i in Precision], False, False, False)
+leaderboard_df = filter_models(
+    df=leaderboard_df, 
+    type_query=[t.to_str(" : ") for t in ModelType], 
+    size_query=list(NUMERIC_INTERVALS.keys()), 
+    precision_query=[i.value.name for i in Precision],
+    show_deleted=False, 
+    show_merges=False, 
+    show_moe=True,
+    show_flagged=False
+)
 
 demo = gr.Blocks(css=custom_css)
 with demo:
@@ -215,6 +229,9 @@ with demo:
                         )
                         merged_models_visibility = gr.Checkbox(
                             value=False, label="Show merges", interactive=True
+                        )
+                        moe_models_visibility = gr.Checkbox(
+                            value=True, label="Show MoE", interactive=True
                         )
                         flagged_models_visibility = gr.Checkbox(
                             value=False, label="Show flagged models", interactive=True
@@ -274,6 +291,7 @@ with demo:
                     filter_columns_size,
                     deleted_models_visibility,
                     merged_models_visibility,
+                    moe_models_visibility,
                     flagged_models_visibility,
                     search_bar,
                 ],
@@ -292,6 +310,7 @@ with demo:
                     filter_columns_size,
                     deleted_models_visibility,
                     merged_models_visibility,
+                    moe_models_visibility,
                     flagged_models_visibility,
                     search_bar,
                 ],
@@ -300,7 +319,7 @@ with demo:
             # Check query parameter once at startup and update search bar + hidden component
             demo.load(load_query, inputs=[], outputs=[search_bar, hidden_search_bar])
             
-            for selector in [shown_columns, filter_columns_type, filter_columns_precision, filter_columns_size, deleted_models_visibility, merged_models_visibility, flagged_models_visibility]:
+            for selector in [shown_columns, filter_columns_type, filter_columns_precision, filter_columns_size, deleted_models_visibility, merged_models_visibility, moe_models_visibility, flagged_models_visibility]:
                 selector.change(
                     update_table,
                     [
@@ -311,6 +330,7 @@ with demo:
                         filter_columns_size,
                         deleted_models_visibility,
                         merged_models_visibility,
+                        moe_models_visibility,
                         flagged_models_visibility,
                         search_bar,
                     ],
@@ -439,6 +459,7 @@ with demo:
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(restart_space, "interval", seconds=10800)
+scheduler.add_job(update_dynamic_files, "interval", seconds=10000) # taking about 3 min
 scheduler.start()
 
 demo.queue(default_concurrency_limit=40).launch()

@@ -30,7 +30,7 @@ class EvalResult:
     likes: int = 0
     num_params: int = 0
     date: str = "" # submission date of request file
-    still_on_hub: bool = False
+    still_on_hub: bool = True
     is_merge: bool = False
     flagged: bool = False
     tags: list = None
@@ -106,12 +106,12 @@ class EvalResult:
         try:
             with open(request_file, "r") as f:
                 request = json.load(f)
-            self.model_type = ModelType.from_str(request.get("model_type", ""))
+            self.model_type = ModelType.from_str(request.get("model_type", "Unknown"))
             self.weight_type = WeightType[request.get("weight_type", "Original")]
             self.num_params = request.get("params", 0)
             self.date = request.get("submitted_time", "")
-            self.architecture = request["architectures"]
-        except Exception:
+            self.architecture = request.get("architectures", "Unknown")
+        except Exception as e:
             print(f"Could not find request file for {self.org}/{self.model}")
 
     def update_with_dynamic_file_dict(self, file_dict):
@@ -119,7 +119,6 @@ class EvalResult:
         self.likes = file_dict.get("likes", 0)
         self.still_on_hub = file_dict["still_on_hub"]
         self.flagged = any("flagged" in tag for tag in file_dict["tags"])
-        self.is_merge = "merge" in file_dict["tags"]
         self.tags = file_dict["tags"]
         
 
@@ -130,7 +129,6 @@ class EvalResult:
             "eval_name": self.eval_name,  # not a column, just a save name,
             AutoEvalColumn.precision.name: self.precision.value.name,
             AutoEvalColumn.model_type.name: self.model_type.value.name,
-            AutoEvalColumn.merged.name: self.is_merge,
             AutoEvalColumn.model_type_symbol.name: self.model_type.value.symbol,
             AutoEvalColumn.weight_type.name: self.weight_type.value.name,
             AutoEvalColumn.architecture.name: self.architecture,
@@ -142,6 +140,8 @@ class EvalResult:
             AutoEvalColumn.likes.name: self.likes,
             AutoEvalColumn.params.name: self.num_params,
             AutoEvalColumn.still_on_hub.name: self.still_on_hub,
+            AutoEvalColumn.merged.name: "merge" in self.tags if self.tags else False,
+            AutoEvalColumn.moe.name: ("moe" in self.tags if self.tags else False) or "moe" in self.full_model.lower(),
             AutoEvalColumn.flagged.name: self.flagged
         }
 
@@ -199,7 +199,8 @@ def get_raw_eval_results(results_path: str, requests_path: str, dynamic_path: st
         # Creation of result
         eval_result = EvalResult.init_from_json_file(model_result_filepath)
         eval_result.update_with_request_file(requests_path)
-        eval_result.update_with_dynamic_file_dict(dynamic_data[eval_result.full_model])
+        if eval_result.full_model in dynamic_data:
+            eval_result.update_with_dynamic_file_dict(dynamic_data[eval_result.full_model])
 
         # Store results of same eval together
         eval_name = eval_result.eval_name

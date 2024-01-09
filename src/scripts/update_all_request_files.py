@@ -1,31 +1,10 @@
-from huggingface_hub import HfApi, ModelFilter, snapshot_download
+from huggingface_hub import ModelFilter, snapshot_download
 from huggingface_hub import ModelCard
 
 import json
-import os
 import time
-import shutil
-from src.submission.check_validity import is_model_on_hub, check_model_card, get_model_size
-from src.envs import DYNAMIC_INFO_REPO, DYNAMIC_INFO_FILE_PATH, API
-
-HF_TOKEN = os.environ.get("HF_TOKEN", None)
-
-TMP_FOLDER = "tmp_requests"
-snapshot_download(
-    repo_id=DYNAMIC_INFO_REPO, local_dir=TMP_FOLDER, repo_type="dataset", tqdm_class=None, etag_timeout=30
-)
-
-# Get models
-start = time.time()
-
-models = list(API.list_models(
-    filter=ModelFilter(task="text-generation"),
-    full=False,
-    cardData=True,
-    fetch_config=True,
-))
-
-print(f"Downloaded list of models in {time.time() - start:.2f} seconds")
+from src.submission.check_validity import is_model_on_hub, check_model_card
+from src.envs import DYNAMIC_INFO_REPO, DYNAMIC_INFO_PATH, DYNAMIC_INFO_FILE_PATH, API
 
 def update_models(file_path, models):
     """
@@ -80,18 +59,37 @@ def update_models(file_path, models):
     with open(file_path, 'w') as f:
         json.dump(model_infos, f, indent=2)
 
-start = time.time()
+def update_dynamic_files():
+    """ This will only update metadata for models already linked in the repo, not add missing ones.
+    """
+    snapshot_download(
+        repo_id=DYNAMIC_INFO_REPO, local_dir=DYNAMIC_INFO_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
+    )
 
-updated_ids = update_models(DYNAMIC_INFO_FILE_PATH, models)
+    print("UPDATE_DYNAMIC: Loaded snapshot")
+    # Get models
+    start = time.time()
 
-print(f"updated in {time.time() - start:.2f} seconds, updated ids: {len(updated_ids)}")
+    models = list(API.list_models(
+        filter=ModelFilter(task="text-generation"),
+        full=False,
+        cardData=True,
+        fetch_config=True,
+    ))
 
-API.upload_file(
-    path_or_fileobj=DYNAMIC_INFO_FILE_PATH,
-    path_in_repo=DYNAMIC_INFO_FILE_PATH.split("/")[-1],
-    repo_id=DYNAMIC_INFO_REPO,
-    repo_type="dataset",
-    commit_message=f"Daily request file update.",
-)
+    print(f"UPDATE_DYNAMIC: Downloaded list of models in {time.time() - start:.2f} seconds")
 
-shutil.rmtree(TMP_FOLDER)
+    start = time.time()
+
+    update_models(DYNAMIC_INFO_FILE_PATH, models)
+
+    print(f"UPDATE_DYNAMIC: updated in {time.time() - start:.2f} seconds")
+
+    API.upload_file(
+        path_or_fileobj=DYNAMIC_INFO_FILE_PATH,
+        path_in_repo=DYNAMIC_INFO_FILE_PATH.split("/")[-1],
+        repo_id=DYNAMIC_INFO_REPO,
+        repo_type="dataset",
+        commit_message=f"Daily request file update.",
+    )
+    print(f"UPDATE_DYNAMIC: pushed to hub")

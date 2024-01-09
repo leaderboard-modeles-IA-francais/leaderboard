@@ -50,9 +50,10 @@ auto_eval_column_dict.append(["merged", ColumnContent, ColumnContent("Merged", "
 auto_eval_column_dict.append(["license", ColumnContent, ColumnContent("Hub License", "str", False)])
 auto_eval_column_dict.append(["params", ColumnContent, ColumnContent("#Params (B)", "number", False)])
 auto_eval_column_dict.append(["likes", ColumnContent, ColumnContent("Hub ❤️", "number", False)])
-auto_eval_column_dict.append(["still_on_hub", ColumnContent, ColumnContent("Available on the hub", "bool", False)])
+auto_eval_column_dict.append(["still_on_hub", ColumnContent, ColumnContent("Available on the hub", "bool", False, hidden=True)])
 auto_eval_column_dict.append(["revision", ColumnContent, ColumnContent("Model sha", "str", False, False)])
-auto_eval_column_dict.append(["flagged", ColumnContent, ColumnContent("Flagged", "bool", False, False)])
+auto_eval_column_dict.append(["flagged", ColumnContent, ColumnContent("Flagged", "bool", False, hidden=True)])
+auto_eval_column_dict.append(["moe", ColumnContent, ColumnContent("MoE", "bool", False, hidden=True)])
 # Dummy column for the search bar (hidden by the custom CSS)
 auto_eval_column_dict.append(["dummy", ColumnContent, ColumnContent("model_name_for_query", "str", False, dummy=True)])
 
@@ -108,6 +109,7 @@ human_baseline_row = {
     AutoEvalColumn.gsm8k.name: 100,
     AutoEvalColumn.dummy.name: "human_baseline",
     AutoEvalColumn.model_type.name: "",
+    AutoEvalColumn.flagged.name: False,
 }
 
 @dataclass
@@ -168,10 +170,8 @@ class Precision(Enum):
 
 
 # Column selection
-COLS = [c.name for c in fields(AutoEvalColumn) if not c.hidden]
-TYPES = [c.type for c in fields(AutoEvalColumn) if not c.hidden]
-COLS_LITE = [c.name for c in fields(AutoEvalColumn) if c.displayed_by_default and not c.hidden]
-TYPES_LITE = [c.type for c in fields(AutoEvalColumn) if c.displayed_by_default and not c.hidden]
+COLS = [c.name for c in fields(AutoEvalColumn)]
+TYPES = [c.type for c in fields(AutoEvalColumn)]
 
 EVAL_COLS = [c.name for c in fields(EvalQueueColumn)]
 EVAL_TYPES = [c.type for c in fields(EvalQueueColumn)]
