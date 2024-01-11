@@ -1,4 +1,3 @@
-auto_evals/
 venv/
 __pycache__/
 .env
@@ -6,10 +5,8 @@ __pycache__/
 *ipynb
 .vscode/
 
-gpt_4_evals/
-human_evals/
 eval-queue/
 eval-results/
-auto_evals/
+dynamic-info/
 
 src/assets/model_counts.html

@@ -33,6 +33,7 @@ class EvalResult:
     still_on_hub: bool = True
     is_merge: bool = False
     flagged: bool = False
+    status: str = "FINISHED"
     tags: list = None
 
     @classmethod
@@ -111,7 +112,9 @@ class EvalResult:
             self.num_params = request.get("params", 0)
             self.date = request.get("submitted_time", "")
             self.architecture = request.get("architectures", "Unknown")
+            self.status = request.get("status", "FAILED")
         except Exception as e:
+            self.status = "FAILED"
             print(f"Could not find request file for {self.org}/{self.model}")
 
     def update_with_dynamic_file_dict(self, file_dict):
@@ -212,8 +215,9 @@ def get_raw_eval_results(results_path: str, requests_path: str, dynamic_path: st
     results = []
     for v in eval_results.values():
         try:
-            v.to_dict() # we test if the dict version is complete
-            results.append(v)
+            if v.status == "FINISHED":
+                v.to_dict() # we test if the dict version is complete
+                results.append(v)
         except KeyError:  # not all eval values present
             continue
 
