@@ -15,6 +15,8 @@ def update_models(file_path, models):
         model_infos = json.load(f)
         for model_id, data in model_infos.items():
             if model_id not in models:
+                data['still_on_hub'] = False
+                data['likes'] = 0
                 continue
 
             model_cfg = models[model_id]
