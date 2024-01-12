@@ -54,8 +54,6 @@ FLAGGED_MODELS = {
     "kyujinpy/Sakura-SOLRCA-Instruct-DPO": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
     "fblgit/LUNA-SOLARkrautLM-Instruct": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
     "CultriX/MistralTrix-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
-    "samir-fama/SamirGPT-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
-    "samir-fama/FernandoGPT-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
     "perlthoughts/Marcoroni-8x7B-v3-MoE": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
     "rwitz/go-bruins-v2": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
     "rwitz/go-bruins": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
