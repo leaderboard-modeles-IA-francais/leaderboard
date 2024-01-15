@@ -46,15 +46,21 @@ def update_models(file_path, models):
                 tags = []
                 if model_card.data.tags:
                     is_merge_from_metadata = "merge" in model_card.data.tags
+                    is_moe_from_metadata = "moe" in model_card.data.tags
                 merge_keywords = ["mergekit", "merged model", "merge model", "merging"]
                 # If the model is a merge but not saying it in the metadata, we flag it
                 is_merge_from_model_card = any(keyword in model_card.text.lower() for keyword in merge_keywords)
-                if is_merge_from_model_card:
+                if is_merge_from_model_card or is_merge_from_metadata:
                     tags.append("merge")
                     if not is_merge_from_metadata:
                         tags.append("flagged:undisclosed_merge")
-                if "moe" in model_card.data.tags:
+                moe_keywords = ["moe", "mixture of experts"]
+                is_moe_from_model_card = any(keyword in model_card.text.lower() for keyword in moe_keywords)
+                is_moe_from_name = "moe" in model_id.lower().replace("/", "-").replace("_", "-").split("-")
+                if is_moe_from_model_card or is_moe_from_name or is_moe_from_metadata:
                     tags.append("moe")
+                    if not is_moe_from_metadata:
+                        tags.append("flagged:undisclosed_moe")
 
             data["tags"] = tags
 

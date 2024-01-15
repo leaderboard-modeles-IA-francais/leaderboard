@@ -100,7 +100,7 @@ DO_NOT_SUBMIT_MODELS = [
 
 def flag_models(leaderboard_data: list[dict]):
     for model_data in leaderboard_data:
-        # Merges are flagged automatically
+        # Merges and moes are flagged automatically
         if model_data[AutoEvalColumn.flagged.name] == True:
             flag_key = "merged"
         else:
