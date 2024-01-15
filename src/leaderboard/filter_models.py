@@ -42,6 +42,7 @@ FLAGGED_MODELS = {
     "zyh3826 / GML-Mistral-merged-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/503",
     "dillfrescott/trinity-medium": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "udkai/Garrulus": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/526",
+    "dfurman/GarrulusMarcoro-7B-v0.1": "https://huggingface.co/dfurman/GarrulusMarcoro-7B-v0.1/discussions/1",
     # Merges not indicated
     "DopeorNope/SOLARC-M-10.7B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
     "DopeorNope/SOLARC-MOE-10.7Bx6": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
