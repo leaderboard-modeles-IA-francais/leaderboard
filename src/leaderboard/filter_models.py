@@ -44,9 +44,6 @@ FLAGGED_MODELS = {
     "udkai/Garrulus": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/526",
     "dfurman/GarrulusMarcoro-7B-v0.1": "https://huggingface.co/dfurman/GarrulusMarcoro-7B-v0.1/discussions/1",
     # Merges not indicated
-    "DopeorNope/SOLARC-M-10.7B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
-    "DopeorNope/SOLARC-MOE-10.7Bx6": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
-    "DopeorNope/SOLARC-MOE-10.7Bx4": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
     "gagan3012/MetaModelv2": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
     "gagan3012/MetaModelv3": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
     "kyujinpy/Sakura-SOLRCA-Math-Instruct-DPO-v2": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
