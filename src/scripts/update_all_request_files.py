@@ -17,10 +17,14 @@ def update_models(file_path, models):
             if model_id not in models:
                 data['still_on_hub'] = False
                 data['likes'] = 0
+                data['downloads'] = 0
+                data['created_at'] = None
                 continue
 
             model_cfg = models[model_id]
             data['likes'] = model_cfg.likes
+            data['downloads'] = model_cfg.downloads
+            data['created_at'] = model_cfg.created_at
             #data['params'] = get_model_size(model_cfg, data['precision'])
             data['license'] = model_cfg.card_data.license if model_cfg.card_data is not None else ""
 
