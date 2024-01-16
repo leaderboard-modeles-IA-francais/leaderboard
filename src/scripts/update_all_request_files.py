@@ -43,6 +43,7 @@ def update_models(file_path, models):
 
             #  Check if the model is a merge
             is_merge_from_metadata = False
+            is_moe_from_metadata = False
             if still_on_hub:
                 model_card = ModelCard.load(model_id)
 
