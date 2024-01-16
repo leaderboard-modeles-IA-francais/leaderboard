@@ -4,7 +4,7 @@ from huggingface_hub import ModelCard
 import json
 import time
 from src.submission.check_validity import is_model_on_hub, check_model_card
-from src.envs import DYNAMIC_INFO_REPO, DYNAMIC_INFO_PATH, DYNAMIC_INFO_FILE_PATH, API
+from src.envs import DYNAMIC_INFO_REPO, DYNAMIC_INFO_PATH, DYNAMIC_INFO_FILE_PATH, API, H4_TOKEN
 
 def update_models(file_path, models):
     """
@@ -30,7 +30,7 @@ def update_models(file_path, models):
 
             # Is the model still on the hub
             still_on_hub, error, model_config = is_model_on_hub(
-                model_name=model_id, revision=data.get("revision"), trust_remote_code=True, test_tokenizer=False
+                model_name=model_id, revision=data.get("revision"), trust_remote_code=True, test_tokenizer=False, token=H4_TOKEN
             )
             # If the model doesn't have a model card or a license, we consider it's deleted
             if still_on_hub:
@@ -88,12 +88,13 @@ def update_dynamic_files():
         cardData=True,
         fetch_config=True,
     ))
+    id_to_model = {model.id : model for model in models}
 
     print(f"UPDATE_DYNAMIC: Downloaded list of models in {time.time() - start:.2f} seconds")
 
     start = time.time()
 
-    update_models(DYNAMIC_INFO_FILE_PATH, models)
+    update_models(DYNAMIC_INFO_FILE_PATH, id_to_model)
 
     print(f"UPDATE_DYNAMIC: updated in {time.time() - start:.2f} seconds")
 
