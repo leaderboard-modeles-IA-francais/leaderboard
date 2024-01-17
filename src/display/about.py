@@ -165,7 +165,7 @@ Not all models are converted properly from `float16` to `bfloat16`, and selectin
 ## In case of model failure
 If your model is displayed in the `FAILED` category, its execution stopped.
 Make sure you have followed the above steps first.
-If everything is done, check you can launch the EleutherAIHarness on your model locally, using the above command without modifications (you can add `--limit` to limit the number of examples per task).
+If everything is done, check you can launch the EleutherAIHarness on your model locally, using the command in the About tab under "Reproducibility" with all arguments specified (you can add `--limit` to limit the number of examples per task).
 """
 
 CITATION_BUTTON_LABEL = "Copy the following snippet to cite these results"
