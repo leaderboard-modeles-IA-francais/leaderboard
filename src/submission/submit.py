@@ -75,6 +75,9 @@ def add_new_eval(
             architectures = getattr(model_config, "architectures", None)
             if architectures:
                 architecture = ";".join(architectures)
+            downloads = getattr(model_config, 'downloads', 0)
+            created_at = getattr(model_config, 'created_at', '')
+
 
 
     # Is the model info correctly filled?
@@ -95,23 +98,29 @@ def add_new_eval(
     if not modelcard_OK:
         return styled_error(error_msg)
     
+    is_merge_from_metadata = False
+    is_moe_from_metadata = False
+    model_card = ModelCard.load(model)
+
     # Storing the model tags
     tags = []
-
-    model_card = ModelCard.load(model)
-    is_merge_from_metadata = False
     if model_card.data.tags:
-        is_merge_from_metadata = "merge" in model_card.data.tags 
-        if "moe" in model_card.data.tags:
-            tags.append("moe")
-
+        is_merge_from_metadata = "merge" in model_card.data.tags
+        is_moe_from_metadata = "moe" in model_card.data.tags
     merge_keywords = ["mergekit", "merged model", "merge model", "merging"]
     # If the model is a merge but not saying it in the metadata, we flag it
     is_merge_from_model_card = any(keyword in model_card.text.lower() for keyword in merge_keywords)
-    if is_merge_from_model_card:
+    if is_merge_from_model_card or is_merge_from_metadata:
         tags.append("merge")
         if not is_merge_from_metadata:
             tags.append("flagged:undisclosed_merge")
+    moe_keywords = ["moe", "mixture of experts"]
+    is_moe_from_model_card = any(keyword in model_card.text.lower() for keyword in moe_keywords)
+    is_moe_from_name = "moe" in model.lower().replace("/", "-").replace("_", "-").split("-")
+    if is_moe_from_model_card or is_moe_from_name or is_moe_from_metadata:
+        tags.append("moe")
+        if not is_moe_from_metadata:
+            tags.append("flagged:undisclosed_moe")
 
 
     # Seems good, creating the eval
@@ -138,6 +147,8 @@ def add_new_eval(
         "license": license,
         "still_on_hub": True,
         "tags": tags,
+        "downloads": downloads, 
+        "created_at": created_at
     }
 
     # Check for duplicate submission
