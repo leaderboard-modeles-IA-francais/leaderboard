@@ -2,7 +2,7 @@ import json
 import os
 from datetime import datetime, timezone
 
-from huggingface_hub import ModelCard
+from huggingface_hub import ModelCard, snapshot_download
 
 from src.display.formatting import styled_error, styled_message, styled_warning
 from src.envs import API, EVAL_REQUESTS_PATH, DYNAMIC_INFO_PATH, DYNAMIC_INFO_FILE_PATH, DYNAMIC_INFO_REPO, H4_TOKEN, QUEUE_REPO, RATE_LIMIT_PERIOD, RATE_LIMIT_QUOTA
@@ -170,6 +170,11 @@ def add_new_eval(
         repo_id=QUEUE_REPO,
         repo_type="dataset",
         commit_message=f"Add {model} to eval queue",
+    )
+
+    # We want to grab the latest version of the submission file to not accidentally overwrite it
+    snapshot_download(
+        repo_id=DYNAMIC_INFO_REPO, local_dir=DYNAMIC_INFO_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
     )
 
     with open(DYNAMIC_INFO_FILE_PATH) as f:
