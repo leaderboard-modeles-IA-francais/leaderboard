@@ -298,7 +298,7 @@ with demo:
                 leaderboard_table,
             )
 
-            # Define a hidden component that will trigger a reload only if a query parameter has be set
+            # Define a hidden component that will trigger a reload only if a query parameter has been set
             hidden_search_bar = gr.Textbox(value="", visible=False)
             hidden_search_bar.change(
                 update_table,
