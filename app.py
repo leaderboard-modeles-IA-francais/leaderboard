@@ -459,7 +459,7 @@ with demo:
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(restart_space, "interval", seconds=10800)
-scheduler.add_job(update_dynamic_files, "interval", seconds=10000) # taking about 3 min
+scheduler.add_job(update_dynamic_files, "cron", minute=50) # launched every hour on minute 50
 scheduler.start()
 
 demo.queue(default_concurrency_limit=40).launch()
