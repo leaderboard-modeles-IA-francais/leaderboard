@@ -67,6 +67,8 @@ def add_new_eval(
             return styled_error(f'Base model "{base_model}" {error}')
 
     architecture = "?"
+    downloads = 0
+    created_at = ""
     if not weight_type == "Adapter":
         model_on_hub, error, model_config = is_model_on_hub(model_name=model, revision=revision, test_tokenizer=True)
         if not model_on_hub:
