@@ -59,7 +59,7 @@ def update_models(file_path, models):
                     tags.append("merge")
                     if not is_merge_from_metadata:
                         tags.append("flagged:undisclosed_merge")
-                moe_keywords = ["moe", "mixture of experts"]
+                moe_keywords = ["moe", "mixture of experts", "mixtral"]
                 is_moe_from_model_card = any(keyword in model_card.text.lower() for keyword in moe_keywords)
                 is_moe_from_name = "moe" in model_id.lower().replace("/", "-").replace("_", "-").split("-")
                 if is_moe_from_model_card or is_moe_from_name or is_moe_from_metadata:
