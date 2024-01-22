@@ -43,6 +43,13 @@ FLAGGED_MODELS = {
     "dillfrescott/trinity-medium": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "udkai/Garrulus": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/526",
     "dfurman/GarrulusMarcoro-7B-v0.1": "https://huggingface.co/dfurman/GarrulusMarcoro-7B-v0.1/discussions/1",
+    "udkai/Turdus": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/548",
+    "eren23/slerp-test-turdus-beagle": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/548",
+    "abideen/NexoNimbus-7B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/548",
+    "alnrg2arg/test2_3": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/548",
+    "nfaheem/Marcoroni-7b-DPO-Merge": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/548",
+    "CultriX/MergeTrix-7B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/548",
+    "liminerity/Blur-7b-v1.21": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/548",
     # Merges not indicated
     "gagan3012/MetaModelv2": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
     "gagan3012/MetaModelv3": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/510",
