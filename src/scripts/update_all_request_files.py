@@ -30,17 +30,16 @@ def update_models(file_path, models):
             data['license'] = model_cfg.card_data.license if model_cfg.card_data is not None else ""
 
             # Is the model still on the hub?
-            try:
+            model_name = model_id
+            if model_cfg.card_data is not None and model_cfg.card_data.base_model is not None:
                 model_name = model_cfg.card_data.base_model # for adapters, we look at the parent model
-            except Exception as e:
-                model_name = model_id
             still_on_hub, _, _ = is_model_on_hub(
-                model_name=model_id, revision=data.get("revision"), trust_remote_code=True, test_tokenizer=False, token=H4_TOKEN
+                model_name=model_name, revision=data.get("revision"), trust_remote_code=True, test_tokenizer=False, token=H4_TOKEN
             )
             # If the model doesn't have a model card or a license, we consider it's deleted
             if still_on_hub:
                 try:
-                    status, msg, model_card = check_model_card(model_id)
+                    status, _, model_card = check_model_card(model_id)
                     if status is False:
                         still_on_hub = False
                 except Exception:
