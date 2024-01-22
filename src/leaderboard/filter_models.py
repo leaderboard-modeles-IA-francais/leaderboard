@@ -133,6 +133,6 @@ def remove_forbidden_models(leaderboard_data: list[dict]):
     return leaderboard_data
 
 
-def filter_models(leaderboard_data: list[dict]):
+def filter_models_flags(leaderboard_data: list[dict]):
     leaderboard_data = remove_forbidden_models(leaderboard_data)
     flag_models(leaderboard_data)

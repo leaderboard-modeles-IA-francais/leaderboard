@@ -102,7 +102,7 @@ def update_table(
     hide_models: list,
     query: str,
 ):
-    filtered_df = filter_models(hidden_df, type_query, size_query, precision_query, hide_models)
+    filtered_df = filter_models(df=hidden_df, type_query=type_query, size_query=size_query, precision_query=precision_query, hide_models=hide_models)
     filtered_df = filter_queries(query, filtered_df)
     df = select_columns(filtered_df, columns)
     return df

@@ -5,7 +5,7 @@ import pandas as pd
 
 from src.display.formatting import has_no_nan_values, make_clickable_model
 from src.display.utils import AutoEvalColumn, EvalQueueColumn, baseline_row
-from src.leaderboard.filter_models import filter_models
+from src.leaderboard.filter_models import filter_models_flags
 from src.leaderboard.read_evals import get_raw_eval_results
 
 
@@ -13,7 +13,7 @@ def get_leaderboard_df(results_path: str, requests_path: str, dynamic_path: str,
     raw_data = get_raw_eval_results(results_path=results_path, requests_path=requests_path, dynamic_path=dynamic_path)
     all_data_json = [v.to_dict() for v in raw_data]
     all_data_json.append(baseline_row)
-    filter_models(all_data_json)
+    filter_models_flags(all_data_json)
 
     df = pd.DataFrame.from_records(all_data_json)
     df = df.sort_values(by=[AutoEvalColumn.average.name], ascending=False)

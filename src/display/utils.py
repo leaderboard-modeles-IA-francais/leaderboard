@@ -120,9 +120,9 @@ class ModelDetails:
 
 class ModelType(Enum):
     PT = ModelDetails(name="pretrained", symbol="🟢")
-    FT = ModelDetails(name="fine-tuned", symbol="🔶")
-    IFT = ModelDetails(name="instruction-tuned", symbol="⭕")
-    RL = ModelDetails(name="RL-tuned", symbol="🟦")
+    FT = ModelDetails(name="fine-tuned on domain-specific datasets", symbol="🔶")
+    chat = ModelDetails(name="chat models (RLHF, DPO, IFT, ...)", symbol="💬")
+    merges = ModelDetails(name="merges and moerges", symbol="🤝")
     Unknown = ModelDetails(name="", symbol="?")
 
     def to_str(self, separator=" "):
@@ -134,10 +134,10 @@ class ModelType(Enum):
             return ModelType.FT
         if "pretrained" in type or "🟢" in type:
             return ModelType.PT
-        if "RL-tuned" in type or "🟦" in type:
-            return ModelType.RL
-        if "instruction-tuned" in type or "⭕" in type:
-            return ModelType.IFT
+        if any([k in type for k in ["instruction-tuned", "RL-tuned", "chat", "🟦", "⭕", "💬"]]):
+            return ModelType.chat
+        if "merge" in type or "🤝" in type:
+            return ModelType.merges
         return ModelType.Unknown
 
 class WeightType(Enum):

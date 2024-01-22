@@ -56,9 +56,8 @@ Side note on the baseline scores:
 ## Icons
 - {ModelType.PT.to_str(" : ")} model: new, base models, trained on a given corpora
 - {ModelType.FT.to_str(" : ")} model: pretrained models finetuned on more data
-Specific fine-tune subcategories (more adapted to chat):
-- {ModelType.IFT.to_str(" : ")} model: instruction fine-tunes, which are model fine-tuned specifically on datasets of task instruction 
-- {ModelType.RL.to_str(" : ")} model: reinforcement fine-tunes, which usually change the model loss a bit with an added policy. 
+- {ModelType.chat.to_str(" : ")} model: chat like fine-tunes, either using IFT (datasets of task instruction), RLHF or DPO (changing the model loss a bit with an added policy), etc
+- {ModelType.merges.to_str(" : ")} model: merges or MoErges, models which have been merged or fused without additional fine-tuning. 
 If there is no icon, we have not uploaded the information on the model yet, feel free to open an issue with the model information!
 
 "Flagged" indicates that this model has been flagged by the community, and should probably be ignored! Clicking the link will redirect you to the discussion about the model.

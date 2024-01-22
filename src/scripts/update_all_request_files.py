@@ -3,6 +3,7 @@ from huggingface_hub import ModelCard
 
 import json
 import time
+
 from src.submission.check_validity import is_model_on_hub, check_model_card, get_model_tags
 from src.envs import DYNAMIC_INFO_REPO, DYNAMIC_INFO_PATH, DYNAMIC_INFO_FILE_PATH, API, H4_TOKEN
 
@@ -85,3 +86,4 @@ def update_dynamic_files():
         commit_message=f"Daily request file update.",
     )
     print(f"UPDATE_DYNAMIC: pushed to hub")
+
