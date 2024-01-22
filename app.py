@@ -39,7 +39,7 @@ from src.tools.plots import (
 )
 
 # Start ephemeral Spaces on PRs (see config in README.md)
-enable_space_ci()
+#enable_space_ci()
 
 def restart_space():
     API.restart_space(repo_id=REPO_ID, token=H4_TOKEN)
@@ -459,7 +459,7 @@ with demo:
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(restart_space, "interval", seconds=10800) # restarted every 3h
-scheduler.add_job(update_dynamic_files, "cron", minute=00) # launched every hour on the hour
+scheduler.add_job(update_dynamic_files, "cron", minute=10) # launched every hour on the hour
 scheduler.start()
 
 demo.queue(default_concurrency_limit=40).launch()
