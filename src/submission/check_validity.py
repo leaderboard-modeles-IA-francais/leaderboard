@@ -19,7 +19,7 @@ def check_model_card(repo_id: str) -> tuple[bool, str]:
     try:
         card = ModelCard.load(repo_id)
     except huggingface_hub.utils.EntryNotFoundError:
-        return False, "Please add a model card to your model to explain how you trained/fine-tuned it."
+        return False, "Please add a model card to your model to explain how you trained/fine-tuned it.", None
 
     # Enforce license metadata
     if card.data.license is None:
@@ -27,13 +27,13 @@ def check_model_card(repo_id: str) -> tuple[bool, str]:
             return False, (
                 "License not found. Please add a license to your model card using the `license` metadata or a"
                 " `license_name`/`license_link` pair."
-            )
+            ), None
 
     # Enforce card content
     if len(card.text) < 200:
-        return False, "Please add a description to your model card, it is too short."
+        return False, "Please add a description to your model card, it is too short.", None
 
-    return True, ""
+    return True, "", card
 
 
 def is_model_on_hub(model_name: str, revision: str, token: str = None, trust_remote_code=False, test_tokenizer=False) -> tuple[bool, str, AutoConfig]:
@@ -133,3 +133,32 @@ def already_submitted_models(requested_models_dir: str) -> set[str]:
                     users_to_submission_dates[organisation].append(info["submitted_time"])
 
     return set(file_names), users_to_submission_dates
+
+def get_model_tags(model_card, model: str):
+    is_merge_from_metadata = False
+    is_moe_from_metadata = False
+
+    tags = []
+    if model_card is None:
+        return tags
+    if model_card.data.tags:
+        is_merge_from_metadata = "merge" in model_card.data.tags
+        is_moe_from_metadata = "moe" in model_card.data.tags
+    merge_keywords = ["mergekit", "merged model", "merge model", "merging"]
+    # If the model is a merge but not saying it in the metadata, we flag it
+    is_merge_from_model_card = any(keyword in model_card.text.lower() for keyword in merge_keywords)
+    if is_merge_from_model_card or is_merge_from_metadata:
+        tags.append("merge")
+        if not is_merge_from_metadata:
+            tags.append("flagged:undisclosed_merge")
+    moe_keywords = ["moe", "mixture of experts", "mixtral"]
+    is_moe_from_model_card = any(keyword in model_card.text.lower() for keyword in moe_keywords)
+    is_moe_from_name = "moe" in model.lower().replace("/", "-").replace("_", "-").split("-")
+    if is_moe_from_model_card or is_moe_from_name or is_moe_from_metadata:
+        tags.append("moe")
+        # We no longer tag undisclosed MoEs
+        #if not is_moe_from_metadata:
+        #    tags.append("flagged:undisclosed_moe")
+
+
+    return tags

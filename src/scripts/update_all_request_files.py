@@ -3,7 +3,7 @@ from huggingface_hub import ModelCard
 
 import json
 import time
-from src.submission.check_validity import is_model_on_hub, check_model_card
+from src.submission.check_validity import is_model_on_hub, check_model_card, get_model_tags
 from src.envs import DYNAMIC_INFO_REPO, DYNAMIC_INFO_PATH, DYNAMIC_INFO_FILE_PATH, API, H4_TOKEN
 
 def update_models(file_path, models):
@@ -35,37 +35,16 @@ def update_models(file_path, models):
             # If the model doesn't have a model card or a license, we consider it's deleted
             if still_on_hub:
                 try:
-                    if check_model_card(model_id)[0] is False:
+                    status, msg, model_card = check_model_card(model_id)
+                    if status is False:
                         still_on_hub = False
                 except Exception:
+                    model_card = None
                     still_on_hub = False
             data['still_on_hub'] = still_on_hub
 
-            #  Check if the model is a merge
-            is_merge_from_metadata = False
-            is_moe_from_metadata = False
             if still_on_hub:
-                model_card = ModelCard.load(model_id)
-
-                # Storing the model metadata
-                tags = []
-                if model_card.data.tags:
-                    is_merge_from_metadata = "merge" in model_card.data.tags
-                    is_moe_from_metadata = "moe" in model_card.data.tags
-                merge_keywords = ["mergekit", "merged model", "merge model", "merging"]
-                # If the model is a merge but not saying it in the metadata, we flag it
-                is_merge_from_model_card = any(keyword in model_card.text.lower() for keyword in merge_keywords)
-                if is_merge_from_model_card or is_merge_from_metadata:
-                    tags.append("merge")
-                    if not is_merge_from_metadata:
-                        tags.append("flagged:undisclosed_merge")
-                moe_keywords = ["moe", "mixture of experts", "mixtral"]
-                is_moe_from_model_card = any(keyword in model_card.text.lower() for keyword in moe_keywords)
-                is_moe_from_name = "moe" in model_id.lower().replace("/", "-").replace("_", "-").split("-")
-                if is_moe_from_model_card or is_moe_from_name or is_moe_from_metadata:
-                    tags.append("moe")
-                    if not is_moe_from_metadata:
-                        tags.append("flagged:undisclosed_moe")
+                tags = get_model_tags(model_card, model_id)
 
             data["tags"] = tags
 

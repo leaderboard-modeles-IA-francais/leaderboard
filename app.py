@@ -99,13 +99,10 @@ def update_table(
     type_query: list,
     precision_query: str,
     size_query: list,
-    show_deleted: bool,
-    show_merges: bool,
-    show_moe: bool,
-    show_flagged: bool,
+    hide_models: list,
     query: str,
 ):
-    filtered_df = filter_models(hidden_df, type_query, size_query, precision_query, show_deleted, show_merges, show_moe, show_flagged)
+    filtered_df = filter_models(hidden_df, type_query, size_query, precision_query, hide_models)
     filtered_df = filter_queries(query, filtered_df)
     df = select_columns(filtered_df, columns)
     return df
@@ -153,21 +150,21 @@ def filter_queries(query: str, filtered_df: pd.DataFrame):
 
 
 def filter_models(
-    df: pd.DataFrame, type_query: list, size_query: list, precision_query: list, show_deleted: bool, show_merges: bool, show_moe:bool, show_flagged: bool
+    df: pd.DataFrame, type_query: list, size_query: list, precision_query: list, hide_models: list
 ) -> pd.DataFrame:
     # Show all models
-    if show_deleted:
-        filtered_df = df
-    else:  # Show only still on the hub models
+    if "Private or deleted" in hide_models:
         filtered_df = df[df[AutoEvalColumn.still_on_hub.name] == True]
+    else:
+        filtered_df = df
 
-    if not show_merges:
+    if "Merges and moerges" in hide_models:
         filtered_df = filtered_df[filtered_df[AutoEvalColumn.merged.name] == False]
 
-    if not show_moe:
+    if "MoE" in hide_models:
         filtered_df = filtered_df[filtered_df[AutoEvalColumn.moe.name] == False]
 
-    if not show_flagged:
+    if "Flagged" in hide_models:
         filtered_df = filtered_df[filtered_df[AutoEvalColumn.flagged.name] == False]
 
     type_emoji = [t[0] for t in type_query]
@@ -186,10 +183,7 @@ leaderboard_df = filter_models(
     type_query=[t.to_str(" : ") for t in ModelType], 
     size_query=list(NUMERIC_INTERVALS.keys()), 
     precision_query=[i.value.name for i in Precision],
-    show_deleted=False, 
-    show_merges=False, 
-    show_moe=True,
-    show_flagged=False
+    hide_models=[True, True, True, False], # Deleted, merges, flagged, MoEs
 )
 
 demo = gr.Blocks(css=custom_css)
@@ -224,17 +218,11 @@ with demo:
                             interactive=True,
                         )
                     with gr.Row():
-                        deleted_models_visibility = gr.Checkbox(
-                            value=False, label="Show private/deleted models", interactive=True
-                        )
-                        merged_models_visibility = gr.Checkbox(
-                            value=False, label="Show merges", interactive=True
-                        )
-                        moe_models_visibility = gr.Checkbox(
-                            value=True, label="Show MoE", interactive=True
-                        )
-                        flagged_models_visibility = gr.Checkbox(
-                            value=False, label="Show flagged models", interactive=True
+                        hide_models = gr.CheckboxGroup(
+                            label="Hide models",
+                            choices = ["Private or deleted", "Merges and moerges", "Flagged", "MoE"],
+                            value=["Private or deleted", "Merges and moerges", "Flagged"],
+                            interactive=True
                         )
                 with gr.Column(min_width=320):
                     #with gr.Box(elem_id="box-filter"):
@@ -289,10 +277,7 @@ with demo:
                     filter_columns_type,
                     filter_columns_precision,
                     filter_columns_size,
-                    deleted_models_visibility,
-                    merged_models_visibility,
-                    moe_models_visibility,
-                    flagged_models_visibility,
+                    hide_models,
                     search_bar,
                 ],
                 leaderboard_table,
@@ -308,10 +293,7 @@ with demo:
                     filter_columns_type,
                     filter_columns_precision,
                     filter_columns_size,
-                    deleted_models_visibility,
-                    merged_models_visibility,
-                    moe_models_visibility,
-                    flagged_models_visibility,
+                    hide_models,
                     search_bar,
                 ],
                 leaderboard_table,
@@ -319,7 +301,7 @@ with demo:
             # Check query parameter once at startup and update search bar + hidden component
             demo.load(load_query, inputs=[], outputs=[search_bar, hidden_search_bar])
             
-            for selector in [shown_columns, filter_columns_type, filter_columns_precision, filter_columns_size, deleted_models_visibility, merged_models_visibility, moe_models_visibility, flagged_models_visibility]:
+            for selector in [shown_columns, filter_columns_type, filter_columns_precision, filter_columns_size, hide_models]:
                 selector.change(
                     update_table,
                     [
@@ -328,10 +310,7 @@ with demo:
                         filter_columns_type,
                         filter_columns_precision,
                         filter_columns_size,
-                        deleted_models_visibility,
-                        merged_models_visibility,
-                        moe_models_visibility,
-                        flagged_models_visibility,
+                        hide_models,
                         search_bar,
                     ],
                     leaderboard_table,
