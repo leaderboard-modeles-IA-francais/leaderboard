@@ -43,8 +43,7 @@ def update_models(file_path, models):
                     still_on_hub = False
             data['still_on_hub'] = still_on_hub
 
-            if still_on_hub:
-                tags = get_model_tags(model_card, model_id)
+            tags = get_model_tags(model_card, model_id) if still_on_hub else []
 
             data["tags"] = tags
 

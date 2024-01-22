@@ -183,7 +183,7 @@ leaderboard_df = filter_models(
     type_query=[t.to_str(" : ") for t in ModelType], 
     size_query=list(NUMERIC_INTERVALS.keys()), 
     precision_query=[i.value.name for i in Precision],
-    hide_models=[True, True, True, False], # Deleted, merges, flagged, MoEs
+    hide_models=["Private or deleted", "Merges and moerges", "Flagged"], # Deleted, merges, flagged, MoEs
 )
 
 demo = gr.Blocks(css=custom_css)
