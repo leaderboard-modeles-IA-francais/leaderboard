@@ -158,7 +158,7 @@ def filter_models(
     else:
         filtered_df = df
 
-    if "Merges and moerges" in hide_models:
+    if "Contains a merge/moerge" in hide_models:
         filtered_df = filtered_df[filtered_df[AutoEvalColumn.merged.name] == False]
 
     if "MoE" in hide_models:
@@ -183,7 +183,7 @@ leaderboard_df = filter_models(
     type_query=[t.to_str(" : ") for t in ModelType], 
     size_query=list(NUMERIC_INTERVALS.keys()), 
     precision_query=[i.value.name for i in Precision],
-    hide_models=["Private or deleted", "Merges and moerges", "Flagged"], # Deleted, merges, flagged, MoEs
+    hide_models=["Private or deleted", "Contains a merge/moerge", "Flagged"], # Deleted, merges, flagged, MoEs
 )
 
 demo = gr.Blocks(css=custom_css)
@@ -220,8 +220,8 @@ with demo:
                     with gr.Row():
                         hide_models = gr.CheckboxGroup(
                             label="Hide models",
-                            choices = ["Private or deleted", "Merges and moerges", "Flagged", "MoE"],
-                            value=["Private or deleted", "Merges and moerges", "Flagged"],
+                            choices = ["Private or deleted", "Contains a merge/moerge", "Flagged", "MoE"],
+                            value=["Private or deleted", "Contains a merge/moerge", "Flagged"],
                             interactive=True
                         )
                 with gr.Column(min_width=320):

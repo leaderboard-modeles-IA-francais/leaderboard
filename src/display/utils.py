@@ -122,7 +122,7 @@ class ModelType(Enum):
     PT = ModelDetails(name="pretrained", symbol="🟢")
     FT = ModelDetails(name="fine-tuned on domain-specific datasets", symbol="🔶")
     chat = ModelDetails(name="chat models (RLHF, DPO, IFT, ...)", symbol="💬")
-    merges = ModelDetails(name="merges and moerges", symbol="🤝")
+    merges = ModelDetails(name="base merges and moerges", symbol="🤝")
     Unknown = ModelDetails(name="", symbol="?")
 
     def to_str(self, separator=" "):
