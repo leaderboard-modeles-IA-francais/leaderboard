@@ -89,6 +89,32 @@ FLAGGED_MODELS = {
     "DopeorNope/SOLARC-MOE-10.7Bx6 ": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/511",
     "DopeorNope/SOLARC-MOE-10.7Bx4": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/511",
     "gagan3012/MetaModelv2 ": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/511",
+    "udkai/Turdus": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "kodonho/Solar-OrcaDPO-Solar-Instruct-SLERP": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "kodonho/SolarM-SakuraSolar-SLERP": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "Yhyu13/LMCocktail-10.7B-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "mlabonne/NeuralMarcoro14-7B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "Neuronovo/neuronovo-7B-v0.2": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "ryandt/MusingCaterpillar": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "Neuronovo/neuronovo-7B-v0.3": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "SanjiWatsuki/Lelantos-DPO-7B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "bardsai/jaskier-7b-dpo": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "cookinai/OpenCM-14": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "bardsai/jaskier-7b-dpo-v2": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "jan-hq/supermario-v2": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",    
+    # MoErges
+    "cloudyu/Yi-34Bx2-MoE-60B":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "cloudyu/Mixtral_34Bx2_MoE_60B":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "gagan3012/MetaModel_moe":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "macadeliccc/SOLAR-math-2x10.7b-v0.2":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "cloudyu/Mixtral_7Bx2_MoE":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "macadeliccc/SOLAR-math-2x10.7b":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "macadeliccc/Orca-SOLAR-4x10.7b":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "macadeliccc/piccolo-8x7b":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "cloudyu/Mixtral_7Bx4_MOE_24B":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "macadeliccc/laser-dolphin-mixtral-2x7b-dpo":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "macadeliccc/polyglot-math-4x7b":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+
 }
 
 # Models which have been requested by orgs to not be submitted on the leaderboard
