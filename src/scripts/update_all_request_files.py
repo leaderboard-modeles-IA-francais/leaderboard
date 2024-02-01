@@ -32,7 +32,8 @@ def update_models(file_path, models):
             # Is the model still on the hub?
             model_name = model_id
             if model_cfg.card_data is not None and model_cfg.card_data.base_model is not None:
-                model_name = model_cfg.card_data.base_model # for adapters, we look at the parent model
+                if isinstance(model_cfg.card_data.base_model, str):
+                    model_name = model_cfg.card_data.base_model # for adapters, we look at the parent model
             still_on_hub, _, _ = is_model_on_hub(
                 model_name=model_name, revision=data.get("revision"), trust_remote_code=True, test_tokenizer=False, token=H4_TOKEN
             )

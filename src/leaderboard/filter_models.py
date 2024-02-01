@@ -114,7 +114,9 @@ FLAGGED_MODELS = {
     "cloudyu/Mixtral_7Bx4_MOE_24B":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
     "macadeliccc/laser-dolphin-mixtral-2x7b-dpo":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
     "macadeliccc/polyglot-math-4x7b":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
-
+    # Other - contamination mostly
+    "DopeorNope/COKAL-v1-70B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/566",
+    "CultriX/MistralTrix-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/556",
 }
 
 # Models which have been requested by orgs to not be submitted on the leaderboard
