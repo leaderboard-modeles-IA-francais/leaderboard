@@ -8,7 +8,7 @@ INTRODUCTION_TEXT = """
 🤗 Submit a model for automated evaluation on the 🤗 GPU cluster on the "Submit" page!
 The leaderboard's backend runs the great [Eleuther AI Language Model Evaluation Harness](https://github.com/EleutherAI/lm-evaluation-harness) - read more details in the "About" page!
 
-Other cool leaderboard:
+Other cool leaderboards:
 - [LLM safety](https://huggingface.co/spaces/AI-Secure/llm-trustworthy-leaderboard)
 - [LLM performance](https://huggingface.co/spaces/optimum/llm-perf-leaderboard)
 """
