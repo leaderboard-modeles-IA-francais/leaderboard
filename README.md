@@ -15,6 +15,8 @@ space_ci: # See https://huggingface.co/spaces/Wauplin/gradio-space-ci
   secrets:
     - HF_TOKEN
     - H4_TOKEN
+tags:
+  - leaderboard
 ---
 
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
