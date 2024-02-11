@@ -13,6 +13,6 @@ python-dateutil==2.8.2
 requests==2.28.2
 sentencepiece
 tqdm==4.65.0
-transformers==4.36.0
+transformers==4.37.0
 tokenizers>=0.15.0
 gradio-space-ci @ git+https://huggingface.co/spaces/Wauplin/gradio-space-ci@0.2.1 # CI !!!
