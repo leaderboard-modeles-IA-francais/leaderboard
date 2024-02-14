@@ -45,28 +45,29 @@ def restart_space():
     API.restart_space(repo_id=REPO_ID, token=H4_TOKEN)
 
 
-def init_space():
-    try:
-        print(EVAL_REQUESTS_PATH)
-        snapshot_download(
-            repo_id=QUEUE_REPO, local_dir=EVAL_REQUESTS_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
-        )
-    except Exception:
-        restart_space()
-    try:
-        print(DYNAMIC_INFO_PATH)
-        snapshot_download(
-            repo_id=DYNAMIC_INFO_REPO, local_dir=DYNAMIC_INFO_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
-        )
-    except Exception:
-        restart_space()
-    try:
-        print(EVAL_RESULTS_PATH)
-        snapshot_download(
-            repo_id=RESULTS_REPO, local_dir=EVAL_RESULTS_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
-        )
-    except Exception:
-        restart_space()
+def init_space(full_init: bool = True):
+    if full_init:
+        try:
+            print(EVAL_REQUESTS_PATH)
+            snapshot_download(
+                repo_id=QUEUE_REPO, local_dir=EVAL_REQUESTS_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
+            )
+        except Exception:
+            restart_space()
+        try:
+            print(DYNAMIC_INFO_PATH)
+            snapshot_download(
+                repo_id=DYNAMIC_INFO_REPO, local_dir=DYNAMIC_INFO_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
+            )
+        except Exception:
+            restart_space()
+        try:
+            print(EVAL_RESULTS_PATH)
+            snapshot_download(
+                repo_id=RESULTS_REPO, local_dir=EVAL_RESULTS_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
+            )
+        except Exception:
+            restart_space()    
 
 
     raw_data, original_df = get_leaderboard_df(

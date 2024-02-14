@@ -31,7 +31,9 @@ def create_scores_df(raw_data: list[EvalResult]) -> pd.DataFrame:
         column = task.col_name
         for _, row in results_df.iterrows():
             current_model = row["full_model"]
-            if current_model in FLAGGED_MODELS:
+            # We ignore models that are flagged/no longer on the hub/not finished 
+            to_ignore = not row["still_on_hub"] or row["flagged"] or current_model in FLAGGED_MODELS or row["status"] != "FINISHED"
+            if to_ignore:
                 continue
 
             current_date = row["date"]
