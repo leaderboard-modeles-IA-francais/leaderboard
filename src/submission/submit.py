@@ -72,7 +72,7 @@ def add_new_eval(
     created_at = ""
     if not weight_type == "Adapter":
         model_on_hub, error, model_config = is_model_on_hub(model_name=model, revision=revision, test_tokenizer=True)
-        if not model_on_hub:
+        if not model_on_hub or model_config is None:
             return styled_error(f'Model "{model}" {error}')
         if model_config is not None:
             architectures = getattr(model_config, "architectures", None)

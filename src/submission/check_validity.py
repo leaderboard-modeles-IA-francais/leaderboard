@@ -60,8 +60,9 @@ def is_model_on_hub(model_name: str, revision: str, token: str = None, trust_rem
         )
 
     except Exception as e:
+        if "You are trying to access a gated repo." in str(e):
+            return True, "uses a gated model.", None
         return False, "was not found on hub!", None
-
 
 def get_model_size(model_info: ModelInfo, precision: str):
     size_pattern = re.compile(r"(\d+\.)?\d+(b|m)")
