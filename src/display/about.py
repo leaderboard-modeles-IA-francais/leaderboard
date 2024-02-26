@@ -38,11 +38,18 @@ You can find:
 - community queries and running status in the `requests` Hugging Face dataset: https://huggingface.co/datasets/open-llm-leaderboard/requests
 
 ## Reproducibility
-To reproduce our results, here is the commands you can run, using [this version](https://github.com/EleutherAI/lm-evaluation-harness/tree/b281b0921b636bc36ad05c0b0b0763bd6dd43463) of the Eleuther AI Harness:
-`python main.py --model=hf-causal-experimental --model_args="pretrained=<your_model>,use_accelerate=True,revision=<your_model_revision>"`
-` --tasks=<task_list> --num_fewshot=<n_few_shot> --batch_size=1 --output_path=<output_path>`
+To reproduce our results, use [this version](https://github.com/EleutherAI/lm-evaluation-harness/tree/b281b0921b636bc36ad05c0b0b0763bd6dd43463) of the Eleuther AI Harness and run:
 
-The total batch size we get for models which fit on one A100 node is 8 (8 GPUs * 1). If you don't use parallelism, adapt your batch size to fit.
+```
+python main.py --model=hf-causal-experimental \
+    --model_args="pretrained=<your_model>,use_accelerate=True,revision=<your_model_revision>" \
+    --tasks=<task_list> \
+    --num_fewshot=<n_few_shot> \
+    --batch_size=1 \
+    --output_path=<output_path>
+```
+
+**Note:** we evaluate all models on a single node of 8 H100s, so the global batch batch size is 8 for each evaluation. If you don't use parallelism, adapt your batch size to fit.
 *You can expect results to vary slightly for different batch sizes because of padding.*
 
 The tasks and few shots parameters are:
