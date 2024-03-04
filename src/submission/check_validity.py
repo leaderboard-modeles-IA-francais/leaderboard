@@ -143,15 +143,15 @@ def get_model_tags(model_card, model: str):
     if model_card is None:
         return tags
     if model_card.data.tags:
-        is_merge_from_metadata = "merge" in model_card.data.tags
-        is_moe_from_metadata = "moe" in model_card.data.tags
-    merge_keywords = ["merged model", "merge model"]
+        is_merge_from_metadata = ("merge" in model_card.data.tags or "moerge" in model_card.data.tags)
+        is_moe_from_metadata = ("moe" in model_card.data.tags or "moerge" in model_card.data.tags)
+    merge_keywords = ["merged model", "merge model", "moerge"]
     # If the model is a merge but not saying it in the metadata, we flag it
     is_merge_from_model_card = any(keyword in model_card.text.lower() for keyword in merge_keywords)
     if is_merge_from_model_card or is_merge_from_metadata:
         tags.append("merge")
-        if not is_merge_from_metadata:
-            tags.append("flagged:undisclosed_merge")
+        #if not is_merge_from_metadata:
+        #    tags.append("flagged:undisclosed_merge")
     moe_keywords = ["moe", "mixtral"]
     is_moe_from_model_card = any(keyword in model_card.text.lower() for keyword in moe_keywords)
     is_moe_from_name = "moe" in model.lower().replace("/", "-").replace("_", "-").split("-")

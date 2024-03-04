@@ -120,6 +120,7 @@ class ModelDetails:
 
 class ModelType(Enum):
     PT = ModelDetails(name="pretrained", symbol="🟢")
+    CPT = ModelDetails(name="continuously pretrained", symbol="🟩")
     FT = ModelDetails(name="fine-tuned on domain-specific datasets", symbol="🔶")
     chat = ModelDetails(name="chat models (RLHF, DPO, IFT, ...)", symbol="💬")
     merges = ModelDetails(name="base merges and moerges", symbol="🤝")
@@ -132,6 +133,8 @@ class ModelType(Enum):
     def from_str(type):
         if "fine-tuned" in type or "🔶" in type:
             return ModelType.FT
+        if "continously pretrained" in type or "🟩" in type:
+            return ModelType.CPT
         if "pretrained" in type or "🟢" in type:
             return ModelType.PT
         if any([k in type for k in ["instruction-tuned", "RL-tuned", "chat", "🟦", "⭕", "💬"]]):

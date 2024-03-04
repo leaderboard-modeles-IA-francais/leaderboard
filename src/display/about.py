@@ -13,13 +13,19 @@ Other cool leaderboards:
 - [LLM performance](https://huggingface.co/spaces/optimum/llm-perf-leaderboard)
 """
 
+icons = f"""
+- {ModelType.PT.to_str(" : ")} model: new, base models, trained on a given corpora
+- {ModelType.CPT.to_str(" : ")} model: new, base models, continuously trained on a given corpora, which includes IFT/chat data
+- {ModelType.FT.to_str(" : ")} model: pretrained models finetuned on more data
+- {ModelType.chat.to_str(" : ")} model: chat like fine-tunes, either using IFT (datasets of task instruction), RLHF or DPO (changing the model loss a bit with an added policy), etc
+- {ModelType.merges.to_str(" : ")} model: merges or MoErges, models which have been merged or fused without additional fine-tuning. 
+"""
 LLM_BENCHMARKS_TEXT = f"""
-# Context
+## ABOUT
 With the plethora of large language models (LLMs) and chatbots being released week upon week, often with grandiose claims of their performance, it can be hard to filter out the genuine progress that is being made by the open-source community and which model is the current state of the art.
 
-## How it works
-
-📈 We evaluate models on 7 key benchmarks using the <a href="https://github.com/EleutherAI/lm-evaluation-harness" target="_blank">  Eleuther AI Language Model Evaluation Harness </a>, a unified framework to test generative language models on a large number of different evaluation tasks.
+### Tasks 
+📈 We evaluate models on 6 key benchmarks using the <a href="https://github.com/EleutherAI/lm-evaluation-harness" target="_blank">  Eleuther AI Language Model Evaluation Harness </a>, a unified framework to test generative language models on a large number of different evaluation tasks.
 
 - <a href="https://arxiv.org/abs/1803.05457" target="_blank">  AI2 Reasoning Challenge </a> (25-shot) - a set of grade-school science questions.
 - <a href="https://arxiv.org/abs/1905.07830" target="_blank">  HellaSwag </a> (10-shot) - a test of commonsense inference, which is easy for humans (~95%) but challenging for SOTA models.
@@ -31,14 +37,20 @@ With the plethora of large language models (LLMs) and chatbots being released we
 For all these evaluations, a higher score is a better score.
 We chose these benchmarks as they test a variety of reasoning and general knowledge across a wide variety of fields in 0-shot and few-shot settings.
 
-## Details and logs
+### Results
 You can find:
 - detailed numerical results in the `results` Hugging Face dataset: https://huggingface.co/datasets/open-llm-leaderboard/results
 - details on the input/outputs for the models in the `details` of each model, that you can access by clicking the 📄 emoji after the model name
 - community queries and running status in the `requests` Hugging Face dataset: https://huggingface.co/datasets/open-llm-leaderboard/requests
 
-## Reproducibility
-To reproduce our results, use [this version](https://github.com/EleutherAI/lm-evaluation-harness/tree/b281b0921b636bc36ad05c0b0b0763bd6dd43463) of the Eleuther AI Harness and run:
+If a model's name contains "Flagged", this indicates it has been flagged by the community, and should probably be ignored! Clicking the link will redirect you to the discussion about the model.
+
+---------------------------
+
+## REPRODUCIBILITY
+To reproduce our results, here is the commands you can run, using [this version](https://github.com/EleutherAI/lm-evaluation-harness/tree/b281b0921b636bc36ad05c0b0b0763bd6dd43463) of the Eleuther AI Harness:
+`python main.py --model=hf-causal-experimental --model_args="pretrained=<your_model>,use_accelerate=True,revision=<your_model_revision>"`
+` --tasks=<task_list> --num_fewshot=<n_few_shot> --batch_size=1 --output_path=<output_path>`
 
 ```
 python main.py --model=hf-causal-experimental \
@@ -64,31 +76,23 @@ Side note on the baseline scores:
 - for log-likelihood evaluation, we select the random baseline
 - for GSM8K, we select the score obtained in the paper after finetuning a 6B model on the full GSM8K training set for 50 epochs
 
-## Icons
-- {ModelType.PT.to_str(" : ")} model: new, base models, trained on a given corpora
-- {ModelType.FT.to_str(" : ")} model: pretrained models finetuned on more data
-- {ModelType.chat.to_str(" : ")} model: chat like fine-tunes, either using IFT (datasets of task instruction), RLHF or DPO (changing the model loss a bit with an added policy), etc
-- {ModelType.merges.to_str(" : ")} model: merges or MoErges, models which have been merged or fused without additional fine-tuning. 
-If there is no icon, we have not uploaded the information on the model yet, feel free to open an issue with the model information!
+---------------------------
 
-"Flagged" indicates that this model has been flagged by the community, and should probably be ignored! Clicking the link will redirect you to the discussion about the model.
+## RESSOURCES
 
-## Quantization
+### Quantization
 To get more information about quantization, see:
 - 8 bits: [blog post](https://huggingface.co/blog/hf-bitsandbytes-integration), [paper](https://arxiv.org/abs/2208.07339)
 - 4 bits: [blog post](https://huggingface.co/blog/4bit-transformers-bitsandbytes), [paper](https://arxiv.org/abs/2305.14314)
 
-## Useful links
+### Useful links
 - [Community resources](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/174)
 - [Collection of best models](https://huggingface.co/collections/open-llm-leaderboard/llm-leaderboard-best-models-652d6c7965a4619fb5c27a03)
 """
 
 FAQ_TEXT = """
----------------------------
-# FAQ
-Below are some common questions - if this FAQ does not answer you, feel free to create a new issue, and we'll take care of it as soon as we can! 
 
-## 1) Submitting a model
+## SUBMISSIONS
 My model requires `trust_remote_code=True`, can I submit it?
 - *We only support models that have been integrated in a stable version of the `transformers` library for automatic submission, as we don't want to run possibly unsage code on our cluster.*
 
@@ -108,7 +112,9 @@ How can I report an evaluation failure?
 - *As we store the logs for all models, feel free to create an issue, **where you link to the requests file of your model** (look for it [here](https://huggingface.co/datasets/open-llm-leaderboard/requests/tree/main)), so we can investigate! If the model failed due to a problem on our side, we'll relaunch it right away!* 
 *Note: Please do not re-upload your model under a different name, it will not help*
 
-## 2) Model results
+---------------------------
+
+## RESULTS
 What kind of information can I find?
 - *Let's imagine you are interested in the Yi-34B results. You have access to 3 different information categories:*
       - *The [request file](https://huggingface.co/datasets/open-llm-leaderboard/requests/blob/main/01-ai/Yi-34B_eval_request_False_bfloat16_Original.json): it gives you information about the status of the evaluation*
@@ -125,26 +131,43 @@ What is this concept of "flagging"?
 My model has been flagged improperly, what can I do?
 - *Every flagged model has a discussion associated with it - feel free to plead your case there, and we'll see what to do together with the community.*
 
-## 3) Editing a submission
+---------------------------
+
+## EDITING SUBMISSIONS
 I upgraded my model and want to re-submit, how can I do that?
 - *Please open an issue with the precise name of your model, and we'll remove your model from the leaderboard so you can resubmit. You can also resubmit directly with the new commit hash!* 
 
 I need to rename my model, how can I do that?
 - *You can use @Weyaxi 's [super cool tool](https://huggingface.co/spaces/Weyaxi/open-llm-leaderboard-renamer) to request model name changes, then open a discussion where you link to the created pull request, and we'll check them and merge them as needed.*
 
-## 4) Other
+---------------------------
+
+## OTHER
+Why do you differentiate between pretrained, continously pretrained, fine-tuned, merges, etc ?
+- *These different models do not play in the same categories, and therefore need to be separated for fair comparision. Base pretrained models are the most interesting for the community, as they are usually good models to fine-tune later on - any jump in performance from a pretrained model represents a true improvement on the SOTA. 
+Fine tuned and IFT/RLHF/chat models usually have better performance, but the latter might be more sensitive to system prompts, which we do not cover at the moment in the Open LLM Leaderboard. 
+Merges and moerges have artificially inflated performance on test sets, which is not always explainable, and does not always apply to real world situations.*
+
+What should I use the leaderboard for?
+- *We recommend using the leaderboard for 3 use cases: 1) getting an idea of the state of open pretrained models, by looking only at the ranks and score of this category; 2) experimenting with different fine tuning methods, datasets, quantization techniques, etc, and comparing their score in a reproducible setup, and 3) checking the performance of a model of interest to you, wrt to other models of its category.*
+
 Why don't you display closed source model scores? 
 - *This is a leaderboard for Open models, both for philosophical reasons (openness is cool) and for practical reasons: we want to ensure that the results we display are accurate and reproducible, but 1) commercial closed models can change their API thus rendering any scoring at a given time incorrect 2) we re-run everything on our cluster to ensure all models are run on the same setup and you can't do that for these models.*
 
 I have an issue about accessing the leaderboard through the Gradio API
 - *Since this is not the recommended way to access the leaderboard, we won't provide support for this, but you can look at tools provided by the community for inspiration!*
+
+I have another problem, help!
+- *Please open an issue in the discussion tab, and we'll do our best to help you in a timely manner :) *
 """
 
 
-EVALUATION_QUEUE_TEXT = """
+EVALUATION_QUEUE_TEXT = f"""
 # Evaluation Queue for the 🤗 Open LLM Leaderboard
 
 Models added here will be automatically evaluated on the 🤗 cluster.
+
+## Don't forget to read the FAQ and the About tabs for more information!
 
 ## First steps before submitting a model
 
@@ -172,10 +195,8 @@ When we add extra information about models to the leaderboard, it will be automa
 ### 5) Select the correct precision
 Not all models are converted properly from `float16` to `bfloat16`, and selecting the wrong precision can sometimes cause evaluation error (as loading a `bf16` model in `fp16` can sometimes generate NaNs, depending on the weight range).
 
-## In case of model failure
-If your model is displayed in the `FAILED` category, its execution stopped.
-Make sure you have followed the above steps first.
-If everything is done, check you can launch the EleutherAIHarness on your model locally, using the command in the About tab under "Reproducibility" with all arguments specified (you can add `--limit` to limit the number of examples per task).
+## Model types
+{icons}
 """
 
 CITATION_BUTTON_LABEL = "Copy the following snippet to cite these results"
