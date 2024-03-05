@@ -14,8 +14,8 @@ Other cool leaderboards:
 """
 
 icons = f"""
-- {ModelType.PT.to_str(" : ")} model: new, base models, trained on a given corpora
-- {ModelType.CPT.to_str(" : ")} model: new, base models, continuously trained on a given corpora, which includes IFT/chat data
+- {ModelType.PT.to_str(" : ")} model: new, base models, trained on a given text corpora using masked modelling
+- {ModelType.CPT.to_str(" : ")} model: new, base models, continuously trained on further corpus (which may include IFT/chat data) using masked modelling
 - {ModelType.FT.to_str(" : ")} model: pretrained models finetuned on more data
 - {ModelType.chat.to_str(" : ")} model: chat like fine-tunes, either using IFT (datasets of task instruction), RLHF or DPO (changing the model loss a bit with an added policy), etc
 - {ModelType.merges.to_str(" : ")} model: merges or MoErges, models which have been merged or fused without additional fine-tuning. 
@@ -94,7 +94,7 @@ FAQ_TEXT = """
 
 ## SUBMISSIONS
 My model requires `trust_remote_code=True`, can I submit it?
-- *We only support models that have been integrated in a stable version of the `transformers` library for automatic submission, as we don't want to run possibly unsage code on our cluster.*
+- *We only support models that have been integrated in a stable version of the `transformers` library for automatic submission, as we don't want to run possibly unsafe code on our cluster.*
 
 What about models of type X? 
 - *We only support models that have been integrated in a stable version of the `transformers` library for automatic submission.*
