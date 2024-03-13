@@ -340,7 +340,7 @@ with demo:
         with gr.TabItem("❗FAQ", elem_id="llm-benchmark-tab-table", id=4):
             gr.Markdown(FAQ_TEXT, elem_classes="markdown-text")
 
-        with gr.TabItem("🚀 Submit here! ", elem_id="llm-benchmark-tab-table", id=5):
+        with gr.TabItem("🚀 Submit ", elem_id="llm-benchmark-tab-table", id=5):
             with gr.Column():
                 with gr.Row():
                     gr.Markdown(EVALUATION_QUEUE_TEXT, elem_classes="markdown-text")

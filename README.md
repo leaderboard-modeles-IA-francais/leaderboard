@@ -17,7 +17,7 @@ space_ci:
   - H4_TOKEN
 tags:
 - leaderboard
-short_description: Ranking open LLMs and chat models on their capabilities
+short_description: Track, rank and evaluate open LLMs and chatbots
 ---
 
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference

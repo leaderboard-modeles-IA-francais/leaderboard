@@ -1,16 +1,8 @@
 from src.display.utils import ModelType
 
-TITLE = """<h1 align="center" id="space-title">🤗 Open LLM Leaderboard</h1>"""
+TITLE = """<h1 style="text-align:left;float:left; id="space-title">🤗 Open LLM Leaderboard</h1> Track, rank and evaluate open LLMs and chatbots"""
 
 INTRODUCTION_TEXT = """
-📐 The 🤗 Open LLM Leaderboard aims to track, rank and evaluate open LLMs and chatbots.
-
-🤗 Submit a model for automated evaluation on the 🤗 GPU cluster on the "Submit" page!
-The leaderboard's backend runs the great [Eleuther AI Language Model Evaluation Harness](https://github.com/EleutherAI/lm-evaluation-harness) - read more details in the "About" page!
-
-Other cool leaderboards:
-- [LLM safety](https://huggingface.co/spaces/AI-Secure/llm-trustworthy-leaderboard)
-- [LLM performance](https://huggingface.co/spaces/optimum/llm-perf-leaderboard)
 """
 
 icons = f"""
@@ -23,6 +15,9 @@ icons = f"""
 LLM_BENCHMARKS_TEXT = f"""
 ## ABOUT
 With the plethora of large language models (LLMs) and chatbots being released week upon week, often with grandiose claims of their performance, it can be hard to filter out the genuine progress that is being made by the open-source community and which model is the current state of the art.
+
+🤗 Submit a model for automated evaluation on the 🤗 GPU cluster on the "Submit" page!
+The leaderboard's backend runs the great [Eleuther AI Language Model Evaluation Harness](https://github.com/EleutherAI/lm-evaluation-harness) - read more details below!
 
 ### Tasks 
 📈 We evaluate models on 6 key benchmarks using the <a href="https://github.com/EleutherAI/lm-evaluation-harness" target="_blank">  Eleuther AI Language Model Evaluation Harness </a>, a unified framework to test generative language models on a large number of different evaluation tasks.
@@ -88,6 +83,12 @@ To get more information about quantization, see:
 ### Useful links
 - [Community resources](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/174)
 - [Collection of best models](https://huggingface.co/collections/open-llm-leaderboard/llm-leaderboard-best-models-652d6c7965a4619fb5c27a03)
+
+### Other cool leaderboards:
+- [LLM safety](https://huggingface.co/spaces/AI-Secure/llm-trustworthy-leaderboard)
+- [LLM performance](https://huggingface.co/spaces/optimum/llm-perf-leaderboard)
+
+
 """
 
 FAQ_TEXT = """
