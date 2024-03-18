@@ -1,6 +1,6 @@
 from src.display.utils import ModelType
 
-TITLE = """<h1 style="text-align:left;float:left; id="space-title">🤗 Open LLM Leaderboard</h1> Track, rank and evaluate open LLMs and chatbots"""
+TITLE = """<h1 style="text-align:left;float:left; id="space-title">🤗 Open LLM Leaderboard</h1> <h3 style="text-align:left;float:left;> Track, rank and evaluate open LLMs and chatbots </h3>"""
 
 INTRODUCTION_TEXT = """
 """
