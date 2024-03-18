@@ -15,6 +15,7 @@ def update_one_model(model_id, data, models_on_the_hub):
         data['likes'] = 0
         data['downloads'] = 0
         data['created_at'] = ""
+        data["tags"] = []
         return data
 
     # Grabbing model parameters
@@ -101,7 +102,7 @@ def update_dynamic_files():
     start = time.time()
 
     models = list(API.list_models(
-        filter=ModelFilter(task="text-generation"),
+        #filter=ModelFilter(task="text-generation"),
         full=False,
         cardData=True,
         fetch_config=True,
