@@ -121,8 +121,8 @@ class EvalResult:
         self.license = file_dict.get("license", "?")
         self.likes = file_dict.get("likes", 0)
         self.still_on_hub = file_dict["still_on_hub"]
-        self.flagged = any("flagged" in tag for tag in file_dict["tags"])
-        self.tags = file_dict["tags"]
+        self.tags = file_dict.get("tags", [])
+        self.flagged = any("flagged" in tag for tag in self.tags)
         
 
     def to_dict(self):
