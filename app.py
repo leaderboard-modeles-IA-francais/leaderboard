@@ -441,8 +441,8 @@ with demo:
             )
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(restart_space, "interval", seconds=10800) # restarted every 3h
-scheduler.add_job(update_dynamic_files, "cron", minute=30) # launched every hour on the hour
+scheduler.add_job(restart_space, "interval", hours=3) # restarted every 3h
+scheduler.add_job(update_dynamic_files, "interval", minute=90) # launched every hour on the hour
 scheduler.start()
 
 demo.queue(default_concurrency_limit=40).launch()
