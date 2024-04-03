@@ -10,6 +10,7 @@ pinned: true
 license: apache-2.0
 duplicated_from: HuggingFaceH4/open_llm_leaderboard
 fullWidth: true
+startup_duration_timeout: 1h
 space_ci:
   private: true
   secrets:
