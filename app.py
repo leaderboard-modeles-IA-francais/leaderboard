@@ -50,21 +50,21 @@ def init_space(full_init: bool = True):
         try:
             print(EVAL_REQUESTS_PATH)
             snapshot_download(
-                repo_id=QUEUE_REPO, local_dir=EVAL_REQUESTS_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
+                repo_id=QUEUE_REPO, local_dir=EVAL_REQUESTS_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30, max_workers=8
             )
         except Exception:
             restart_space()
         try:
             print(DYNAMIC_INFO_PATH)
             snapshot_download(
-                repo_id=DYNAMIC_INFO_REPO, local_dir=DYNAMIC_INFO_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
+                repo_id=DYNAMIC_INFO_REPO, local_dir=DYNAMIC_INFO_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30, max_workers=8
             )
         except Exception:
             restart_space()
         try:
             print(EVAL_RESULTS_PATH)
             snapshot_download(
-                repo_id=RESULTS_REPO, local_dir=EVAL_RESULTS_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
+                repo_id=RESULTS_REPO, local_dir=EVAL_RESULTS_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30,   max_workers=8
             )
         except Exception:
             restart_space()    

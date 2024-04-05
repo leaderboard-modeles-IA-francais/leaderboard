@@ -150,6 +150,9 @@ def get_model_tags(model_card, model: str):
     if is_merge_from_model_card or is_merge_from_metadata:
         tags.append("merge")
     is_moe_from_model_card = any(keyword in model_card.text.lower() for keyword in ["moe", "mixtral"])
+    # Hardcoding because of gating problem
+    if model == "Qwen/Qwen1.5-32B":
+        is_moe_from_model_card = False
     is_moe_from_name = "moe" in model.lower().replace("/", "-").replace("_", "-").split("-")
     if is_moe_from_model_card or is_moe_from_name or is_moe_from_metadata:
         tags.append("moe")

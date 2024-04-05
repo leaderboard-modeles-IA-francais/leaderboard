@@ -13,9 +13,12 @@ def get_leaderboard_df(results_path: str, requests_path: str, dynamic_path: str,
     raw_data = get_raw_eval_results(results_path=results_path, requests_path=requests_path, dynamic_path=dynamic_path)
     all_data_json = [v.to_dict() for v in raw_data]
     all_data_json.append(baseline_row)
+    print([data for data in all_data_json if data["model_name_for_query"] == "databricks/dbrx-base"])
     filter_models_flags(all_data_json)
 
     df = pd.DataFrame.from_records(all_data_json)
+    print(df.columns)
+    print(df[df["model_name_for_query"] == "databricks/dbrx-base"])
     df = df.sort_values(by=[AutoEvalColumn.average.name], ascending=False)
     df = df[cols].round(decimals=2)
 
@@ -44,7 +47,11 @@ def get_evaluation_queue_df(save_path: str, cols: list) -> list[pd.DataFrame]:
             for sub_entry in sub_entries:
                 file_path = os.path.join(save_path, entry, sub_entry)
                 with open(file_path) as fp:
-                    data = json.load(fp)
+                    try:
+                        data = json.load(fp)
+                    except json.JSONDecodeError:
+                        print(f"Error reading {file_path}")
+                        continue
 
                 data[EvalQueueColumn.model.name] = make_clickable_model(data["model"])
                 data[EvalQueueColumn.revision.name] = data.get("revision", "main")
