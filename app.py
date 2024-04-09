@@ -48,7 +48,7 @@ from src.tools.collections import update_collections
 from src.tools.plots import create_metric_plot_obj, create_plot_df, create_scores_df
 
 # Start ephemeral Spaces on PRs (see config in README.md)
-enable_space_ci()
+#enable_space_ci()
 
 
 def restart_space():
