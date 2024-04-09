@@ -207,7 +207,7 @@ def get_raw_eval_results(results_path: str, requests_path: str, dynamic_path: st
         if eval_result.full_model in dynamic_data:
             eval_result.update_with_dynamic_file_dict(dynamic_data[eval_result.full_model])
             # Hardcoding because of gating problem
-            if "meta-llama" in eval_result.full_model: 
+            if any([org in eval_result.full_model for org in ["meta-llama/", "google/", "tiiuae/"]]): 
                 eval_result.still_on_hub = True
 
         # Store results of same eval together
