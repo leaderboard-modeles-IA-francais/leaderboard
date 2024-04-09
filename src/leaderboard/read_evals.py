@@ -7,29 +7,27 @@ from dataclasses import dataclass
 import dateutil
 import numpy as np
 
-from huggingface_hub import ModelCard
-
 from src.display.formatting import make_clickable_model
-from src.display.utils import AutoEvalColumn, ModelType, Tasks, Precision, WeightType
+from src.display.utils import AutoEvalColumn, ModelType, Precision, Tasks, WeightType
 
 
 @dataclass
 class EvalResult:
     # Also see src.display.utils.AutoEvalColumn for what will be displayed.
-    eval_name: str # org_model_precision (uid)
-    full_model: str # org/model (path on hub)
-    org: str 
+    eval_name: str  # org_model_precision (uid)
+    full_model: str  # org/model (path on hub)
+    org: str
     model: str
-    revision: str # commit hash, "" if main
+    revision: str  # commit hash, "" if main
     results: dict
     precision: Precision = Precision.Unknown
-    model_type: ModelType = ModelType.Unknown # Pretrained, fine tuned, ...
-    weight_type: WeightType = WeightType.Original # Original or Adapter
-    architecture: str = "Unknown" # From config file
+    model_type: ModelType = ModelType.Unknown  # Pretrained, fine tuned, ...
+    weight_type: WeightType = WeightType.Original  # Original or Adapter
+    architecture: str = "Unknown"  # From config file
     license: str = "?"
     likes: int = 0
     num_params: int = 0
-    date: str = "" # submission date of request file
+    date: str = ""  # submission date of request file
     still_on_hub: bool = True
     is_merge: bool = False
     flagged: bool = False
@@ -96,8 +94,8 @@ class EvalResult:
             org=org,
             model=model,
             results=results,
-            precision=precision,  
-            revision= config.get("model_sha", ""),
+            precision=precision,
+            revision=config.get("model_sha", ""),
         )
 
     def update_with_request_file(self, requests_path):
@@ -113,7 +111,7 @@ class EvalResult:
             self.date = request.get("submitted_time", "")
             self.architecture = request.get("architectures", "Unknown")
             self.status = request.get("status", "FAILED")
-        except Exception as e:
+        except Exception:
             self.status = "FAILED"
             print(f"Could not find request file for {self.org}/{self.model}")
 
@@ -123,7 +121,6 @@ class EvalResult:
         self.still_on_hub = file_dict["still_on_hub"]
         self.tags = file_dict.get("tags", [])
         self.flagged = any("flagged" in tag for tag in self.tags)
-        
 
     def to_dict(self):
         """Converts the Eval Result to a dict compatible with our dataframe display"""
@@ -145,7 +142,7 @@ class EvalResult:
             AutoEvalColumn.still_on_hub.name: self.still_on_hub,
             AutoEvalColumn.merged.name: "merge" in self.tags if self.tags else False,
             AutoEvalColumn.moe.name: ("moe" in self.tags if self.tags else False) or "moe" in self.full_model.lower(),
-            AutoEvalColumn.flagged.name: self.flagged
+            AutoEvalColumn.flagged.name: self.flagged,
         }
 
         for task in Tasks:
@@ -168,10 +165,7 @@ def get_request_file_for_model(requests_path, model_name, precision):
     for tmp_request_file in request_files:
         with open(tmp_request_file, "r") as f:
             req_content = json.load(f)
-            if (
-                req_content["status"] in ["FINISHED"]
-                and req_content["precision"] == precision.split(".")[-1]
-            ):
+            if req_content["status"] in ["FINISHED"] and req_content["precision"] == precision.split(".")[-1]:
                 request_file = tmp_request_file
     return request_file
 
@@ -207,7 +201,7 @@ def get_raw_eval_results(results_path: str, requests_path: str, dynamic_path: st
         if eval_result.full_model in dynamic_data:
             eval_result.update_with_dynamic_file_dict(dynamic_data[eval_result.full_model])
             # Hardcoding because of gating problem
-            if any([org in eval_result.full_model for org in ["meta-llama/", "google/", "tiiuae/"]]): 
+            if any([org in eval_result.full_model for org in ["meta-llama/", "google/", "tiiuae/"]]):
                 eval_result.still_on_hub = True
 
         # Store results of same eval together
@@ -221,7 +215,7 @@ def get_raw_eval_results(results_path: str, requests_path: str, dynamic_path: st
     for v in eval_results.values():
         try:
             if v.status == "FINISHED":
-                v.to_dict() # we test if the dict version is complete
+                v.to_dict()  # we test if the dict version is complete
                 results.append(v)
         except KeyError:  # not all eval values present
             continue

@@ -24,10 +24,14 @@ def check_model_card(repo_id: str) -> tuple[bool, str]:
     # Enforce license metadata
     if card.data.license is None:
         if not ("license_name" in card.data and "license_link" in card.data):
-            return False, (
-                "License not found. Please add a license to your model card using the `license` metadata or a"
-                " `license_name`/`license_link` pair."
-            ), None
+            return (
+                False,
+                (
+                    "License not found. Please add a license to your model card using the `license` metadata or a"
+                    " `license_name`/`license_link` pair."
+                ),
+                None,
+            )
 
     # Enforce card content
     if len(card.text) < 200:
@@ -36,33 +40,40 @@ def check_model_card(repo_id: str) -> tuple[bool, str]:
     return True, "", card
 
 
-def is_model_on_hub(model_name: str, revision: str, token: str = None, trust_remote_code=False, test_tokenizer=False) -> tuple[bool, str, AutoConfig]:
+def is_model_on_hub(
+    model_name: str, revision: str, token: str = None, trust_remote_code=False, test_tokenizer=False
+) -> tuple[bool, str, AutoConfig]:
     try:
-        config = AutoConfig.from_pretrained(model_name, revision=revision, trust_remote_code=trust_remote_code, token=token) #, force_download=True)
+        config = AutoConfig.from_pretrained(
+            model_name, revision=revision, trust_remote_code=trust_remote_code, token=token
+        )  # , force_download=True)
         if test_tokenizer:
             try:
-                tk = AutoTokenizer.from_pretrained(model_name, revision=revision, trust_remote_code=trust_remote_code, token=token)
+                tk = AutoTokenizer.from_pretrained(
+                    model_name, revision=revision, trust_remote_code=trust_remote_code, token=token
+                )
             except ValueError as e:
+                return (False, f"uses a tokenizer which is not in a transformers release: {e}", None)
+            except Exception:
                 return (
                     False,
-                    f"uses a tokenizer which is not in a transformers release: {e}",
-                    None
+                    "'s tokenizer cannot be loaded. Is your tokenizer class in a stable transformers release, and correctly configured?",
+                    None,
                 )
-            except Exception as e:
-                return (False, "'s tokenizer cannot be loaded. Is your tokenizer class in a stable transformers release, and correctly configured?", None)
         return True, None, config
 
-    except ValueError as e:
+    except ValueError:
         return (
             False,
             "needs to be launched with `trust_remote_code=True`. For safety reason, we do not allow these models to be automatically submitted to the leaderboard.",
-            None
+            None,
         )
 
     except Exception as e:
         if "You are trying to access a gated repo." in str(e):
             return True, "uses a gated model.", None
         return False, f"was not found or misconfigured on the hub! Error raised was {e.args[0]}", None
+
 
 def get_model_size(model_info: ModelInfo, precision: str):
     size_pattern = re.compile(r"(\d+\.)?\d+(b|m)")
@@ -79,15 +90,17 @@ def get_model_size(model_info: ModelInfo, precision: str):
             size_match = re.search(size_pattern, model_info.id.lower())
             model_size = size_match.group(0)
             model_size = round(float(model_size[:-1]) if model_size[-1] == "b" else float(model_size[:-1]) / 1e3, 3)
-        except AttributeError as e:
+        except AttributeError:
             return 0  # Unknown model sizes are indicated as 0, see NUMERIC_INTERVALS in app.py
 
     size_factor = 8 if (precision == "GPTQ" or "gptq" in model_info.id.lower()) else 1
     model_size = size_factor * model_size
     return model_size
 
+
 def get_model_arch(model_info: ModelInfo):
     return model_info.config.get("architectures", "Unknown")
+
 
 def user_submission_permission(org_or_user, users_to_submission_dates, rate_limit_period, rate_limit_quota):
     if org_or_user not in users_to_submission_dates:
@@ -135,6 +148,7 @@ def already_submitted_models(requested_models_dir: str) -> set[str]:
 
     return set(file_names), users_to_submission_dates
 
+
 def get_model_tags(model_card, model: str):
     is_merge_from_metadata = False
     is_moe_from_metadata = False
@@ -143,10 +157,14 @@ def get_model_tags(model_card, model: str):
     if model_card is None:
         return tags
     if model_card.data.tags:
-        is_merge_from_metadata = any([tag in model_card.data.tags for tag in ["merge", "moerge", "mergekit", "lazymergekit"]])
+        is_merge_from_metadata = any(
+            [tag in model_card.data.tags for tag in ["merge", "moerge", "mergekit", "lazymergekit"]]
+        )
         is_moe_from_metadata = any([tag in model_card.data.tags for tag in ["moe", "moerge"]])
 
-    is_merge_from_model_card = any(keyword in model_card.text.lower() for keyword in ["merged model", "merge model", "moerge"])
+    is_merge_from_model_card = any(
+        keyword in model_card.text.lower() for keyword in ["merged model", "merge model", "moerge"]
+    )
     if is_merge_from_model_card or is_merge_from_metadata:
         tags.append("merge")
     is_moe_from_model_card = any(keyword in model_card.text.lower() for keyword in ["moe", "mixtral"])

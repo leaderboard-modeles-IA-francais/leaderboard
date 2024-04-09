@@ -4,6 +4,7 @@ __pycache__/
 .ipynb_checkpoints
 *ipynb
 .vscode/
+.DS_Store
 
 eval-queue/
 eval-results/

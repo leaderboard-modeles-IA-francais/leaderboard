@@ -29,7 +29,7 @@ FLAGGED_MODELS = {
     "mncai/mistral-7b-dpo-merge-v1.1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "mncai/mistral-7b-dpo-v6": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "Toten5/LeoScorpius-GreenNode-7B-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
-    "GreenNode/GreenNodeLM-7B-v1olet":  "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
+    "GreenNode/GreenNodeLM-7B-v1olet": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "quantumaikr/quantum-dpo-v0.1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "quantumaikr/quantum-v0.01": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "quantumaikr/quantum-trinity-v0.1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
@@ -43,7 +43,6 @@ FLAGGED_MODELS = {
     "dillfrescott/trinity-medium": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/474",
     "udkai/Garrulus": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/526",
     "dfurman/GarrulusMarcoro-7B-v0.1": "https://huggingface.co/dfurman/GarrulusMarcoro-7B-v0.1/discussions/1",
-    "udkai/Turdus": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/548",
     "eren23/slerp-test-turdus-beagle": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/548",
     "abideen/NexoNimbus-7B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/548",
     "alnrg2arg/test2_3": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/548",
@@ -101,19 +100,19 @@ FLAGGED_MODELS = {
     "bardsai/jaskier-7b-dpo": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
     "cookinai/OpenCM-14": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
     "bardsai/jaskier-7b-dpo-v2": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
-    "jan-hq/supermario-v2": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",    
+    "jan-hq/supermario-v2": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
     # MoErges
-    "cloudyu/Yi-34Bx2-MoE-60B":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
-    "cloudyu/Mixtral_34Bx2_MoE_60B":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
-    "gagan3012/MetaModel_moe":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
-    "macadeliccc/SOLAR-math-2x10.7b-v0.2":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
-    "cloudyu/Mixtral_7Bx2_MoE":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
-    "macadeliccc/SOLAR-math-2x10.7b":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
-    "macadeliccc/Orca-SOLAR-4x10.7b":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
-    "macadeliccc/piccolo-8x7b":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
-    "cloudyu/Mixtral_7Bx4_MOE_24B":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
-    "macadeliccc/laser-dolphin-mixtral-2x7b-dpo":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
-    "macadeliccc/polyglot-math-4x7b":"https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "cloudyu/Yi-34Bx2-MoE-60B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "cloudyu/Mixtral_34Bx2_MoE_60B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "gagan3012/MetaModel_moe": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "macadeliccc/SOLAR-math-2x10.7b-v0.2": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "cloudyu/Mixtral_7Bx2_MoE": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "macadeliccc/SOLAR-math-2x10.7b": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "macadeliccc/Orca-SOLAR-4x10.7b": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "macadeliccc/piccolo-8x7b": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "cloudyu/Mixtral_7Bx4_MOE_24B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "macadeliccc/laser-dolphin-mixtral-2x7b-dpo": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
+    "macadeliccc/polyglot-math-4x7b": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/540",
     # Other - contamination mostly
     "DopeorNope/COKAL-v1-70B": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/566",
     "CultriX/MistralTrix-v1": "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/556",
@@ -124,16 +123,16 @@ FLAGGED_MODELS = {
 # Models which have been requested by orgs to not be submitted on the leaderboard
 DO_NOT_SUBMIT_MODELS = [
     "Voicelab/trurl-2-13b",  # trained on MMLU
-    "TigerResearch/tigerbot-70b-chat", # per authors request
-    "TigerResearch/tigerbot-70b-chat-v2", # per authors request
-    "TigerResearch/tigerbot-70b-chat-v4-4k", # per authors request
+    "TigerResearch/tigerbot-70b-chat",  # per authors request
+    "TigerResearch/tigerbot-70b-chat-v2",  # per authors request
+    "TigerResearch/tigerbot-70b-chat-v4-4k",  # per authors request
 ]
 
 
 def flag_models(leaderboard_data: list[dict]):
     for model_data in leaderboard_data:
         # Merges and moes are flagged automatically
-        if model_data[AutoEvalColumn.flagged.name] == True:
+        if model_data[AutoEvalColumn.flagged.name]:
             flag_key = "merged"
         else:
             flag_key = model_data["model_name_for_query"]
@@ -144,9 +143,9 @@ def flag_models(leaderboard_data: list[dict]):
                 FLAGGED_MODELS[flag_key],
                 f"See discussion #{issue_num}",
             )
-            model_data[
-                AutoEvalColumn.model.name
-            ] = f"{model_data[AutoEvalColumn.model.name]} has been flagged! {issue_link}"
+            model_data[AutoEvalColumn.model.name] = (
+                f"{model_data[AutoEvalColumn.model.name]} has been flagged! {issue_link}"
+            )
             model_data[AutoEvalColumn.flagged.name] = True
         else:
             model_data[AutoEvalColumn.flagged.name] = False

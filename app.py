@@ -1,3 +1,4 @@
+import os
 import gradio as gr
 import pandas as pd
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -8,9 +9,9 @@ from src.display.about import (
     CITATION_BUTTON_LABEL,
     CITATION_BUTTON_TEXT,
     EVALUATION_QUEUE_TEXT,
+    FAQ_TEXT,
     INTRODUCTION_TEXT,
     LLM_BENCHMARKS_TEXT,
-    FAQ_TEXT,
     TITLE,
 )
 from src.display.css_html_js import custom_css
@@ -23,23 +24,32 @@ from src.display.utils import (
     TYPES,
     AutoEvalColumn,
     ModelType,
-    fields,
+    Precision,
     WeightType,
-    Precision
+    fields,
 )
-from src.envs import API, EVAL_REQUESTS_PATH, DYNAMIC_INFO_REPO, DYNAMIC_INFO_FILE_PATH, DYNAMIC_INFO_PATH, EVAL_RESULTS_PATH, H4_TOKEN, IS_PUBLIC, QUEUE_REPO, REPO_ID, RESULTS_REPO
+from src.envs import (
+    API,
+    DYNAMIC_INFO_FILE_PATH,
+    DYNAMIC_INFO_PATH,
+    DYNAMIC_INFO_REPO,
+    EVAL_REQUESTS_PATH,
+    EVAL_RESULTS_PATH,
+    H4_TOKEN,
+    IS_PUBLIC,
+    QUEUE_REPO,
+    REPO_ID,
+    RESULTS_REPO,
+)
 from src.populate import get_evaluation_queue_df, get_leaderboard_df
-from src.submission.submit import add_new_eval
 from src.scripts.update_all_request_files import update_dynamic_files
+from src.submission.submit import add_new_eval
 from src.tools.collections import update_collections
-from src.tools.plots import (
-    create_metric_plot_obj,
-    create_plot_df,
-    create_scores_df,
-)
+from src.tools.plots import create_metric_plot_obj, create_plot_df, create_scores_df
 
 # Start ephemeral Spaces on PRs (see config in README.md)
-#enable_space_ci()
+enable_space_ci()
+
 
 def restart_space():
     API.restart_space(repo_id=REPO_ID, token=H4_TOKEN)
@@ -50,32 +60,46 @@ def init_space(full_init: bool = True):
         try:
             print(EVAL_REQUESTS_PATH)
             snapshot_download(
-                repo_id=QUEUE_REPO, local_dir=EVAL_REQUESTS_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30, max_workers=8
+                repo_id=QUEUE_REPO,
+                local_dir=EVAL_REQUESTS_PATH,
+                repo_type="dataset",
+                tqdm_class=None,
+                etag_timeout=30,
+                max_workers=8,
             )
         except Exception:
             restart_space()
         try:
             print(DYNAMIC_INFO_PATH)
             snapshot_download(
-                repo_id=DYNAMIC_INFO_REPO, local_dir=DYNAMIC_INFO_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30, max_workers=8
+                repo_id=DYNAMIC_INFO_REPO,
+                local_dir=DYNAMIC_INFO_PATH,
+                repo_type="dataset",
+                tqdm_class=None,
+                etag_timeout=30,
+                max_workers=8,
             )
         except Exception:
             restart_space()
         try:
             print(EVAL_RESULTS_PATH)
             snapshot_download(
-                repo_id=RESULTS_REPO, local_dir=EVAL_RESULTS_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30,   max_workers=8
+                repo_id=RESULTS_REPO,
+                local_dir=EVAL_RESULTS_PATH,
+                repo_type="dataset",
+                tqdm_class=None,
+                etag_timeout=30,
+                max_workers=8,
             )
         except Exception:
-            restart_space()    
-
+            restart_space()
 
     raw_data, original_df = get_leaderboard_df(
-        results_path=EVAL_RESULTS_PATH, 
-        requests_path=EVAL_REQUESTS_PATH, 
-        dynamic_path=DYNAMIC_INFO_FILE_PATH, 
-        cols=COLS, 
-        benchmark_cols=BENCHMARK_COLS
+        results_path=EVAL_RESULTS_PATH,
+        requests_path=EVAL_REQUESTS_PATH,
+        dynamic_path=DYNAMIC_INFO_FILE_PATH,
+        cols=COLS,
+        benchmark_cols=BENCHMARK_COLS,
     )
     update_collections(original_df.copy())
     leaderboard_df = original_df.copy()
@@ -90,7 +114,16 @@ def init_space(full_init: bool = True):
 
     return leaderboard_df, original_df, plot_df, finished_eval_queue_df, running_eval_queue_df, pending_eval_queue_df
 
-leaderboard_df, original_df, plot_df, finished_eval_queue_df, running_eval_queue_df, pending_eval_queue_df = init_space()
+
+# Convert the environment variable "LEADERBOARD_FULL_INIT" to a boolean value, defaulting to True if the variable is not set.
+# This controls whether a full initialization should be performed.
+do_full_init = os.getenv("LEADERBOARD_FULL_INIT", "True") == "True"
+
+# Calls the init_space function with the `full_init` parameter determined by the `do_full_init` variable.
+# This initializes various DataFrames used throughout the application, with the level of initialization detail controlled by the `do_full_init` flag.
+leaderboard_df, original_df, plot_df, finished_eval_queue_df, running_eval_queue_df, pending_eval_queue_df = (
+    init_space(full_init=do_full_init)
+)
 
 
 # Searching and filtering
@@ -103,7 +136,13 @@ def update_table(
     hide_models: list,
     query: str,
 ):
-    filtered_df = filter_models(df=hidden_df, type_query=type_query, size_query=size_query, precision_query=precision_query, hide_models=hide_models)
+    filtered_df = filter_models(
+        df=hidden_df,
+        type_query=type_query,
+        size_query=size_query,
+        precision_query=precision_query,
+        hide_models=hide_models,
+    )
     filtered_df = filter_queries(query, filtered_df)
     df = select_columns(filtered_df, columns)
     return df
@@ -111,43 +150,82 @@ def update_table(
 
 def load_query(request: gr.Request):  # triggered only once at startup => read query parameter if it exists
     query = request.query_params.get("query") or ""
-    return query, query # return one for the "search_bar", one for a hidden component that triggers a reload only if value has changed
+    return (
+        query,
+        query,
+    )  # return one for the "search_bar", one for a hidden component that triggers a reload only if value has changed
 
 
-def search_table(df: pd.DataFrame, query: str) -> pd.DataFrame:
-    return df[(df[AutoEvalColumn.dummy.name].str.contains(query, case=False))]
+def search_model(df: pd.DataFrame, query: str) -> pd.DataFrame:
+    return df[(df[AutoEvalColumn.dummy.name].str.contains(query, case=False, na=False))]
+
+
+def search_license(df: pd.DataFrame, query: str) -> pd.DataFrame:
+    return df[df[AutoEvalColumn.license.name].str.contains(query, case=False, na=False)]
 
 
 def select_columns(df: pd.DataFrame, columns: list) -> pd.DataFrame:
     always_here_cols = [c.name for c in fields(AutoEvalColumn) if c.never_hidden]
     dummy_col = [AutoEvalColumn.dummy.name]
-        #AutoEvalColumn.model_type_symbol.name,
-        #AutoEvalColumn.model.name,
+    # AutoEvalColumn.model_type_symbol.name,
+    # AutoEvalColumn.model.name,
     # We use COLS to maintain sorting
-    filtered_df = df[
-        always_here_cols + [c for c in COLS if c in df.columns and c in columns] + dummy_col
+    filtered_df = df[always_here_cols + [c for c in COLS if c in df.columns and c in columns] + dummy_col]
+    return filtered_df
+
+
+def filter_queries(query: str, df: pd.DataFrame):
+    tmp_result_df = []
+
+    # Empty query return the same df
+    if query == "":
+        return df
+
+    # all_queries = [q.strip() for q in query.split(";")]
+    # license_queries = []
+    all_queries = [q.strip() for q in query.split(";") if q.strip() != ""]
+    model_queries = [q for q in all_queries if not q.startswith("licence")]
+    license_queries_raw = [q for q in all_queries if q.startswith("license")]
+    license_queries = [
+        q.replace("license:", "").strip() for q in license_queries_raw if q.replace("license:", "").strip() != ""
     ]
-    return filtered_df
 
+    # Handling model name search
+    for query in model_queries:
+        tmp_df = search_model(df, query)
+        if len(tmp_df) > 0:
+            tmp_result_df.append(tmp_df)
 
-def filter_queries(query: str, filtered_df: pd.DataFrame):
-    """Added by Abishek"""
-    final_df = []
-    if query != "":
-        queries = [q.strip() for q in query.split(";")]
-        for _q in queries:
-            _q = _q.strip()
-            if _q != "":
-                temp_filtered_df = search_table(filtered_df, _q)
-                if len(temp_filtered_df) > 0:
-                    final_df.append(temp_filtered_df)
-        if len(final_df) > 0:
-            filtered_df = pd.concat(final_df)
-            filtered_df = filtered_df.drop_duplicates(
-                subset=[AutoEvalColumn.model.name, AutoEvalColumn.precision.name, AutoEvalColumn.revision.name]
-            )
+    if not tmp_result_df and not license_queries:
+        # Nothing is found, no license_queries -> return empty df
+        return pd.DataFrame(columns=df.columns)
 
-    return filtered_df
+    if tmp_result_df:
+        df = pd.concat(tmp_result_df)
+        df = df.drop_duplicates(
+            subset=[AutoEvalColumn.model.name, AutoEvalColumn.precision.name, AutoEvalColumn.revision.name]
+        )
+
+    if not license_queries:
+        return df
+
+    # Handling license search
+    tmp_result_df = []
+    for query in license_queries:
+        tmp_df = search_license(df, query)
+        if len(tmp_df) > 0:
+            tmp_result_df.append(tmp_df)
+
+    if not tmp_result_df:
+        # Nothing is found, return empty df
+        return pd.DataFrame(columns=df.columns)
+
+    df = pd.concat(tmp_result_df)
+    df = df.drop_duplicates(
+        subset=[AutoEvalColumn.model.name, AutoEvalColumn.precision.name, AutoEvalColumn.revision.name]
+    )
+
+    return df
 
 
 def filter_models(
@@ -179,12 +257,13 @@ def filter_models(
 
     return filtered_df
 
+
 leaderboard_df = filter_models(
-    df=leaderboard_df, 
-    type_query=[t.to_str(" : ") for t in ModelType], 
-    size_query=list(NUMERIC_INTERVALS.keys()), 
+    df=leaderboard_df,
+    type_query=[t.to_str(" : ") for t in ModelType],
+    size_query=list(NUMERIC_INTERVALS.keys()),
     precision_query=[i.value.name for i in Precision],
-    hide_models=["Private or deleted", "Contains a merge/moerge", "Flagged"], # Deleted, merges, flagged, MoEs
+    hide_models=["Private or deleted", "Contains a merge/moerge", "Flagged"],  # Deleted, merges, flagged, MoEs
 )
 
 demo = gr.Blocks(css=custom_css)
@@ -198,7 +277,7 @@ with demo:
                 with gr.Column():
                     with gr.Row():
                         search_bar = gr.Textbox(
-                            placeholder=" 🔍 Search for your model (separate multiple queries with `;`) and press ENTER...",
+                            placeholder="🔍 Search models or licenses (e.g., 'model_name; license: MIT') and press ENTER...",
                             show_label=False,
                             elem_id="search-bar",
                         )
@@ -221,12 +300,12 @@ with demo:
                     with gr.Row():
                         hide_models = gr.CheckboxGroup(
                             label="Hide models",
-                            choices = ["Private or deleted", "Contains a merge/moerge", "Flagged", "MoE"],
+                            choices=["Private or deleted", "Contains a merge/moerge", "Flagged", "MoE"],
                             value=["Private or deleted", "Contains a merge/moerge", "Flagged"],
-                            interactive=True
+                            interactive=True,
                         )
                 with gr.Column(min_width=320):
-                    #with gr.Box(elem_id="box-filter"):
+                    # with gr.Box(elem_id="box-filter"):
                     filter_columns_type = gr.CheckboxGroup(
                         label="Model types",
                         choices=[t.to_str() for t in ModelType],
@@ -260,7 +339,7 @@ with demo:
                 elem_id="leaderboard-table",
                 interactive=False,
                 visible=True,
-                #column_widths=["2%", "33%"] 
+                # column_widths=["2%", "33%"]
             )
 
             # Dummy leaderboard for handling the case when the user uses backspace key
@@ -301,8 +380,14 @@ with demo:
             )
             # Check query parameter once at startup and update search bar + hidden component
             demo.load(load_query, inputs=[], outputs=[search_bar, hidden_search_bar])
-            
-            for selector in [shown_columns, filter_columns_type, filter_columns_precision, filter_columns_size, hide_models]:
+
+            for selector in [
+                shown_columns,
+                filter_columns_type,
+                filter_columns_precision,
+                filter_columns_size,
+                hide_models,
+            ]:
                 selector.change(
                     update_table,
                     [
@@ -326,14 +411,14 @@ with demo:
                         [AutoEvalColumn.average.name],
                         title="Average of Top Scores and Human Baseline Over Time (from last update)",
                     )
-                    gr.Plot(value=chart, min_width=500) 
+                    gr.Plot(value=chart, min_width=500)
                 with gr.Column():
                     chart = create_metric_plot_obj(
                         plot_df,
                         BENCHMARK_COLS,
                         title="Top Scores and Human Baseline Over Time (from last update)",
                     )
-                    gr.Plot(value=chart, min_width=500) 
+                    gr.Plot(value=chart, min_width=500)
         with gr.TabItem("📝 About", elem_id="llm-benchmark-tab-table", id=3):
             gr.Markdown(LLM_BENCHMARKS_TEXT, elem_classes="markdown-text")
 
@@ -441,8 +526,8 @@ with demo:
             )
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(restart_space, "interval", hours=3) # restarted every 3h
-scheduler.add_job(update_dynamic_files, "interval", hours=2) # launched every 2 hour
+scheduler.add_job(restart_space, "interval", hours=3)  # restarted every 3h
+scheduler.add_job(update_dynamic_files, "interval", hours=2)  # launched every 2 hour
 scheduler.start()
 
 demo.queue(default_concurrency_limit=40).launch()

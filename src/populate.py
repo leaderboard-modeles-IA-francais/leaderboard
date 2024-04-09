@@ -9,7 +9,9 @@ from src.leaderboard.filter_models import filter_models_flags
 from src.leaderboard.read_evals import get_raw_eval_results
 
 
-def get_leaderboard_df(results_path: str, requests_path: str, dynamic_path: str, cols: list, benchmark_cols: list) -> pd.DataFrame:
+def get_leaderboard_df(
+    results_path: str, requests_path: str, dynamic_path: str, cols: list, benchmark_cols: list
+) -> pd.DataFrame:
     raw_data = get_raw_eval_results(results_path=results_path, requests_path=requests_path, dynamic_path=dynamic_path)
     all_data_json = [v.to_dict() for v in raw_data]
     all_data_json.append(baseline_row)

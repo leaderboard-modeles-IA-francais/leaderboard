@@ -3,6 +3,7 @@ from enum import Enum
 
 import pandas as pd
 
+
 def fields(raw_class):
     return [v for k, v in raw_class.__dict__.items() if k[:2] != "__" and k[-2:] != "__"]
 
@@ -13,6 +14,7 @@ class Task:
     metric: str
     col_name: str
 
+
 class Tasks(Enum):
     arc = Task("arc:challenge", "acc_norm", "ARC")
     hellaswag = Task("hellaswag", "acc_norm", "HellaSwag")
@@ -20,6 +22,7 @@ class Tasks(Enum):
     truthfulqa = Task("truthfulqa:mc", "mc2", "TruthfulQA")
     winogrande = Task("winogrande", "acc", "Winogrande")
     gsm8k = Task("gsm8k", "acc", "GSM8K")
+
 
 # These classes are for user facing column names,
 # to avoid having to change them all around the code
@@ -33,11 +36,12 @@ class ColumnContent:
     never_hidden: bool = False
     dummy: bool = False
 
+
 auto_eval_column_dict = []
 # Init
 auto_eval_column_dict.append(["model_type_symbol", ColumnContent, ColumnContent("T", "str", True, never_hidden=True)])
 auto_eval_column_dict.append(["model", ColumnContent, ColumnContent("Model", "markdown", True, never_hidden=True)])
-#Scores
+# Scores
 auto_eval_column_dict.append(["average", ColumnContent, ColumnContent("Average ⬆️", "number", True)])
 for task in Tasks:
     auto_eval_column_dict.append([task.name, ColumnContent, ColumnContent(task.value.col_name, "number", True)])
@@ -50,7 +54,9 @@ auto_eval_column_dict.append(["merged", ColumnContent, ColumnContent("Merged", "
 auto_eval_column_dict.append(["license", ColumnContent, ColumnContent("Hub License", "str", False)])
 auto_eval_column_dict.append(["params", ColumnContent, ColumnContent("#Params (B)", "number", False)])
 auto_eval_column_dict.append(["likes", ColumnContent, ColumnContent("Hub ❤️", "number", False)])
-auto_eval_column_dict.append(["still_on_hub", ColumnContent, ColumnContent("Available on the hub", "bool", False, hidden=True)])
+auto_eval_column_dict.append(
+    ["still_on_hub", ColumnContent, ColumnContent("Available on the hub", "bool", False, hidden=True)]
+)
 auto_eval_column_dict.append(["revision", ColumnContent, ColumnContent("Model sha", "str", False, False)])
 auto_eval_column_dict.append(["flagged", ColumnContent, ColumnContent("Flagged", "bool", False, hidden=True)])
 auto_eval_column_dict.append(["moe", ColumnContent, ColumnContent("MoE", "bool", False, hidden=True)])
@@ -59,6 +65,7 @@ auto_eval_column_dict.append(["dummy", ColumnContent, ColumnContent("model_name_
 
 # We use make dataclass to dynamically fill the scores from Tasks
 AutoEvalColumn = make_dataclass("AutoEvalColumn", auto_eval_column_dict, frozen=True)
+
 
 @dataclass(frozen=True)
 class EvalQueueColumn:  # Queue column
@@ -112,10 +119,11 @@ human_baseline_row = {
     AutoEvalColumn.flagged.name: False,
 }
 
+
 @dataclass
 class ModelDetails:
     name: str
-    symbol: str = "" # emoji, only for the model type
+    symbol: str = ""  # emoji, only for the model type
 
 
 class ModelType(Enum):
@@ -143,10 +151,12 @@ class ModelType(Enum):
             return ModelType.merges
         return ModelType.Unknown
 
+
 class WeightType(Enum):
     Adapter = ModelDetails("Adapter")
     Original = ModelDetails("Original")
     Delta = ModelDetails("Delta")
+
 
 class Precision(Enum):
     float16 = ModelDetails("float16")
@@ -168,8 +178,6 @@ class Precision(Enum):
         if precision in ["GPTQ", "None"]:
             return Precision.qt_GPTQ
         return Precision.Unknown
-        
-
 
 
 # Column selection

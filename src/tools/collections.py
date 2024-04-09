@@ -1,5 +1,3 @@
-import os
-
 import pandas as pd
 from huggingface_hub import add_collection_item, delete_collection_item, get_collection, update_collection_item
 from huggingface_hub.utils._errors import HfHubHTTPError

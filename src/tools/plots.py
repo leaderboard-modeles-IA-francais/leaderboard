@@ -1,12 +1,12 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 import plotly.express as px
 from plotly.graph_objs import Figure
 
+from src.display.utils import BENCHMARK_COLS, AutoEvalColumn, Task, Tasks
+from src.display.utils import human_baseline_row as HUMAN_BASELINE
 from src.leaderboard.filter_models import FLAGGED_MODELS
-from src.display.utils import human_baseline_row as HUMAN_BASELINE, AutoEvalColumn, Tasks, Task, BENCHMARK_COLS
 from src.leaderboard.read_evals import EvalResult
-
 
 
 def create_scores_df(raw_data: list[EvalResult]) -> pd.DataFrame:
@@ -18,7 +18,7 @@ def create_scores_df(raw_data: list[EvalResult]) -> pd.DataFrame:
     """
     # Step 1: Ensure 'date' is in datetime format and sort the DataFrame by it
     results_df = pd.DataFrame(raw_data)
-    #results_df["date"] = pd.to_datetime(results_df["date"], format="mixed", utc=True)
+    # results_df["date"] = pd.to_datetime(results_df["date"], format="mixed", utc=True)
     results_df.sort_values(by="date", inplace=True)
 
     # Step 2: Initialize the scores dictionary
@@ -31,8 +31,13 @@ def create_scores_df(raw_data: list[EvalResult]) -> pd.DataFrame:
         column = task.col_name
         for _, row in results_df.iterrows():
             current_model = row["full_model"]
-            # We ignore models that are flagged/no longer on the hub/not finished 
-            to_ignore = not row["still_on_hub"] or row["flagged"] or current_model in FLAGGED_MODELS or row["status"] != "FINISHED"
+            # We ignore models that are flagged/no longer on the hub/not finished
+            to_ignore = (
+                not row["still_on_hub"]
+                or row["flagged"]
+                or current_model in FLAGGED_MODELS
+                or row["status"] != "FINISHED"
+            )
             if to_ignore:
                 continue
 
@@ -54,7 +59,7 @@ def create_scores_df(raw_data: list[EvalResult]) -> pd.DataFrame:
     return {k: pd.DataFrame(v) for k, v in scores.items()}
 
 
-def create_plot_df(scores_df: dict[str: pd.DataFrame]) -> pd.DataFrame:
+def create_plot_df(scores_df: dict[str : pd.DataFrame]) -> pd.DataFrame:
     """
     Transforms the scores DataFrame into a new format suitable for plotting.
 
@@ -79,9 +84,7 @@ def create_plot_df(scores_df: dict[str: pd.DataFrame]) -> pd.DataFrame:
     return concat_df
 
 
-def create_metric_plot_obj(
-    df: pd.DataFrame, metrics: list[str], title: str
-) -> Figure:
+def create_metric_plot_obj(df: pd.DataFrame, metrics: list[str], title: str) -> Figure:
     """
     Create a Plotly figure object with lines representing different metrics
     and horizontal dotted lines representing human baselines.

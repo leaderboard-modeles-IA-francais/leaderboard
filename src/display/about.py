@@ -12,7 +12,7 @@ icons = f"""
 - {ModelType.chat.to_str(" : ")} model: chat like fine-tunes, either using IFT (datasets of task instruction), RLHF or DPO (changing the model loss a bit with an added policy), etc
 - {ModelType.merges.to_str(" : ")} model: merges or MoErges, models which have been merged or fused without additional fine-tuning. 
 """
-LLM_BENCHMARKS_TEXT = f"""
+LLM_BENCHMARKS_TEXT = """
 ## ABOUT
 With the plethora of large language models (LLMs) and chatbots being released week upon week, often with grandiose claims of their performance, it can be hard to filter out the genuine progress that is being made by the open-source community and which model is the current state of the art.
 
@@ -131,6 +131,15 @@ What is this concept of "flagging"?
 
 My model has been flagged improperly, what can I do?
 - *Every flagged model has a discussion associated with it - feel free to plead your case there, and we'll see what to do together with the community.*
+
+---------------------------
+
+## HOW TO SEARCH FOR A MODEL
+Search for models in the leaderboard by:
+1. Name, e.g., *model_name*
+2. Multiple names, separated by `;`, e.g., *model_name1;model_name2*
+3. License, prefix with `license:`, e.g., *license: MIT*
+4. Combination of name and license, order is irrelevant, e.g., *model_name; license: cc-by-sa-4.0*
 
 ---------------------------
 

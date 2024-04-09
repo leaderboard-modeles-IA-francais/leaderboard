@@ -2,22 +2,33 @@ import json
 import os
 from datetime import datetime, timezone
 
-from huggingface_hub import ModelCard, snapshot_download
+from huggingface_hub import snapshot_download
 
 from src.display.formatting import styled_error, styled_message, styled_warning
-from src.envs import API, EVAL_REQUESTS_PATH, DYNAMIC_INFO_PATH, DYNAMIC_INFO_FILE_PATH, DYNAMIC_INFO_REPO, H4_TOKEN, QUEUE_REPO, RATE_LIMIT_PERIOD, RATE_LIMIT_QUOTA
+from src.envs import (
+    API,
+    DYNAMIC_INFO_FILE_PATH,
+    DYNAMIC_INFO_PATH,
+    DYNAMIC_INFO_REPO,
+    EVAL_REQUESTS_PATH,
+    H4_TOKEN,
+    QUEUE_REPO,
+    RATE_LIMIT_PERIOD,
+    RATE_LIMIT_QUOTA,
+)
 from src.leaderboard.filter_models import DO_NOT_SUBMIT_MODELS
 from src.submission.check_validity import (
     already_submitted_models,
     check_model_card,
     get_model_size,
+    get_model_tags,
     is_model_on_hub,
     user_submission_permission,
-    get_model_tags
 )
 
 REQUESTED_MODELS = None
 USERS_TO_SUBMISSION_DATES = None
+
 
 def add_new_eval(
     model: str,
@@ -58,7 +69,9 @@ def add_new_eval(
         return styled_warning("Model authors have requested that their model be not submitted on the leaderboard.")
 
     if model == "CohereForAI/c4ai-command-r-plus":
-        return styled_warning("This model cannot be submitted manually on the leaderboard before the transformers release.")        
+        return styled_warning(
+            "This model cannot be submitted manually on the leaderboard before the transformers release."
+        )
 
     # Does the model actually exist?
     if revision == "":
@@ -66,7 +79,9 @@ def add_new_eval(
 
     # Is the model on the hub?
     if weight_type in ["Delta", "Adapter"]:
-        base_model_on_hub, error, _ = is_model_on_hub(model_name=base_model, revision=revision, token=H4_TOKEN, test_tokenizer=True)
+        base_model_on_hub, error, _ = is_model_on_hub(
+            model_name=base_model, revision=revision, token=H4_TOKEN, test_tokenizer=True
+        )
         if not base_model_on_hub:
             return styled_error(f'Base model "{base_model}" {error}')
 
@@ -81,10 +96,8 @@ def add_new_eval(
             architectures = getattr(model_config, "architectures", None)
             if architectures:
                 architecture = ";".join(architectures)
-            downloads = getattr(model_config, 'downloads', 0)
-            created_at = getattr(model_config, 'created_at', '')
-
-
+            downloads = getattr(model_config, "downloads", 0)
+            created_at = getattr(model_config, "created_at", "")
 
     # Is the model info correctly filled?
     try:
@@ -103,7 +116,7 @@ def add_new_eval(
     modelcard_OK, error_msg, model_card = check_model_card(model)
     if not modelcard_OK:
         return styled_error(error_msg)
-    
+
     tags = get_model_tags(model_card, model)
 
     # Seems good, creating the eval
@@ -130,8 +143,8 @@ def add_new_eval(
         "license": license,
         "still_on_hub": True,
         "tags": tags,
-        "downloads": downloads, 
-        "created_at": created_at
+        "downloads": downloads,
+        "created_at": created_at,
     }
 
     # Check for duplicate submission
@@ -174,8 +187,6 @@ def add_new_eval(
         repo_type="dataset",
         commit_message=f"Add {model} to dynamic info queue",
     )
-
-    
 
     # Remove the local file
     os.remove(out_path)
