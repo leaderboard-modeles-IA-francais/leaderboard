@@ -1,7 +1,17 @@
 from dataclasses import dataclass, make_dataclass
 from enum import Enum
-
+import json
 import pandas as pd
+
+
+def load_json_data(file_path):
+    """Safely load JSON data from a file."""
+    try:
+        with open(file_path, "r") as file:
+            return json.load(file)
+    except json.JSONDecodeError:
+        print(f"Error reading JSON from {file_path}")
+        return None  # Or raise an exception
 
 
 def fields(raw_class):

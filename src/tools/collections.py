@@ -17,65 +17,60 @@ intervals = {
 }
 
 
-def update_collections(df: DataFrame):
-    """This function updates the Open LLM Leaderboard model collection with the latest best models for
-    each size category and type.
-    """
-    collection = get_collection(collection_slug=PATH_TO_COLLECTION, token=H4_TOKEN)
+def _filter_by_type_and_size(df, model_type, size_interval):
+    """Filter DataFrame by model type and parameter size interval."""
+    type_emoji = model_type.value.symbol[0]
+    filtered_df = df[df[AutoEvalColumn.model_type_symbol.name] == type_emoji]
     params_column = pd.to_numeric(df[AutoEvalColumn.params.name], errors="coerce")
+    mask = params_column.apply(lambda x: x in size_interval)
+    return filtered_df.loc[mask]
 
+
+def _add_models_to_collection(collection, models, model_type, size):
+    """Add best models to the collection and update positions."""
+    cur_len_collection = len(collection.items)
+    for ix, model in enumerate(models, start=1):
+        try:
+            collection = add_collection_item(
+                PATH_TO_COLLECTION,
+                item_id=model,
+                item_type="model",
+                exists_ok=True,
+                note=f"Best {model_type.to_str(' ')} model of around {size} on the leaderboard today!",
+                token=H4_TOKEN,
+            )
+            # Ensure position is correct if item was added
+            if len(collection.items) > cur_len_collection:
+                item_object_id = collection.items[-1].item_object_id
+                update_collection_item(collection_slug=PATH_TO_COLLECTION, item_object_id=item_object_id, position=ix)
+                cur_len_collection = len(collection.items)
+            break  # assuming we only add the top model
+        except HfHubHTTPError:
+            continue
+
+
+def update_collections(df: DataFrame):
+    """Update collections by filtering and adding the best models."""
+    collection = get_collection(collection_slug=PATH_TO_COLLECTION, token=H4_TOKEN)
     cur_best_models = []
 
-    ix = 0
-    for type in ModelType:
-        if type.value.name == "":
+    for model_type in ModelType:
+        if not model_type.value.name:
             continue
-        for size in intervals:
-            # We filter the df to gather the relevant models
-            type_emoji = [t[0] for t in type.value.symbol]
-            filtered_df = df[df[AutoEvalColumn.model_type_symbol.name].isin(type_emoji)]
-
-            numeric_interval = pd.IntervalIndex([intervals[size]])
-            mask = params_column.apply(lambda x: any(numeric_interval.contains(x)))
-            filtered_df = filtered_df.loc[mask]
-
+        for size, interval in intervals.items():
+            filtered_df = _filter_by_type_and_size(df, model_type, interval)
             best_models = list(
-                filtered_df.sort_values(AutoEvalColumn.average.name, ascending=False)[AutoEvalColumn.dummy.name]
+                filtered_df.sort_values(AutoEvalColumn.average.name, ascending=False)[AutoEvalColumn.dummy.name][:10]
             )
-            print(type.value.symbol, size, best_models[:10])
+            print(model_type.value.symbol, size, best_models)
+            _add_models_to_collection(collection, best_models, model_type, size)
+            cur_best_models.extend(best_models)
 
-            # We add them one by one to the leaderboard
-            for model in best_models:
-                ix += 1
-                cur_len_collection = len(collection.items)
-                try:
-                    collection = add_collection_item(
-                        PATH_TO_COLLECTION,
-                        item_id=model,
-                        item_type="model",
-                        exists_ok=True,
-                        note=f"Best {type.to_str(' ')} model of around {size} on the leaderboard today!",
-                        token=H4_TOKEN,
-                    )
-                    if (
-                        len(collection.items) > cur_len_collection
-                    ):  # we added an item - we make sure its position is correct
-                        item_object_id = collection.items[-1].item_object_id
-                        update_collection_item(
-                            collection_slug=PATH_TO_COLLECTION, item_object_id=item_object_id, position=ix
-                        )
-                        cur_len_collection = len(collection.items)
-                    cur_best_models.append(model)
-                    break
-                except HfHubHTTPError:
-                    continue
-
-    collection = get_collection(PATH_TO_COLLECTION, token=H4_TOKEN)
-    for item in collection.items:
-        if item.item_id not in cur_best_models:
-            try:
-                delete_collection_item(
-                    collection_slug=PATH_TO_COLLECTION, item_object_id=item.item_object_id, token=H4_TOKEN
-                )
-            except HfHubHTTPError:
-                continue
+    # Cleanup
+    existing_models = {item.item_id for item in collection.items}
+    to_remove = existing_models - set(cur_best_models)
+    for item_id in to_remove:
+        try:
+            delete_collection_item(collection_slug=PATH_TO_COLLECTION, item_object_id=item_id, token=H4_TOKEN)
+        except HfHubHTTPError:
+            continue

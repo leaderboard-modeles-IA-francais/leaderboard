@@ -1,4 +1,5 @@
 import os
+import logging
 
 from huggingface_hub import HfApi
 
@@ -15,11 +16,21 @@ PRIVATE_RESULTS_REPO = "open-llm-leaderboard/private-results"
 
 IS_PUBLIC = bool(os.environ.get("IS_PUBLIC", True))
 
-CACHE_PATH = os.getenv("HF_HOME", ".")
+HF_HOME = os.getenv("HF_HOME", ".")
 
-EVAL_REQUESTS_PATH = os.path.join(CACHE_PATH, "eval-queue")
-EVAL_RESULTS_PATH = os.path.join(CACHE_PATH, "eval-results")
-DYNAMIC_INFO_PATH = os.path.join(CACHE_PATH, "dynamic-info")
+# Check HF_HOME write access
+print(f"Initial HF_HOME set to: {HF_HOME}")
+
+if not os.access(HF_HOME, os.W_OK):
+    print(f"No write access to HF_HOME: {HF_HOME}. Resetting to current directory.")
+    HF_HOME = "."
+    os.environ["HF_HOME"] = HF_HOME
+else:
+    print(f"Write access confirmed for HF_HOME")
+
+EVAL_REQUESTS_PATH = os.path.join(HF_HOME, "eval-queue")
+EVAL_RESULTS_PATH = os.path.join(HF_HOME, "eval-results")
+DYNAMIC_INFO_PATH = os.path.join(HF_HOME, "dynamic-info")
 DYNAMIC_INFO_FILE_PATH = os.path.join(DYNAMIC_INFO_PATH, "model_infos.json")
 
 EVAL_REQUESTS_PATH_PRIVATE = "eval-queue-private"

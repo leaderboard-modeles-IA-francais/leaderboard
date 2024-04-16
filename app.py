@@ -1,4 +1,5 @@
 import os
+import logging
 import gradio as gr
 import pandas as pd
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -47,6 +48,7 @@ from src.submission.submit import add_new_eval
 from src.tools.collections import update_collections
 from src.tools.plots import create_metric_plot_obj, create_plot_df, create_scores_df
 
+
 # Start ephemeral Spaces on PRs (see config in README.md)
 enable_space_ci()
 
@@ -55,44 +57,34 @@ def restart_space():
     API.restart_space(repo_id=REPO_ID, token=H4_TOKEN)
 
 
+def download_dataset(repo_id, local_dir, repo_type="dataset", max_attempts=3):
+    """Attempt to download dataset with retries."""
+    attempt = 0
+    while attempt < max_attempts:
+        try:
+            print(f"Downloading {repo_id} to {local_dir}")
+            snapshot_download(
+                repo_id=repo_id,
+                local_dir=local_dir,
+                repo_type=repo_type,
+                tqdm_class=None,
+                etag_timeout=30,
+                max_workers=8,
+            )
+            return
+        except Exception as e:
+            logging.error(f"Error downloading {repo_id}: {e}")
+            attempt += 1
+            if attempt == max_attempts:
+                restart_space()
+
+
 def init_space(full_init: bool = True):
+    """Initializes the application space, loading only necessary data."""
     if full_init:
-        try:
-            print(EVAL_REQUESTS_PATH)
-            snapshot_download(
-                repo_id=QUEUE_REPO,
-                local_dir=EVAL_REQUESTS_PATH,
-                repo_type="dataset",
-                tqdm_class=None,
-                etag_timeout=30,
-                max_workers=8,
-            )
-        except Exception:
-            restart_space()
-        try:
-            print(DYNAMIC_INFO_PATH)
-            snapshot_download(
-                repo_id=DYNAMIC_INFO_REPO,
-                local_dir=DYNAMIC_INFO_PATH,
-                repo_type="dataset",
-                tqdm_class=None,
-                etag_timeout=30,
-                max_workers=8,
-            )
-        except Exception:
-            restart_space()
-        try:
-            print(EVAL_RESULTS_PATH)
-            snapshot_download(
-                repo_id=RESULTS_REPO,
-                local_dir=EVAL_RESULTS_PATH,
-                repo_type="dataset",
-                tqdm_class=None,
-                etag_timeout=30,
-                max_workers=8,
-            )
-        except Exception:
-            restart_space()
+        download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
+        download_dataset(DYNAMIC_INFO_REPO, DYNAMIC_INFO_PATH)
+        download_dataset(RESULTS_REPO, EVAL_RESULTS_PATH)
 
     raw_data, original_df = get_leaderboard_df(
         results_path=EVAL_RESULTS_PATH,
@@ -101,18 +93,12 @@ def init_space(full_init: bool = True):
         cols=COLS,
         benchmark_cols=BENCHMARK_COLS,
     )
-    update_collections(original_df.copy())
+    update_collections(original_df)
     leaderboard_df = original_df.copy()
+    
+    eval_queue_dfs = get_evaluation_queue_df(EVAL_REQUESTS_PATH, EVAL_COLS)
 
-    plot_df = create_plot_df(create_scores_df(raw_data))
-
-    (
-        finished_eval_queue_df,
-        running_eval_queue_df,
-        pending_eval_queue_df,
-    ) = get_evaluation_queue_df(EVAL_REQUESTS_PATH, EVAL_COLS)
-
-    return leaderboard_df, original_df, plot_df, finished_eval_queue_df, running_eval_queue_df, pending_eval_queue_df
+    return leaderboard_df, raw_data, original_df, eval_queue_dfs
 
 
 # Convert the environment variable "LEADERBOARD_FULL_INIT" to a boolean value, defaulting to True if the variable is not set.
@@ -121,9 +107,14 @@ do_full_init = os.getenv("LEADERBOARD_FULL_INIT", "True") == "True"
 
 # Calls the init_space function with the `full_init` parameter determined by the `do_full_init` variable.
 # This initializes various DataFrames used throughout the application, with the level of initialization detail controlled by the `do_full_init` flag.
-leaderboard_df, original_df, plot_df, finished_eval_queue_df, running_eval_queue_df, pending_eval_queue_df = (
-    init_space(full_init=do_full_init)
-)
+leaderboard_df, raw_data, original_df, eval_queue_dfs = init_space(full_init=do_full_init)
+finished_eval_queue_df, running_eval_queue_df, pending_eval_queue_df = eval_queue_dfs
+
+
+# Data processing for plots now only on demand in the respective Gradio tab
+def load_and_create_plots():
+    plot_df = create_plot_df(create_scores_df(raw_data))
+    return plot_df
 
 
 # Searching and filtering
@@ -406,6 +397,7 @@ with demo:
         with gr.TabItem("📈 Metrics through time", elem_id="llm-benchmark-tab-table", id=2):
             with gr.Row():
                 with gr.Column():
+                    plot_df = load_and_create_plots()
                     chart = create_metric_plot_obj(
                         plot_df,
                         [AutoEvalColumn.average.name],
@@ -413,12 +405,14 @@ with demo:
                     )
                     gr.Plot(value=chart, min_width=500)
                 with gr.Column():
+                    plot_df = load_and_create_plots()
                     chart = create_metric_plot_obj(
                         plot_df,
                         BENCHMARK_COLS,
                         title="Top Scores and Human Baseline Over Time (from last update)",
                     )
                     gr.Plot(value=chart, min_width=500)
+
         with gr.TabItem("📝 About", elem_id="llm-benchmark-tab-table", id=3):
             gr.Markdown(LLM_BENCHMARKS_TEXT, elem_classes="markdown-text")
 

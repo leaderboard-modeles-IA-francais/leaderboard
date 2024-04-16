@@ -1,68 +1,55 @@
 import json
 import os
-
+import pathlib
 import pandas as pd
-
 from src.display.formatting import has_no_nan_values, make_clickable_model
 from src.display.utils import AutoEvalColumn, EvalQueueColumn, baseline_row
 from src.leaderboard.filter_models import filter_models_flags
 from src.leaderboard.read_evals import get_raw_eval_results
+from src.display.utils import load_json_data
 
 
-def get_leaderboard_df(
-    results_path: str, requests_path: str, dynamic_path: str, cols: list, benchmark_cols: list
-) -> pd.DataFrame:
-    raw_data = get_raw_eval_results(results_path=results_path, requests_path=requests_path, dynamic_path=dynamic_path)
-    all_data_json = [v.to_dict() for v in raw_data]
-    all_data_json.append(baseline_row)
-    print([data for data in all_data_json if data["model_name_for_query"] == "databricks/dbrx-base"])
+def _process_model_data(entry, model_name_key="model", revision_key="revision"):
+    """Enrich model data with clickable links and revisions."""
+    entry[EvalQueueColumn.model.name] = make_clickable_model(entry.get(model_name_key, ""))
+    entry[EvalQueueColumn.revision.name] = entry.get(revision_key, "main")
+    return entry
+
+
+def get_evaluation_queue_df(save_path, cols):
+    """Generate dataframes for pending, running, and finished evaluation entries."""
+    save_path = pathlib.Path(save_path)
+    all_evals = []
+
+    for path in save_path.rglob('*.json'):
+        data = load_json_data(path)
+        if data:
+            all_evals.append(_process_model_data(data))
+
+    # Organizing data by status
+    status_map = {
+        "PENDING": ["PENDING", "RERUN"],
+        "RUNNING": ["RUNNING"],
+        "FINISHED": ["FINISHED", "PENDING_NEW_EVAL"],
+    }
+    status_dfs = {status: [] for status in status_map}
+    for eval_data in all_evals:
+        for status, extra_statuses in status_map.items():
+            if eval_data["status"] in extra_statuses:
+                status_dfs[status].append(eval_data)
+
+    return tuple(pd.DataFrame(status_dfs[status], columns=cols) for status in ["FINISHED", "RUNNING", "PENDING"])
+
+
+def get_leaderboard_df(results_path, requests_path, dynamic_path, cols, benchmark_cols):
+    """Retrieve and process leaderboard data."""
+    raw_data = get_raw_eval_results(results_path, requests_path, dynamic_path)
+    all_data_json = [model.to_dict() for model in raw_data] + [baseline_row]
     filter_models_flags(all_data_json)
 
     df = pd.DataFrame.from_records(all_data_json)
-    print(df.columns)
-    print(df[df["model_name_for_query"] == "databricks/dbrx-base"])
     df = df.sort_values(by=[AutoEvalColumn.average.name], ascending=False)
     df = df[cols].round(decimals=2)
-
-    # filter out if any of the benchmarks have not been produced
     df = df[has_no_nan_values(df, benchmark_cols)]
     return raw_data, df
 
-
-def get_evaluation_queue_df(save_path: str, cols: list) -> list[pd.DataFrame]:
-    entries = [entry for entry in os.listdir(save_path) if not entry.startswith(".")]
-    all_evals = []
-
-    for entry in entries:
-        if ".json" in entry:
-            file_path = os.path.join(save_path, entry)
-            with open(file_path) as fp:
-                data = json.load(fp)
-
-            data[EvalQueueColumn.model.name] = make_clickable_model(data["model"])
-            data[EvalQueueColumn.revision.name] = data.get("revision", "main")
-
-            all_evals.append(data)
-        elif ".md" not in entry:
-            # this is a folder
-            sub_entries = [e for e in os.listdir(f"{save_path}/{entry}") if not e.startswith(".")]
-            for sub_entry in sub_entries:
-                file_path = os.path.join(save_path, entry, sub_entry)
-                with open(file_path) as fp:
-                    try:
-                        data = json.load(fp)
-                    except json.JSONDecodeError:
-                        print(f"Error reading {file_path}")
-                        continue
-
-                data[EvalQueueColumn.model.name] = make_clickable_model(data["model"])
-                data[EvalQueueColumn.revision.name] = data.get("revision", "main")
-                all_evals.append(data)
-
-    pending_list = [e for e in all_evals if e["status"] in ["PENDING", "RERUN"]]
-    running_list = [e for e in all_evals if e["status"] == "RUNNING"]
-    finished_list = [e for e in all_evals if e["status"].startswith("FINISHED") or e["status"] == "PENDING_NEW_EVAL"]
-    df_pending = pd.DataFrame.from_records(pending_list, columns=cols)
-    df_running = pd.DataFrame.from_records(running_list, columns=cols)
-    df_finished = pd.DataFrame.from_records(finished_list, columns=cols)
-    return df_finished[cols], df_running[cols], df_pending[cols]
