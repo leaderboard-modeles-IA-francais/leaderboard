@@ -37,7 +37,7 @@ class Tasks(Enum):
 # These classes are for user facing column names,
 # to avoid having to change them all around the code
 # when a modif is needed
-@dataclass
+@dataclass(frozen=True)
 class ColumnContent:
     name: str
     type: str
