@@ -60,7 +60,7 @@ def update_collections(df: DataFrame):
         for size, interval in intervals.items():
             filtered_df = _filter_by_type_and_size(df, model_type, interval)
             best_models = list(
-                filtered_df.sort_values(AutoEvalColumn.average.name, ascending=False)[AutoEvalColumn.dummy.name][:10]
+                filtered_df.sort_values(AutoEvalColumn.average.name, ascending=False)[AutoEvalColumn.fullname.name][:10]
             )
             print(model_type.value.symbol, size, best_models)
             _add_models_to_collection(collection, best_models, model_type, size)

@@ -1,4 +1,5 @@
 custom_css = """
+
 /* Hides the final AutoEvalColumn */
 #llm-benchmark-tab-table table td:last-child,
 #llm-benchmark-tab-table table th:last-child {
@@ -44,7 +45,7 @@ table th:first-child {
     background: none;
     border: none;
 }
- 
+
 #search-bar {
     padding: 0px;
 }

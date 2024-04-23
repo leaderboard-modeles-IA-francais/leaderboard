@@ -82,10 +82,12 @@ def download_dataset(repo_id, local_dir, repo_type="dataset", max_attempts=3):
 def init_space(full_init: bool = True):
     """Initializes the application space, loading only necessary data."""
     if full_init:
+        # These downloads only occur on full initialization
         download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
         download_dataset(DYNAMIC_INFO_REPO, DYNAMIC_INFO_PATH)
         download_dataset(RESULTS_REPO, EVAL_RESULTS_PATH)
 
+    # Always retrieve the leaderboard DataFrame
     raw_data, original_df = get_leaderboard_df(
         results_path=EVAL_RESULTS_PATH,
         requests_path=EVAL_REQUESTS_PATH,
@@ -93,13 +95,17 @@ def init_space(full_init: bool = True):
         cols=COLS,
         benchmark_cols=BENCHMARK_COLS,
     )
-    update_collections(original_df)
+
+    if full_init:
+        # Collection update only happens on full initialization
+        update_collections(original_df)
+
     leaderboard_df = original_df.copy()
     
+    # Evaluation queue DataFrame retrieval is independent of initialization detail level
     eval_queue_dfs = get_evaluation_queue_df(EVAL_REQUESTS_PATH, EVAL_COLS)
 
     return leaderboard_df, raw_data, original_df, eval_queue_dfs
-
 
 # Convert the environment variable "LEADERBOARD_FULL_INIT" to a boolean value, defaulting to True if the variable is not set.
 # This controls whether a full initialization should be performed.
@@ -148,22 +154,16 @@ def load_query(request: gr.Request):  # triggered only once at startup => read q
 
 
 def search_model(df: pd.DataFrame, query: str) -> pd.DataFrame:
-    return df[(df[AutoEvalColumn.dummy.name].str.contains(query, case=False, na=False))]
-
+    return df[(df[AutoEvalColumn.fullname.name].str.contains(query, case=False, na=False))]
 
 def search_license(df: pd.DataFrame, query: str) -> pd.DataFrame:
     return df[df[AutoEvalColumn.license.name].str.contains(query, case=False, na=False)]
 
-
 def select_columns(df: pd.DataFrame, columns: list) -> pd.DataFrame:
     always_here_cols = [c.name for c in fields(AutoEvalColumn) if c.never_hidden]
-    dummy_col = [AutoEvalColumn.dummy.name]
-    # AutoEvalColumn.model_type_symbol.name,
-    # AutoEvalColumn.model.name,
-    # We use COLS to maintain sorting
+    dummy_col = [AutoEvalColumn.fullname.name]
     filtered_df = df[always_here_cols + [c for c in COLS if c in df.columns and c in columns] + dummy_col]
     return filtered_df
-
 
 def filter_queries(query: str, df: pd.DataFrame):
     tmp_result_df = []
@@ -323,14 +323,13 @@ with demo:
                 value=leaderboard_df[
                     [c.name for c in fields(AutoEvalColumn) if c.never_hidden]
                     + shown_columns.value
-                    + [AutoEvalColumn.dummy.name]
+                    + [AutoEvalColumn.fullname.name]
                 ],
                 headers=[c.name for c in fields(AutoEvalColumn) if c.never_hidden] + shown_columns.value,
                 datatype=TYPES,
                 elem_id="leaderboard-table",
                 interactive=False,
                 visible=True,
-                # column_widths=["2%", "33%"]
             )
 
             # Dummy leaderboard for handling the case when the user uses backspace key

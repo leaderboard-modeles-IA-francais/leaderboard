@@ -71,10 +71,11 @@ auto_eval_column_dict.append(["revision", ColumnContent, ColumnContent("Model sh
 auto_eval_column_dict.append(["flagged", ColumnContent, ColumnContent("Flagged", "bool", False, hidden=True)])
 auto_eval_column_dict.append(["moe", ColumnContent, ColumnContent("MoE", "bool", False, hidden=True)])
 # Dummy column for the search bar (hidden by the custom CSS)
-auto_eval_column_dict.append(["dummy", ColumnContent, ColumnContent("model_name_for_query", "str", False, dummy=True)])
+auto_eval_column_dict.append(["fullname", ColumnContent, ColumnContent("fullname", "str", False, dummy=True)])
 
 # We use make dataclass to dynamically fill the scores from Tasks
 AutoEvalColumn = make_dataclass("AutoEvalColumn", auto_eval_column_dict, frozen=True)
+
 
 
 @dataclass(frozen=True)
@@ -99,7 +100,7 @@ baseline_row = {
     AutoEvalColumn.truthfulqa.name: 25.0,
     AutoEvalColumn.winogrande.name: 50.0,
     AutoEvalColumn.gsm8k.name: 0.21,
-    AutoEvalColumn.dummy.name: "baseline",
+    AutoEvalColumn.fullname.name: "baseline",
     AutoEvalColumn.model_type.name: "",
     AutoEvalColumn.flagged.name: False,
 }
@@ -124,7 +125,7 @@ human_baseline_row = {
     AutoEvalColumn.truthfulqa.name: 94.0,
     AutoEvalColumn.winogrande.name: 94.0,
     AutoEvalColumn.gsm8k.name: 100,
-    AutoEvalColumn.dummy.name: "human_baseline",
+    AutoEvalColumn.fullname.name: "human_baseline",
     AutoEvalColumn.model_type.name: "",
     AutoEvalColumn.flagged.name: False,
 }
