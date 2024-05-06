@@ -26,7 +26,7 @@ if not os.access(HF_HOME, os.W_OK):
     HF_HOME = "."
     os.environ["HF_HOME"] = HF_HOME
 else:
-    print(f"Write access confirmed for HF_HOME")
+    print("Write access confirmed for HF_HOME")
 
 EVAL_REQUESTS_PATH = os.path.join(HF_HOME, "eval-queue")
 EVAL_RESULTS_PATH = os.path.join(HF_HOME, "eval-results")

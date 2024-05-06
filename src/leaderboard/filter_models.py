@@ -1,6 +1,7 @@
 from src.display.formatting import model_hyperlink
 from src.display.utils import AutoEvalColumn
 
+
 # Models which have been flagged by users as being problematic for a reason or another
 # (Model name to forum discussion link)
 FLAGGED_MODELS = {
@@ -137,10 +138,7 @@ def flag_models(leaderboard_data: list[dict]):
             flag_key = "merged"
         else:
             flag_key = model_data[AutoEvalColumn.fullname.name]
-
-        print(f"model check: {flag_key}")
         if flag_key in FLAGGED_MODELS:
-            print(f"Flagged model: {flag_key}")
             issue_num = FLAGGED_MODELS[flag_key].split("/")[-1]
             issue_link = model_hyperlink(
                 FLAGGED_MODELS[flag_key],

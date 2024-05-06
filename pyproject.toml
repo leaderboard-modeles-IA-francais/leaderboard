@@ -1,9 +1,15 @@
 [tool.ruff]
-# Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
-lint.select = ["E", "F"]
-lint.ignore = ["E501"] # line too long (black is taking care of this)
-line-length = 119
-lint.fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "EM", "ERA", "EXE", "FBT", "ICN", "INP", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "TRY", "UP", "YTT"]
+line-length = 120
+target-version = "py312"
+include = ["*.py", "*.pyi", "**/pyproject.toml", "*.ipynb"]
+ignore=["I","EM","FBT","TRY003","S101","D101","D102","D103","D104","D105","G004","D107","FA102"]
+fixable=["ALL"]
+select=["ALL"]
+
+[tool.ruff.lint]
+select = ["E", "F"]
+fixable = ["ALL"]
+ignore = ["E501"] # line too long (black is taking care of this)
 
 [tool.isort]
 profile = "black"

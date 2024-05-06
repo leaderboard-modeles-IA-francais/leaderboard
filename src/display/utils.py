@@ -1,8 +1,29 @@
 from dataclasses import dataclass, make_dataclass
 from enum import Enum
 import json
+import logging
+from datetime import datetime
 import pandas as pd
 
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+def parse_datetime(datetime_str):
+    formats = [
+        "%Y-%m-%dT%H-%M-%S.%f",  # Format with dashes
+        "%Y-%m-%dT%H:%M:%S.%f",  # Standard format with colons
+        "%Y-%m-%dT%H %M %S.%f",  # Spaces as separator
+    ]
+    
+    for fmt in formats:
+        try:
+            return datetime.strptime(datetime_str, fmt)
+        except ValueError:
+            continue
+    # in rare cases set unix start time for files with incorrect time (legacy files)
+    logging.error(f"No valid date format found for: {datetime_str}")
+    return datetime(1970, 1, 1)
 
 def load_json_data(file_path):
     """Safely load JSON data from a file."""

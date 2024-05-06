@@ -1,4 +1,5 @@
 import os
+import time
 import logging
 import gradio as gr
 import pandas as pd
@@ -49,6 +50,9 @@ from src.tools.collections import update_collections
 from src.tools.plots import create_metric_plot_obj, create_plot_df, create_scores_df
 
 
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 # Start ephemeral Spaces on PRs (see config in README.md)
 enable_space_ci()
 
@@ -57,12 +61,24 @@ def restart_space():
     API.restart_space(repo_id=REPO_ID, token=H4_TOKEN)
 
 
-def download_dataset(repo_id, local_dir, repo_type="dataset", max_attempts=3):
-    """Attempt to download dataset with retries."""
+def time_diff_wrapper(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        diff = end_time - start_time
+        logging.info(f"Time taken for {func.__name__}: {diff} seconds")
+        return result
+    return wrapper
+
+
+@time_diff_wrapper
+def download_dataset(repo_id, local_dir, repo_type="dataset", max_attempts=3, backoff_factor=1.5):
+    """Download dataset with exponential backoff retries."""
     attempt = 0
     while attempt < max_attempts:
         try:
-            print(f"Downloading {repo_id} to {local_dir}")
+            logging.info(f"Downloading {repo_id} to {local_dir}")
             snapshot_download(
                 repo_id=repo_id,
                 local_dir=local_dir,
@@ -71,21 +87,25 @@ def download_dataset(repo_id, local_dir, repo_type="dataset", max_attempts=3):
                 etag_timeout=30,
                 max_workers=8,
             )
+            logging.info("Download successful")
             return
         except Exception as e:
-            logging.error(f"Error downloading {repo_id}: {e}")
+            wait_time = backoff_factor ** attempt
+            logging.error(f"Error downloading {repo_id}: {e}, retrying in {wait_time}s")
+            time.sleep(wait_time)
             attempt += 1
-            if attempt == max_attempts:
-                restart_space()
-
+    raise Exception(f"Failed to download {repo_id} after {max_attempts} attempts")
 
 def init_space(full_init: bool = True):
     """Initializes the application space, loading only necessary data."""
     if full_init:
         # These downloads only occur on full initialization
-        download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
-        download_dataset(DYNAMIC_INFO_REPO, DYNAMIC_INFO_PATH)
-        download_dataset(RESULTS_REPO, EVAL_RESULTS_PATH)
+        try:
+            download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
+            download_dataset(DYNAMIC_INFO_REPO, DYNAMIC_INFO_PATH)
+            download_dataset(RESULTS_REPO, EVAL_RESULTS_PATH)
+        except Exception:
+            restart_space()
 
     # Always retrieve the leaderboard DataFrame
     raw_data, original_df = get_leaderboard_df(

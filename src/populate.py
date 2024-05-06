@@ -52,4 +52,3 @@ def get_leaderboard_df(results_path, requests_path, dynamic_path, cols, benchmar
     df = df[cols].round(decimals=2)
     df = df[has_no_nan_values(df, benchmark_cols)]
     return raw_data, df
-
