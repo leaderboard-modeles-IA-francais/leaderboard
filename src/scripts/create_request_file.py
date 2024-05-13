@@ -47,7 +47,7 @@ def main():
     eval_entry = {
         "model": model_name,
         "base_model": base_model,
-        "revision": revision,
+        "revision": model_info.sha, # force to use the exact model commit 
         "private": False,
         "precision": precision,
         "weight_type": weight_type,

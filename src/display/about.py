@@ -205,6 +205,7 @@ When we add extra information about models to the leaderboard, it will be automa
 ### 5) Select the correct precision
 Not all models are converted properly from `float16` to `bfloat16`, and selecting the wrong precision can sometimes cause evaluation error (as loading a `bf16` model in `fp16` can sometimes generate NaNs, depending on the weight range).
 
+<b>Note:</b> Please be advised that when submitting, git <b>branches</b> and <b>tags</b> will be strictly tied to the <b>specific commit</b> present at the time of submission. This ensures revision consistency.
 ## Model types
 {icons}
 """

@@ -125,7 +125,7 @@ def add_new_eval(
     eval_entry = {
         "model": model,
         "base_model": base_model,
-        "revision": revision,
+        "revision": model_info.sha, # force to use the exact model commit 
         "private": private,
         "precision": precision,
         "params": model_size,
