@@ -133,11 +133,14 @@ DO_NOT_SUBMIT_MODELS = [
 def flag_models(leaderboard_data: list[dict]):
     """Flags models based on external criteria or flagged status."""
     for model_data in leaderboard_data:
-        # Merges and moes are flagged automatically
-        if model_data[AutoEvalColumn.flagged.name]:
-            flag_key = "merged"
-        else:
+        # If a model is not flagged, use its "fullname" as a key
+        if model_data[AutoEvalColumn.not_flagged.name]:
             flag_key = model_data[AutoEvalColumn.fullname.name]
+        else:
+             # Merges and moes are flagged 
+            flag_key = "merged"
+        
+        # Reverse the logic: Check for non-flagged models instead
         if flag_key in FLAGGED_MODELS:
             issue_num = FLAGGED_MODELS[flag_key].split("/")[-1]
             issue_link = model_hyperlink(
@@ -147,9 +150,9 @@ def flag_models(leaderboard_data: list[dict]):
             model_data[AutoEvalColumn.model.name] = (
                 f"{model_data[AutoEvalColumn.model.name]} has been flagged! {issue_link}"
             )
-            model_data[AutoEvalColumn.flagged.name] = True
+            model_data[AutoEvalColumn.not_flagged.name] = False
         else:
-            model_data[AutoEvalColumn.flagged.name] = False
+            model_data[AutoEvalColumn.not_flagged.name] = True
 
 
 def remove_forbidden_models(leaderboard_data: list[dict]):

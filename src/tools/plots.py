@@ -34,7 +34,7 @@ def create_scores_df(raw_data: list[EvalResult]) -> pd.DataFrame:
             # We ignore models that are flagged/no longer on the hub/not finished
             to_ignore = (
                 not row["still_on_hub"]
-                or row["flagged"]
+                or not row["not_flagged"]
                 or current_model in FLAGGED_MODELS
                 or row["status"] != "FINISHED"
             )
@@ -68,7 +68,6 @@ def create_plot_df(scores_df: dict[str : pd.DataFrame]) -> pd.DataFrame:
     """
     # Initialize the list to store DataFrames
     dfs = []
-
     # Iterate over the cols and create a new DataFrame for each column
     for col in BENCHMARK_COLS + [AutoEvalColumn.average.name]:
         d = scores_df[col].reset_index(drop=True)

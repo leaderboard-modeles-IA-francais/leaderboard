@@ -170,7 +170,6 @@ def get_model_tags(model_card, model: str):
     is_moe_from_model_card = any(keyword in model_card.text.lower() for keyword in ["moe", "mixtral"])
     # Hardcoding because of gating problem
     if "Qwen/Qwen1.5-32B" in model:
-        print("HERE NSHJNKJSNJLAS")
         is_moe_from_model_card = False
     is_moe_from_name = "moe" in model.lower().replace("/", "-").replace("_", "-").split("-")
     if is_moe_from_model_card or is_moe_from_name or is_moe_from_metadata:

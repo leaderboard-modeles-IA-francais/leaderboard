@@ -37,7 +37,7 @@ class EvalResult:
     date: str = "" # submission date of request file
     still_on_hub: bool = True
     is_merge: bool = False
-    flagged: bool = False
+    not_flagged: bool = False
     status: str = "FINISHED"
     # List of tags, initialized to a new empty list for each instance to avoid the pitfalls of mutable default arguments.
     tags: List[str] = field(default_factory=list)
@@ -164,7 +164,7 @@ class EvalResult:
         self.tags = file_dict.get("tags", [])
         
         # Calculate `flagged` only if 'tags' is not empty and avoid calculating each time
-        self.flagged = "flagged" in self.tags
+        self.not_flagged = not (any("flagged" in tag for tag in self.tags))
 
 
     def to_dict(self):
@@ -185,9 +185,9 @@ class EvalResult:
             AutoEvalColumn.likes.name: self.likes,
             AutoEvalColumn.params.name: self.num_params,
             AutoEvalColumn.still_on_hub.name: self.still_on_hub,
-            AutoEvalColumn.merged.name: "merge" in self.tags if self.tags else False,
-            AutoEvalColumn.moe.name: ("moe" in self.tags if self.tags else False) or "moe" in self.full_model.lower(),
-            AutoEvalColumn.flagged.name: self.flagged,
+            AutoEvalColumn.merged.name: not( "merge" in self.tags if self.tags else False),
+            AutoEvalColumn.moe.name: not ( ("moe" in self.tags if self.tags else False) or "moe" in self.full_model.lower()) ,
+            AutoEvalColumn.not_flagged.name: self.not_flagged,
         }
 
         for task in Tasks:

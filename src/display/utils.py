@@ -89,7 +89,7 @@ auto_eval_column_dict.append(
     ["still_on_hub", ColumnContent, ColumnContent("Available on the hub", "bool", False, hidden=True)]
 )
 auto_eval_column_dict.append(["revision", ColumnContent, ColumnContent("Model sha", "str", False, False)])
-auto_eval_column_dict.append(["flagged", ColumnContent, ColumnContent("Flagged", "bool", False, hidden=True)])
+auto_eval_column_dict.append(["not_flagged", ColumnContent, ColumnContent("Flagged", "bool", False, hidden=True)])
 auto_eval_column_dict.append(["moe", ColumnContent, ColumnContent("MoE", "bool", False, hidden=True)])
 # Dummy column for the search bar (hidden by the custom CSS)
 auto_eval_column_dict.append(["fullname", ColumnContent, ColumnContent("fullname", "str", False, dummy=True)])
@@ -123,7 +123,7 @@ baseline_row = {
     AutoEvalColumn.gsm8k.name: 0.21,
     AutoEvalColumn.fullname.name: "baseline",
     AutoEvalColumn.model_type.name: "",
-    AutoEvalColumn.flagged.name: False,
+    AutoEvalColumn.not_flagged.name: False,
 }
 
 # Average ⬆️ human baseline is 0.897 (source: averaging human baselines below)
@@ -148,7 +148,7 @@ human_baseline_row = {
     AutoEvalColumn.gsm8k.name: 100,
     AutoEvalColumn.fullname.name: "human_baseline",
     AutoEvalColumn.model_type.name: "",
-    AutoEvalColumn.flagged.name: False,
+    AutoEvalColumn.not_flagged.name: False,
 }
 
 
