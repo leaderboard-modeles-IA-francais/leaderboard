@@ -138,8 +138,8 @@ My model has been flagged improperly, what can I do?
 Search for models in the leaderboard by:
 1. Name, e.g., *model_name*
 2. Multiple names, separated by `;`, e.g., *model_name1;model_name2*
-3. License, prefix with `license:`, e.g., *license: MIT*
-4. Combination of name and license, order is irrelevant, e.g., *model_name; license: cc-by-sa-4.0*
+3. License, prefix with `Hub License:...`, e.g., *Hub License: MIT*
+4. Combination of name and license, order is irrelevant, e.g., *model_name; Hub License: cc-by-sa-4.0*
 
 ---------------------------
 
