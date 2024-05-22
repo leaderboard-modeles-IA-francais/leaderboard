@@ -1,5 +1,3 @@
-import json
-import os
 import pathlib
 import pandas as pd
 from src.display.formatting import has_no_nan_values, make_clickable_model
@@ -21,7 +19,7 @@ def get_evaluation_queue_df(save_path, cols):
     save_path = pathlib.Path(save_path)
     all_evals = []
 
-    for path in save_path.rglob('*.json'):
+    for path in save_path.rglob("*.json"):
         data = load_json_data(path)
         if data:
             all_evals.append(_process_model_data(data))

@@ -137,9 +137,9 @@ def flag_models(leaderboard_data: list[dict]):
         if model_data[AutoEvalColumn.not_flagged.name]:
             flag_key = model_data[AutoEvalColumn.fullname.name]
         else:
-             # Merges and moes are flagged 
+            # Merges and moes are flagged
             flag_key = "merged"
-        
+
         # Reverse the logic: Check for non-flagged models instead
         if flag_key in FLAGGED_MODELS:
             issue_num = FLAGGED_MODELS[flag_key].split("/")[-1]
@@ -171,4 +171,3 @@ def remove_forbidden_models(leaderboard_data: list[dict]):
 def filter_models_flags(leaderboard_data: list[dict]):
     leaderboard_data = remove_forbidden_models(leaderboard_data)
     flag_models(leaderboard_data)
-

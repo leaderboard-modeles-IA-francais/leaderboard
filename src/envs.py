@@ -1,6 +1,4 @@
 import os
-import logging
-
 from huggingface_hub import HfApi
 
 # clone / pull the lmeh eval data

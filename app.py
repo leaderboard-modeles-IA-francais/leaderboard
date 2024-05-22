@@ -1,5 +1,4 @@
 import os
-import pandas as pd
 import logging
 import time
 import gradio as gr
@@ -23,8 +22,6 @@ from src.display.utils import (
     COLS,
     EVAL_COLS,
     EVAL_TYPES,
-    NUMERIC_INTERVALS,
-    TYPES,
     AutoEvalColumn,
     ModelType,
     Precision,
@@ -51,10 +48,11 @@ from src.tools.collections import update_collections
 from src.tools.plots import create_metric_plot_obj, create_plot_df, create_scores_df
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Start ephemeral Spaces on PRs (see config in README.md)
 enable_space_ci()
+
 
 def restart_space():
     API.restart_space(repo_id=REPO_ID, token=H4_TOKEN)
@@ -68,6 +66,7 @@ def time_diff_wrapper(func):
         diff = end_time - start_time
         logging.info(f"Time taken for {func.__name__}: {diff} seconds")
         return result
+
     return wrapper
 
 
@@ -89,11 +88,12 @@ def download_dataset(repo_id, local_dir, repo_type="dataset", max_attempts=3, ba
             logging.info("Download successful")
             return
         except Exception as e:
-            wait_time = backoff_factor ** attempt
+            wait_time = backoff_factor**attempt
             logging.error(f"Error downloading {repo_id}: {e}, retrying in {wait_time}s")
             time.sleep(wait_time)
             attempt += 1
     raise Exception(f"Failed to download {repo_id} after {max_attempts} attempts")
+
 
 def init_space(full_init: bool = True):
     """Initializes the application space, loading only necessary data."""
@@ -120,11 +120,12 @@ def init_space(full_init: bool = True):
         update_collections(original_df)
 
     leaderboard_df = original_df.copy()
-    
+
     # Evaluation queue DataFrame retrieval is independent of initialization detail level
     eval_queue_dfs = get_evaluation_queue_df(EVAL_REQUESTS_PATH, EVAL_COLS)
 
     return leaderboard_df, raw_data, original_df, eval_queue_dfs
+
 
 # Convert the environment variable "LEADERBOARD_FULL_INIT" to a boolean value, defaulting to True if the variable is not set.
 # This controls whether a full initialization should be performed.
@@ -153,36 +154,34 @@ with demo:
                 value=leaderboard_df,
                 datatype=[c.type for c in fields(AutoEvalColumn)],
                 select_columns=SelectColumns(
-                    default_selection=[
-                        c.name
-                        for c in fields(AutoEvalColumn)
-                        if c.displayed_by_default
-                    ],
+                    default_selection=[c.name for c in fields(AutoEvalColumn) if c.displayed_by_default],
                     cant_deselect=[c.name for c in fields(AutoEvalColumn) if c.never_hidden or c.dummy],
                     label="Select Columns to Display:",
                 ),
-                search_columns=[
-                    AutoEvalColumn.model.name, 
-                    AutoEvalColumn.fullname.name, 
-                    AutoEvalColumn.license.name
-                ],
-                hide_columns=[
-                    c.name
-                    for c in fields(AutoEvalColumn)
-                    if c.hidden
-                ],
+                search_columns=[AutoEvalColumn.model.name, AutoEvalColumn.fullname.name, AutoEvalColumn.license.name],
+                hide_columns=[c.name for c in fields(AutoEvalColumn) if c.hidden],
                 filter_columns=[
                     ColumnFilter(AutoEvalColumn.model_type.name, type="checkboxgroup", label="Model types"),
                     ColumnFilter(AutoEvalColumn.precision.name, type="checkboxgroup", label="Precision"),
-                    ColumnFilter(AutoEvalColumn.params.name, type="slider", min=0, max=150, label="Select the number of parameters (B)"),
-                    ColumnFilter(AutoEvalColumn.still_on_hub.name, type="boolean", label="Private or deleted", default=True),
-                    ColumnFilter(AutoEvalColumn.merged.name, type="boolean", label="Contains a merge/moerge", default=True),
+                    ColumnFilter(
+                        AutoEvalColumn.params.name,
+                        type="slider",
+                        min=0,
+                        max=150,
+                        label="Select the number of parameters (B)",
+                    ),
+                    ColumnFilter(
+                        AutoEvalColumn.still_on_hub.name, type="boolean", label="Private or deleted", default=True
+                    ),
+                    ColumnFilter(
+                        AutoEvalColumn.merged.name, type="boolean", label="Contains a merge/moerge", default=True
+                    ),
                     ColumnFilter(AutoEvalColumn.moe.name, type="boolean", label="MoE", default=False),
                     ColumnFilter(AutoEvalColumn.not_flagged.name, type="boolean", label="Flagged", default=True),
                 ],
-                bool_checkboxgroup_label="Hide models"
+                bool_checkboxgroup_label="Hide models",
             )
-            
+
         with gr.TabItem("📈 Metrics through time", elem_id="llm-benchmark-tab-table", id=2):
             with gr.Row():
                 with gr.Column():

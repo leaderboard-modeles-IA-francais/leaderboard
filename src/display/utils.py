@@ -7,7 +7,8 @@ import pandas as pd
 
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
 
 def parse_datetime(datetime_str):
     formats = [
@@ -15,7 +16,7 @@ def parse_datetime(datetime_str):
         "%Y-%m-%dT%H:%M:%S.%f",  # Standard format with colons
         "%Y-%m-%dT%H %M %S.%f",  # Spaces as separator
     ]
-    
+
     for fmt in formats:
         try:
             return datetime.strptime(datetime_str, fmt)
@@ -24,6 +25,7 @@ def parse_datetime(datetime_str):
     # in rare cases set unix start time for files with incorrect time (legacy files)
     logging.error(f"No valid date format found for: {datetime_str}")
     return datetime(1970, 1, 1)
+
 
 def load_json_data(file_path):
     """Safely load JSON data from a file."""
@@ -96,7 +98,6 @@ auto_eval_column_dict.append(["fullname", ColumnContent, ColumnContent("fullname
 
 # We use make dataclass to dynamically fill the scores from Tasks
 AutoEvalColumn = make_dataclass("AutoEvalColumn", auto_eval_column_dict, frozen=True)
-
 
 
 @dataclass(frozen=True)
