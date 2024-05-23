@@ -166,7 +166,7 @@ with demo:
                     ColumnFilter(
                         AutoEvalColumn.params.name,
                         type="slider",
-                        min=0,
+                        min=0.01,
                         max=150,
                         label="Select the number of parameters (B)",
                     ),
