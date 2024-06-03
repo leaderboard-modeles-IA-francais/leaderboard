@@ -90,11 +90,11 @@ def download_dataset(repo_id, local_dir, repo_type="dataset", max_attempts=3, ba
             attempt += 1
     raise Exception(f"Failed to download {repo_id} after {max_attempts} attempts")
 
-def get_latest_data_leaderboard(init: bool = False):
+def get_latest_data_leaderboard(leaderboard_initial_df):
     current_time = datetime.datetime.now()
     global LAST_UPDATE_LEADERBOARD
     if current_time - LAST_UPDATE_LEADERBOARD < datetime.timedelta(minutes=10):
-        return
+        return leaderboard_initial_df
     LAST_UPDATE_LEADERBOARD = current_time
     leaderboard_dataset = datasets.load_dataset(
         AGGREGATED_REPO, 
@@ -311,7 +311,7 @@ with demo:
                 show_copy_button=True,
             )
 
-    demo.load(fn=get_latest_data_leaderboard, inputs=None, outputs=[leaderboard])
+    demo.load(fn=get_latest_data_leaderboard, inputs=[leaderboard], outputs=[leaderboard])
     #demo.load(fn=get_latest_data_queue, inputs=None, outputs=[finished_eval_table, running_eval_table, pending_eval_table])
 
 
