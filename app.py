@@ -93,7 +93,7 @@ def download_dataset(repo_id, local_dir, repo_type="dataset", max_attempts=3, ba
 def get_latest_data_leaderboard(leaderboard_initial_df):
     current_time = datetime.datetime.now()
     global LAST_UPDATE_LEADERBOARD
-    if current_time - LAST_UPDATE_LEADERBOARD < datetime.timedelta(minutes=10):
+    if current_time - LAST_UPDATE_LEADERBOARD < datetime.timedelta(minutes=10) and leaderboard_initial_df is not None:
         return leaderboard_initial_df
     LAST_UPDATE_LEADERBOARD = current_time
     leaderboard_dataset = datasets.load_dataset(
@@ -127,7 +127,7 @@ def init_space():
             restart_space()
 
     # Always redownload the leaderboard DataFrame
-    leaderboard_df = get_latest_data_leaderboard()
+    leaderboard_df = get_latest_data_leaderboard(None)
 
     # Evaluation queue DataFrame retrieval is independent of initialization detail level
     eval_queue_dfs = get_latest_data_queue()
