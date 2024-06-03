@@ -173,7 +173,6 @@ def init_leaderboard(dataframe):
         bool_checkboxgroup_label="Hide models",
     )
 
-
 demo = gr.Blocks(css=custom_css)
 with demo:
     gr.HTML(TITLE)
@@ -307,7 +306,6 @@ with demo:
             )
 
     demo.load(fn=get_latest_data_leaderboard, inputs=None, outputs=[leaderboard])
-    demo.load(fn=get_latest_data_queue, inputs=None, outputs=[finished_eval_table, running_eval_table, pending_eval_table])
 
 demo.queue(default_concurrency_limit=40)
 
@@ -357,16 +355,17 @@ async def update_leaderboard(payload: WebhookPayload) -> None:
             verification_mode="no_checks"
         )
 
-LAST_UPDATE_QUEUE = datetime.datetime.now()
-@webhooks_server.add_webhook    
-async def update_queue(payload: WebhookPayload) -> None:
-    """Redownloads the queue dataset each time it updates"""
-    if payload.repo.type == "dataset" and payload.event.action == "update":
-        current_time = datetime.datetime.now()
-        if current_time - LAST_UPDATE_QUEUE > datetime.timedelta(minutes=10):
-            # We only redownload is last update was more than 10 minutes ago, as the queue is 
-            # updated regularly and heavy to download
-            download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
-            LAST_UPDATE_QUEUE = datetime.datetime.now()
+if False:
+    LAST_UPDATE_QUEUE = datetime.datetime.now()
+    @webhooks_server.add_webhook    
+    async def update_queue(payload: WebhookPayload) -> None:
+        """Redownloads the queue dataset each time it updates"""
+        if payload.repo.type == "dataset" and payload.event.action == "update":
+            current_time = datetime.datetime.now()
+            if current_time - LAST_UPDATE_QUEUE > datetime.timedelta(minutes=10):
+                # We only redownload is last update was more than 10 minutes ago, as the queue is 
+                # updated regularly and heavy to download
+                download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
+                LAST_UPDATE_QUEUE = datetime.datetime.now()
 
 webhooks_server.launch()
