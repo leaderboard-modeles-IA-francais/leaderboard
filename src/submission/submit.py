@@ -2,16 +2,11 @@ import json
 import os
 from datetime import datetime, timezone
 
-from huggingface_hub import snapshot_download
-
 from src.display.formatting import styled_error, styled_message, styled_warning
 from src.envs import (
     API,
-    DYNAMIC_INFO_FILE_PATH,
-    DYNAMIC_INFO_PATH,
-    DYNAMIC_INFO_REPO,
     EVAL_REQUESTS_PATH,
-    H4_TOKEN,
+    HF_TOKEN,
     QUEUE_REPO,
     RATE_LIMIT_PERIOD,
     RATE_LIMIT_QUOTA,
@@ -35,7 +30,6 @@ def add_new_eval(
     base_model: str,
     revision: str,
     precision: str,
-    private: bool,
     weight_type: str,
     model_type: str,
 ):
@@ -80,7 +74,7 @@ def add_new_eval(
     # Is the model on the hub?
     if weight_type in ["Delta", "Adapter"]:
         base_model_on_hub, error, _ = is_model_on_hub(
-            model_name=base_model, revision=revision, token=H4_TOKEN, test_tokenizer=True
+            model_name=base_model, revision=revision, token=HF_TOKEN, test_tokenizer=True
         )
         if not base_model_on_hub:
             return styled_error(f'Base model "{base_model}" {error}')
@@ -126,7 +120,6 @@ def add_new_eval(
         "model": model,
         "base_model": base_model,
         "revision": model_info.sha, # force to use the exact model commit 
-        "private": private,
         "precision": precision,
         "params": model_size,
         "architectures": architecture,
@@ -154,7 +147,7 @@ def add_new_eval(
     print("Creating eval file")
     OUT_DIR = f"{EVAL_REQUESTS_PATH}/{user_name}"
     os.makedirs(OUT_DIR, exist_ok=True)
-    out_path = f"{OUT_DIR}/{model_path}_eval_request_{private}_{precision}_{weight_type}.json"
+    out_path = f"{OUT_DIR}/{model_path}_eval_request_False_{precision}_{weight_type}.json"
 
     with open(out_path, "w") as f:
         f.write(json.dumps(eval_entry))
@@ -166,26 +159,6 @@ def add_new_eval(
         repo_id=QUEUE_REPO,
         repo_type="dataset",
         commit_message=f"Add {model} to eval queue",
-    )
-
-    # We want to grab the latest version of the submission file to not accidentally overwrite it
-    snapshot_download(
-        repo_id=DYNAMIC_INFO_REPO, local_dir=DYNAMIC_INFO_PATH, repo_type="dataset", tqdm_class=None, etag_timeout=30
-    )
-
-    with open(DYNAMIC_INFO_FILE_PATH) as f:
-        all_supplementary_info = json.load(f)
-
-    all_supplementary_info[model] = supplementary_info
-    with open(DYNAMIC_INFO_FILE_PATH, "w") as f:
-        json.dump(all_supplementary_info, f, indent=2)
-
-    API.upload_file(
-        path_or_fileobj=DYNAMIC_INFO_FILE_PATH,
-        path_in_repo=DYNAMIC_INFO_FILE_PATH.split("/")[-1],
-        repo_id=DYNAMIC_INFO_REPO,
-        repo_type="dataset",
-        commit_message=f"Add {model} to dynamic info queue",
     )
 
     # Remove the local file

@@ -2,10 +2,9 @@ import os
 import logging
 import time
 import gradio as gr
-from apscheduler.schedulers.background import BackgroundScheduler
-from huggingface_hub import snapshot_download
+import datasets
+from huggingface_hub import snapshot_download, WebhooksServer, WebhookPayload, RepoCard
 from gradio_leaderboard import Leaderboard, ColumnFilter, SelectColumns
-from gradio_space_ci import enable_space_ci
 
 from src.display.about import (
     CITATION_BUTTON_LABEL,
@@ -30,32 +29,27 @@ from src.display.utils import (
 )
 from src.envs import (
     API,
-    DYNAMIC_INFO_FILE_PATH,
-    DYNAMIC_INFO_PATH,
-    DYNAMIC_INFO_REPO,
     EVAL_REQUESTS_PATH,
-    EVAL_RESULTS_PATH,
-    H4_TOKEN,
-    IS_PUBLIC,
+    AGGREGATED_REPO,
+    HF_TOKEN,
     QUEUE_REPO,
     REPO_ID,
-    RESULTS_REPO,
+    HF_HOME,
 )
 from src.populate import get_evaluation_queue_df, get_leaderboard_df
-from src.scripts.update_all_request_files import update_dynamic_files
 from src.submission.submit import add_new_eval
-from src.tools.collections import update_collections
 from src.tools.plots import create_metric_plot_obj, create_plot_df, create_scores_df
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-# Start ephemeral Spaces on PRs (see config in README.md)
-enable_space_ci()
 
+# Convert the environment variable "LEADERBOARD_FULL_INIT" to a boolean value, defaulting to True if the variable is not set.
+# This controls whether a full initialization should be performed.
+DO_FULL_INIT = os.getenv("LEADERBOARD_FULL_INIT", "True") == "True"
 
 def restart_space():
-    API.restart_space(repo_id=REPO_ID, token=H4_TOKEN)
+    API.restart_space(repo_id=REPO_ID, token=HF_TOKEN)
 
 
 def time_diff_wrapper(func):
@@ -94,53 +88,89 @@ def download_dataset(repo_id, local_dir, repo_type="dataset", max_attempts=3, ba
             attempt += 1
     raise Exception(f"Failed to download {repo_id} after {max_attempts} attempts")
 
+def get_latest_data_leaderboard():
+    leaderboard_dataset = datasets.load_dataset(
+        AGGREGATED_REPO, 
+        "default", 
+        split="train", 
+        cache_dir=HF_HOME, 
+        download_mode=datasets.DownloadMode.REUSE_DATASET_IF_EXISTS, # Uses the cached dataset 
+        verification_mode="no_checks"
+    )
 
-def init_space(full_init: bool = True):
-    """Initializes the application space, loading only necessary data."""
-    if full_init:
-        # These downloads only occur on full initialization
-        try:
-            download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
-            download_dataset(DYNAMIC_INFO_REPO, DYNAMIC_INFO_PATH)
-            download_dataset(RESULTS_REPO, EVAL_RESULTS_PATH)
-        except Exception:
-            restart_space()
-
-    # Always retrieve the leaderboard DataFrame
-    raw_data, original_df = get_leaderboard_df(
-        results_path=EVAL_RESULTS_PATH,
-        requests_path=EVAL_REQUESTS_PATH,
-        dynamic_path=DYNAMIC_INFO_FILE_PATH,
+    leaderboard_df = get_leaderboard_df(
+        leaderboard_dataset=leaderboard_dataset, 
         cols=COLS,
         benchmark_cols=BENCHMARK_COLS,
     )
 
-    if full_init:
-        # Collection update only happens on full initialization
-        update_collections(original_df)
+    return leaderboard_df
 
-    leaderboard_df = original_df.copy()
+def get_latest_data_queue():
+    eval_queue_dfs = get_evaluation_queue_df(EVAL_REQUESTS_PATH, EVAL_COLS)
+    return eval_queue_dfs
+
+def init_space():
+    """Initializes the application space, loading only necessary data."""
+    if DO_FULL_INIT:
+        # These downloads only occur on full initialization
+        try:
+            download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
+        except Exception:
+            restart_space()
+
+    # Always redownload the leaderboard DataFrame
+    leaderboard_df = get_latest_data_leaderboard()
 
     # Evaluation queue DataFrame retrieval is independent of initialization detail level
-    eval_queue_dfs = get_evaluation_queue_df(EVAL_REQUESTS_PATH, EVAL_COLS)
+    eval_queue_dfs = get_latest_data_queue()
 
-    return leaderboard_df, raw_data, original_df, eval_queue_dfs
+    return leaderboard_df, eval_queue_dfs
 
-
-# Convert the environment variable "LEADERBOARD_FULL_INIT" to a boolean value, defaulting to True if the variable is not set.
-# This controls whether a full initialization should be performed.
-do_full_init = os.getenv("LEADERBOARD_FULL_INIT", "True") == "True"
 
 # Calls the init_space function with the `full_init` parameter determined by the `do_full_init` variable.
 # This initializes various DataFrames used throughout the application, with the level of initialization detail controlled by the `do_full_init` flag.
-leaderboard_df, raw_data, original_df, eval_queue_dfs = init_space(full_init=do_full_init)
+leaderboard_df, eval_queue_dfs = init_space()
 finished_eval_queue_df, running_eval_queue_df, pending_eval_queue_df = eval_queue_dfs
 
 
 # Data processing for plots now only on demand in the respective Gradio tab
 def load_and_create_plots():
-    plot_df = create_plot_df(create_scores_df(raw_data))
+    plot_df = create_plot_df(create_scores_df(leaderboard_df))
     return plot_df
+
+def init_leaderboard(dataframe):
+    return Leaderboard(
+        value = dataframe,
+        datatype=[c.type for c in fields(AutoEvalColumn)],
+        select_columns=SelectColumns(
+            default_selection=[c.name for c in fields(AutoEvalColumn) if c.displayed_by_default],
+            cant_deselect=[c.name for c in fields(AutoEvalColumn) if c.never_hidden or c.dummy],
+            label="Select Columns to Display:",
+        ),
+        search_columns=[AutoEvalColumn.model.name, AutoEvalColumn.fullname.name, AutoEvalColumn.license.name],
+        hide_columns=[c.name for c in fields(AutoEvalColumn) if c.hidden],
+        filter_columns=[
+            ColumnFilter(AutoEvalColumn.model_type.name, type="checkboxgroup", label="Model types"),
+            ColumnFilter(AutoEvalColumn.precision.name, type="checkboxgroup", label="Precision"),
+            ColumnFilter(
+                AutoEvalColumn.params.name,
+                type="slider",
+                min=0.01,
+                max=150,
+                label="Select the number of parameters (B)",
+            ),
+            ColumnFilter(
+                AutoEvalColumn.still_on_hub.name, type="boolean", label="Private or deleted", default=True
+            ),
+            ColumnFilter(
+                AutoEvalColumn.merged.name, type="boolean", label="Contains a merge/moerge", default=True
+            ),
+            ColumnFilter(AutoEvalColumn.moe.name, type="boolean", label="MoE", default=False),
+            ColumnFilter(AutoEvalColumn.not_flagged.name, type="boolean", label="Flagged", default=True),
+        ],
+        bool_checkboxgroup_label="Hide models",
+    )
 
 
 demo = gr.Blocks(css=custom_css)
@@ -150,37 +180,7 @@ with demo:
 
     with gr.Tabs(elem_classes="tab-buttons") as tabs:
         with gr.TabItem("🏅 LLM Benchmark", elem_id="llm-benchmark-tab-table", id=0):
-            leaderboard = Leaderboard(
-                value=leaderboard_df,
-                datatype=[c.type for c in fields(AutoEvalColumn)],
-                select_columns=SelectColumns(
-                    default_selection=[c.name for c in fields(AutoEvalColumn) if c.displayed_by_default],
-                    cant_deselect=[c.name for c in fields(AutoEvalColumn) if c.never_hidden or c.dummy],
-                    label="Select Columns to Display:",
-                ),
-                search_columns=[AutoEvalColumn.model.name, AutoEvalColumn.fullname.name, AutoEvalColumn.license.name],
-                hide_columns=[c.name for c in fields(AutoEvalColumn) if c.hidden],
-                filter_columns=[
-                    ColumnFilter(AutoEvalColumn.model_type.name, type="checkboxgroup", label="Model types"),
-                    ColumnFilter(AutoEvalColumn.precision.name, type="checkboxgroup", label="Precision"),
-                    ColumnFilter(
-                        AutoEvalColumn.params.name,
-                        type="slider",
-                        min=0.01,
-                        max=150,
-                        label="Select the number of parameters (B)",
-                    ),
-                    ColumnFilter(
-                        AutoEvalColumn.still_on_hub.name, type="boolean", label="Private or deleted", default=True
-                    ),
-                    ColumnFilter(
-                        AutoEvalColumn.merged.name, type="boolean", label="Contains a merge/moerge", default=True
-                    ),
-                    ColumnFilter(AutoEvalColumn.moe.name, type="boolean", label="MoE", default=False),
-                    ColumnFilter(AutoEvalColumn.not_flagged.name, type="boolean", label="Flagged", default=True),
-                ],
-                bool_checkboxgroup_label="Hide models",
-            )
+            leaderboard = init_leaderboard(leaderboard_df)
 
         with gr.TabItem("📈 Metrics through time", elem_id="llm-benchmark-tab-table", id=2):
             with gr.Row():
@@ -219,7 +219,6 @@ with demo:
                 with gr.Column():
                     model_name_textbox = gr.Textbox(label="Model name")
                     revision_name_textbox = gr.Textbox(label="Revision commit", placeholder="main")
-                    private = gr.Checkbox(False, label="Private", visible=not IS_PUBLIC)
                     model_type = gr.Dropdown(
                         choices=[t.to_str(" : ") for t in ModelType if t != ModelType.Unknown],
                         label="Model type",
@@ -290,7 +289,6 @@ with demo:
                     base_model_name_textbox,
                     revision_name_textbox,
                     precision,
-                    private,
                     weight_type,
                     model_type,
                 ],
@@ -307,9 +305,61 @@ with demo:
                 show_copy_button=True,
             )
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(restart_space, "interval", hours=3)  # restarted every 3h
-scheduler.add_job(update_dynamic_files, "interval", hours=2)  # launched every 2 hour
-scheduler.start()
+    demo.load(fn=get_latest_data_leaderboard, inputs=None, outputs=[leaderboard])
+    demo.load(fn=get_latest_data_queue, inputs=None, outputs=[finished_eval_table, running_eval_table, pending_eval_table])
 
-demo.queue(default_concurrency_limit=40).launch()
+demo.queue(default_concurrency_limit=40)
+
+# Start ephemeral Spaces on PRs (see config in README.md)
+from gradio_space_ci.webhook import IS_EPHEMERAL_SPACE, SPACE_ID, configure_space_ci
+
+def enable_space_ci_and_return_server(ui: gr.Blocks) -> WebhooksServer:
+    # Taken from https://huggingface.co/spaces/Wauplin/gradio-space-ci/blob/075119aee75ab5e7150bf0814eec91c83482e790/src/gradio_space_ci/webhook.py#L61
+    # Compared to original, this one do not monkeypatch Gradio which allows us to define more webhooks.
+    # ht to Lucain!
+    if SPACE_ID is None:
+        print("Not in a Space: Space CI disabled.")
+        return WebhooksServer(ui=demo)
+
+    if IS_EPHEMERAL_SPACE:
+        print("In an ephemeral Space: Space CI disabled.")
+        return WebhooksServer(ui=demo)
+
+    card = RepoCard.load(repo_id_or_path=SPACE_ID, repo_type="space")
+    config = card.data.get("space_ci", {})
+    print(f"Enabling Space CI with config from README: {config}")
+
+    return configure_space_ci(
+        blocks=ui,
+        trusted_authors=config.get("trusted_authors"),
+        private=config.get("private", "auto"),
+        variables=config.get("variables", "auto"),
+        secrets=config.get("secrets"),
+        hardware=config.get("hardware"),
+        storage=config.get("storage"),
+    )
+
+# Create webhooks server (with CI url if in Space and not ephemeral)
+webhooks_server = enable_space_ci_and_return_server(ui=demo)
+
+# Add webhooks
+@webhooks_server.add_webhook
+async def update_leaderboard(payload: WebhookPayload) -> None:
+    """Redownloads the leaderboard dataset each time it updates"""
+    if payload.repo.type == "dataset" and payload.event.action == "update":
+        datasets.load_dataset(
+            AGGREGATED_REPO, 
+            "default", 
+            split="train", 
+            cache_dir=HF_HOME, 
+            download_mode=datasets.DownloadMode.FORCE_REDOWNLOAD, 
+            verification_mode="no_checks"
+        )
+
+@webhooks_server.add_webhook    
+async def update_queue(payload: WebhookPayload) -> None:
+    """Redownloads the queue dataset each time it updates"""
+    if payload.repo.type == "dataset" and payload.event.action == "update":
+        download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
+
+webhooks_server.launch()

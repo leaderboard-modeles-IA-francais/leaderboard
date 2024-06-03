@@ -13,7 +13,7 @@ from src.envs import HAS_HIGHER_RATE_LIMIT
 
 
 # ht to @Wauplin, thank you for the snippet!
-# See https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/317
+# See https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard/discussions/317
 def check_model_card(repo_id: str) -> tuple[bool, str]:
     # Returns operation status, and error message
     try:

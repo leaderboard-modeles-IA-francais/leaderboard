@@ -93,6 +93,7 @@ auto_eval_column_dict.append(
 auto_eval_column_dict.append(["revision", ColumnContent, ColumnContent("Model sha", "str", False, False)])
 auto_eval_column_dict.append(["not_flagged", ColumnContent, ColumnContent("Flagged", "bool", False, hidden=True)])
 auto_eval_column_dict.append(["moe", ColumnContent, ColumnContent("MoE", "bool", False, hidden=True)])
+auto_eval_column_dict.append(["date", ColumnContent, ColumnContent("date", "bool", False, hidden=True)])
 # Dummy column for the search bar (hidden by the custom CSS)
 auto_eval_column_dict.append(["fullname", ColumnContent, ColumnContent("fullname", "str", False, dummy=True)])
 

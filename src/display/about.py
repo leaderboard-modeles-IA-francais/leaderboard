@@ -81,7 +81,7 @@ To get more information about quantization, see:
 - 4 bits: [blog post](https://huggingface.co/blog/4bit-transformers-bitsandbytes), [paper](https://arxiv.org/abs/2305.14314)
 
 ### Useful links
-- [Community resources](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard/discussions/174)
+- [Community resources](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard/discussions/174)
 - [Collection of best models](https://huggingface.co/collections/open-llm-leaderboard/llm-leaderboard-best-models-652d6c7965a4619fb5c27a03)
 
 ### Other cool leaderboards:
@@ -217,7 +217,7 @@ CITATION_BUTTON_TEXT = r"""
   title = {Open LLM Leaderboard},
   year = {2023},
   publisher = {Hugging Face},
-  howpublished = "\url{https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard}"
+  howpublished = "\url{https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard}"
 }
 @software{eval-harness,
   author       = {Gao, Leo and

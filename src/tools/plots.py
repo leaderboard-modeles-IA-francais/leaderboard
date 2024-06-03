@@ -6,10 +6,9 @@ from plotly.graph_objs import Figure
 from src.display.utils import BENCHMARK_COLS, AutoEvalColumn, Task, Tasks
 from src.display.utils import human_baseline_row as HUMAN_BASELINE
 from src.leaderboard.filter_models import FLAGGED_MODELS
-from src.leaderboard.read_evals import EvalResult
 
 
-def create_scores_df(raw_data: list[EvalResult]) -> pd.DataFrame:
+def create_scores_df(results_df: list[dict]) -> pd.DataFrame:
     """
     Generates a DataFrame containing the maximum scores until each date.
 
@@ -17,8 +16,7 @@ def create_scores_df(raw_data: list[EvalResult]) -> pd.DataFrame:
     :return: A new DataFrame containing the maximum scores until each date for every metric.
     """
     # Step 1: Ensure 'date' is in datetime format and sort the DataFrame by it
-    results_df = pd.DataFrame(raw_data)
-    # results_df["date"] = pd.to_datetime(results_df["date"], format="mixed", utc=True)
+    results_df["date"] = pd.to_datetime(results_df["date"], format="mixed", utc=True)
     results_df.sort_values(by="date", inplace=True)
 
     # Step 2: Initialize the scores dictionary
@@ -30,22 +28,18 @@ def create_scores_df(raw_data: list[EvalResult]) -> pd.DataFrame:
         last_date = ""
         column = task.col_name
         for _, row in results_df.iterrows():
-            current_model = row["full_model"]
+            current_model = row[AutoEvalColumn.fullname.name]
             # We ignore models that are flagged/no longer on the hub/not finished
             to_ignore = (
-                not row["still_on_hub"]
-                or not row["not_flagged"]
+                not row[AutoEvalColumn.still_on_hub.name]
+                or not row[AutoEvalColumn.not_flagged.name]
                 or current_model in FLAGGED_MODELS
-                or row["status"] != "FINISHED"
             )
             if to_ignore:
                 continue
 
-            current_date = row["date"]
-            if task.benchmark == "Average":
-                current_score = np.mean(list(row["results"].values()))
-            else:
-                current_score = row["results"][task.benchmark]
+            current_date = row[AutoEvalColumn.date.name]
+            current_score = row[task.col_name]
 
             if current_score > current_max:
                 if current_date == last_date and len(scores[column]) > 0:
