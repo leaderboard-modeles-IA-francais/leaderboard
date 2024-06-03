@@ -92,6 +92,7 @@ def download_dataset(repo_id, local_dir, repo_type="dataset", max_attempts=3, ba
 
 def get_latest_data_leaderboard(init: bool = False):
     current_time = datetime.datetime.now()
+    global LAST_UPDATE_LEADERBOARD
     if current_time - LAST_UPDATE_LEADERBOARD < datetime.timedelta(minutes=10):
         return
     LAST_UPDATE_LEADERBOARD = current_time
@@ -368,6 +369,7 @@ async def update_queue(payload: WebhookPayload) -> None:
     """Redownloads the queue dataset each time it updates"""
     if payload.repo.type == "dataset" and payload.event.action == "update":
         current_time = datetime.datetime.now()
+        global LAST_UPDATE_QUEUE
         if current_time - LAST_UPDATE_QUEUE > datetime.timedelta(minutes=10):
             print("would have updated")
             # We only redownload is last update was more than 10 minutes ago, as the queue is 
