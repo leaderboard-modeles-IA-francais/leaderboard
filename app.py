@@ -48,6 +48,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 # Convert the environment variable "LEADERBOARD_FULL_INIT" to a boolean value, defaulting to True if the variable is not set.
 # This controls whether a full initialization should be performed.
 DO_FULL_INIT = os.getenv("LEADERBOARD_FULL_INIT", "True") == "True"
+LAST_UPDATE_LEADERBOARD = datetime.datetime.now()
 
 def restart_space():
     API.restart_space(repo_id=REPO_ID, token=HF_TOKEN)
@@ -89,7 +90,11 @@ def download_dataset(repo_id, local_dir, repo_type="dataset", max_attempts=3, ba
             attempt += 1
     raise Exception(f"Failed to download {repo_id} after {max_attempts} attempts")
 
-def get_latest_data_leaderboard():
+def get_latest_data_leaderboard(init: bool = False):
+    current_time = datetime.datetime.now()
+    if current_time - LAST_UPDATE_LEADERBOARD < datetime.timedelta(minutes=10):
+        return
+    LAST_UPDATE_LEADERBOARD = current_time
     leaderboard_dataset = datasets.load_dataset(
         AGGREGATED_REPO, 
         "default", 
@@ -306,6 +311,8 @@ with demo:
             )
 
     demo.load(fn=get_latest_data_leaderboard, inputs=None, outputs=[leaderboard])
+    #demo.load(fn=get_latest_data_queue, inputs=None, outputs=[finished_eval_table, running_eval_table, pending_eval_table])
+
 
 demo.queue(default_concurrency_limit=40)
 
@@ -355,17 +362,17 @@ async def update_leaderboard(payload: WebhookPayload) -> None:
             verification_mode="no_checks"
         )
 
-if False:
-    LAST_UPDATE_QUEUE = datetime.datetime.now()
-    @webhooks_server.add_webhook    
-    async def update_queue(payload: WebhookPayload) -> None:
-        """Redownloads the queue dataset each time it updates"""
-        if payload.repo.type == "dataset" and payload.event.action == "update":
-            current_time = datetime.datetime.now()
-            if current_time - LAST_UPDATE_QUEUE > datetime.timedelta(minutes=10):
-                # We only redownload is last update was more than 10 minutes ago, as the queue is 
-                # updated regularly and heavy to download
-                download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
-                LAST_UPDATE_QUEUE = datetime.datetime.now()
+LAST_UPDATE_QUEUE = datetime.datetime.now()
+@webhooks_server.add_webhook    
+async def update_queue(payload: WebhookPayload) -> None:
+    """Redownloads the queue dataset each time it updates"""
+    if payload.repo.type == "dataset" and payload.event.action == "update":
+        current_time = datetime.datetime.now()
+        if current_time - LAST_UPDATE_QUEUE > datetime.timedelta(minutes=10):
+            print("would have updated")
+            # We only redownload is last update was more than 10 minutes ago, as the queue is 
+            # updated regularly and heavy to download
+            #download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
+            LAST_UPDATE_QUEUE = datetime.datetime.now()
 
 webhooks_server.launch()
