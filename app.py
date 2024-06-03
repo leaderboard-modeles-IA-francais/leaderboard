@@ -1,6 +1,7 @@
 import os
 import logging
 import time
+import datetime
 import gradio as gr
 import datasets
 from huggingface_hub import snapshot_download, WebhooksServer, WebhookPayload, RepoCard
@@ -356,10 +357,16 @@ async def update_leaderboard(payload: WebhookPayload) -> None:
             verification_mode="no_checks"
         )
 
+LAST_UPDATE_QUEUE = datetime.datetime.now()
 @webhooks_server.add_webhook    
 async def update_queue(payload: WebhookPayload) -> None:
     """Redownloads the queue dataset each time it updates"""
     if payload.repo.type == "dataset" and payload.event.action == "update":
-        download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
+        current_time = datetime.datetime.now()
+        if current_time - LAST_UPDATE_QUEUE > datetime.timedelta(minutes=10):
+            # We only redownload is last update was more than 10 minutes ago, as the queue is 
+            # updated regularly and heavy to download
+            download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
+            LAST_UPDATE_QUEUE = datetime.datetime.now()
 
 webhooks_server.launch()
