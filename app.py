@@ -351,7 +351,7 @@ webhooks_server = enable_space_ci_and_return_server(ui=demo)
 
 # Add webhooks
 @webhooks_server.add_webhook
-async def update_leaderboard(payload: WebhookPayload) -> None:
+def update_leaderboard(payload: WebhookPayload) -> None:
     """Redownloads the leaderboard dataset each time it updates"""
     if payload.repo.type == "dataset" and payload.event.action == "update":
         datasets.load_dataset(
@@ -365,7 +365,7 @@ async def update_leaderboard(payload: WebhookPayload) -> None:
 
 LAST_UPDATE_QUEUE = datetime.datetime.now()
 @webhooks_server.add_webhook    
-async def update_queue(payload: WebhookPayload) -> None:
+def update_queue(payload: WebhookPayload) -> None:
     """Redownloads the queue dataset each time it updates"""
     if payload.repo.type == "dataset" and payload.event.action == "update":
         current_time = datetime.datetime.now()
