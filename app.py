@@ -90,7 +90,7 @@ def download_dataset(repo_id, local_dir, repo_type="dataset", max_attempts=3, ba
             attempt += 1
     raise Exception(f"Failed to download {repo_id} after {max_attempts} attempts")
 
-def get_latest_data_leaderboard(leaderboard_initial_df):
+def get_latest_data_leaderboard(leaderboard_initial_df = None):
     current_time = datetime.datetime.now()
     global LAST_UPDATE_LEADERBOARD
     if current_time - LAST_UPDATE_LEADERBOARD < datetime.timedelta(minutes=10) and leaderboard_initial_df is not None:
@@ -127,7 +127,7 @@ def init_space():
             restart_space()
 
     # Always redownload the leaderboard DataFrame
-    leaderboard_df = get_latest_data_leaderboard(None)
+    leaderboard_df = get_latest_data_leaderboard()
 
     # Evaluation queue DataFrame retrieval is independent of initialization detail level
     eval_queue_dfs = get_latest_data_queue()
@@ -312,7 +312,7 @@ with demo:
             )
 
     demo.load(fn=get_latest_data_leaderboard, inputs=[leaderboard], outputs=[leaderboard])
-    #demo.load(fn=get_latest_data_queue, inputs=None, outputs=[finished_eval_table, running_eval_table, pending_eval_table])
+    leaderboard.change(fn=get_latest_data_queue, inputs=None, outputs=[finished_eval_table, running_eval_table, pending_eval_table])
 
 
 demo.queue(default_concurrency_limit=40)
@@ -363,6 +363,7 @@ def update_leaderboard(payload: WebhookPayload) -> None:
             verification_mode="no_checks"
         )
 
+# The below code is not used at the moment, as we can manage the queue file locally
 LAST_UPDATE_QUEUE = datetime.datetime.now()
 @webhooks_server.add_webhook    
 def update_queue(payload: WebhookPayload) -> None:
@@ -371,7 +372,7 @@ def update_queue(payload: WebhookPayload) -> None:
         current_time = datetime.datetime.now()
         global LAST_UPDATE_QUEUE
         if current_time - LAST_UPDATE_QUEUE > datetime.timedelta(minutes=10):
-            print("would have updated")
+            print("Would have updated the queue")
             # We only redownload is last update was more than 10 minutes ago, as the queue is 
             # updated regularly and heavy to download
             #download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
