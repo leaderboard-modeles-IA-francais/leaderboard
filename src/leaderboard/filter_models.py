@@ -119,6 +119,7 @@ FLAGGED_MODELS = {
     "CultriX/MistralTrix-v1": "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard/discussions/556",
     "Contamination/contaminated_proof_7b_v1.0": "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard/discussions/664",
     "Contamination/contaminated_proof_7b_v1.0_safetensor": "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard/discussions/664",
+    "saltlux/luxia-21.4b-alignment-v1.2": "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard/discussions/767",
 }
 
 # Models which have been requested by orgs to not be submitted on the leaderboard
