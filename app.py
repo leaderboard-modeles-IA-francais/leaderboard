@@ -213,93 +213,28 @@ with demo:
         with gr.TabItem("❗FAQ", elem_id="llm-benchmark-tab-table", id=4):
             gr.Markdown(FAQ_TEXT, elem_classes="markdown-text")
 
-        with gr.TabItem("🚀 Submit ", elem_id="llm-benchmark-tab-table", id=5):
-            with gr.Column():
-                with gr.Row():
-                    gr.Markdown(EVALUATION_QUEUE_TEXT, elem_classes="markdown-text")
-
-            with gr.Row():
-                gr.Markdown("# ✉️✨ Submit your model here!", elem_classes="markdown-text")
-
-            with gr.Row():
-                with gr.Column():
-                    model_name_textbox = gr.Textbox(label="Model name")
-                    revision_name_textbox = gr.Textbox(label="Revision commit", placeholder="main")
-                    model_type = gr.Dropdown(
-                        choices=[t.to_str(" : ") for t in ModelType if t != ModelType.Unknown],
-                        label="Model type",
-                        multiselect=False,
-                        value=ModelType.FT.to_str(" : "),
-                        interactive=True,
-                    )
-
-                with gr.Column():
-                    precision = gr.Dropdown(
-                        choices=[i.value.name for i in Precision if i != Precision.Unknown],
-                        label="Precision",
-                        multiselect=False,
-                        value="float16",
-                        interactive=True,
-                    )
-                    weight_type = gr.Dropdown(
-                        choices=[i.value.name for i in WeightType],
-                        label="Weights type",
-                        multiselect=False,
-                        value="Original",
-                        interactive=True,
-                    )
-                    base_model_name_textbox = gr.Textbox(label="Base model (for delta or adapter weights)")
-
-            with gr.Column():
-                with gr.Accordion(
-                    f"✅ Finished Evaluations ({len(finished_eval_queue_df)})",
-                    open=False,
-                ):
-                    with gr.Row():
-                        finished_eval_table = gr.components.Dataframe(
-                            value=finished_eval_queue_df,
-                            headers=EVAL_COLS,
-                            datatype=EVAL_TYPES,
-                            row_count=5,
-                        )
-                with gr.Accordion(
-                    f"🔄 Running Evaluation Queue ({len(running_eval_queue_df)})",
-                    open=False,
-                ):
-                    with gr.Row():
-                        running_eval_table = gr.components.Dataframe(
-                            value=running_eval_queue_df,
-                            headers=EVAL_COLS,
-                            datatype=EVAL_TYPES,
-                            row_count=5,
-                        )
-
-                with gr.Accordion(
-                    f"⏳ Pending Evaluation Queue ({len(pending_eval_queue_df)})",
-                    open=False,
-                ):
-                    with gr.Row():
-                        pending_eval_table = gr.components.Dataframe(
-                            value=pending_eval_queue_df,
-                            headers=EVAL_COLS,
-                            datatype=EVAL_TYPES,
-                            row_count=5,
-                        )
-
-            submit_button = gr.Button("Submit Eval")
-            submission_result = gr.Markdown()
-            submit_button.click(
-                add_new_eval,
-                [
-                    model_name_textbox,
-                    base_model_name_textbox,
-                    revision_name_textbox,
-                    precision,
-                    weight_type,
-                    model_type,
-                ],
-                submission_result,
+        with gr.TabItem("🚀 Submit? ", elem_id="llm-benchmark-tab-table", id=5):
+            countdown = gr.HTML(
+                """<div align="center">
+                <div position: relative>
+                <img 
+                    src="https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard/resolve/main/gif.gif" 
+                    allowtransparency="true" 
+                    style="display:block;width:100%;height:auto;" 
+                />
+                <iframe 
+                    src="https://logwork.com/widget/countdown/?text=Surprise%20loading...&amp;timezone=Europe%2FParis&amp;width=&amp;style=circles&amp;uid=815898&amp;loc=https://logwork.com/countdown-fxmc&amp;language=en&amp;textcolor=&amp;background=%23ffd21e&amp;date=2024-06-26%2015%3A00%3A00&amp;digitscolor=%23ff9d00&amp;unitscolor=&amp" 
+                    style="position: absolute; top:0; left: 0; border: medium; width:100%; height:100%; margin: 0px; visibility: visible;" 
+                    scrolling="no" 
+                    allowtransparency="true" 
+                    frameborder="0"
+                    allowfullscreen
+                />
+                </div>
+                </div>"""
             )
+            #gif = gr.Image(value="./gif.gif", interactive=False)
+            gr.Markdown("*Countdown by Logwork.com, gif art by Chun Te Lee*")
 
     with gr.Row():
         with gr.Accordion("📙 Citation", open=False):
@@ -312,8 +247,7 @@ with demo:
             )
 
     demo.load(fn=get_latest_data_leaderboard, inputs=[leaderboard], outputs=[leaderboard])
-    leaderboard.change(fn=get_latest_data_queue, inputs=None, outputs=[finished_eval_table, running_eval_table, pending_eval_table])
-
+    
 
 demo.queue(default_concurrency_limit=40)
 
