@@ -177,6 +177,7 @@ def init_leaderboard(dataframe):
             ColumnFilter(AutoEvalColumn.not_flagged.name, type="boolean", label="Flagged", default=True),
         ],
         bool_checkboxgroup_label="Hide models",
+        interactive=False,
     )
 
 demo = gr.Blocks(css=custom_css)
