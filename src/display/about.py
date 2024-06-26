@@ -212,13 +212,14 @@ Not all models are converted properly from `float16` to `bfloat16`, and selectin
 
 CITATION_BUTTON_LABEL = "Copy the following snippet to cite these results"
 CITATION_BUTTON_TEXT = r"""
-@misc{open-llm-leaderboard,
-  author = {Edward Beeching and Clémentine Fourrier and Nathan Habib and Sheon Han and Nathan Lambert and Nazneen Rajani and Omar Sanseviero and Lewis Tunstall and Thomas Wolf},
-  title = {Open LLM Leaderboard},
-  year = {2023},
+@misc{open-llm-leaderboard-v2,
+  author = {Clémentine Fourrier and Nathan Habib and Alina Lozovskaya and Konrad Szafer and Thomas Wolf},
+  title = {Open LLM Leaderboard v2},
+  year = {2024},
   publisher = {Hugging Face},
-  howpublished = "\url{https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard}"
+  howpublished = "\url{https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard}",
 }
+
 @software{eval-harness,
   author       = {Gao, Leo and
                   Tow, Jonathan and
@@ -243,65 +244,66 @@ CITATION_BUTTON_TEXT = r"""
   publisher    = {Zenodo},
   version      = {v0.0.1},
   doi          = {10.5281/zenodo.5371628},
-  url          = {https://doi.org/10.5281/zenodo.5371628}
+  url          = {https://doi.org/10.5281/zenodo.5371628},
 }
-@misc{clark2018think,
-      title={Think you have Solved Question Answering? Try ARC, the AI2 Reasoning Challenge},
-      author={Peter Clark and Isaac Cowhey and Oren Etzioni and Tushar Khot and Ashish Sabharwal and Carissa Schoenick and Oyvind Tafjord},
-      year={2018},
-      eprint={1803.05457},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI}
+
+@misc{zhou2023instructionfollowingevaluationlargelanguage,
+  title={Instruction-Following Evaluation for Large Language Models},
+  author={Jeffrey Zhou and Tianjian Lu and Swaroop Mishra and Siddhartha Brahma and Sujoy Basu and Yi Luan and Denny Zhou and Le Hou},
+  year={2023},
+  eprint={2311.07911},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2311.07911},
 }
-@misc{zellers2019hellaswag,
-      title={HellaSwag: Can a Machine Really Finish Your Sentence?},
-      author={Rowan Zellers and Ari Holtzman and Yonatan Bisk and Ali Farhadi and Yejin Choi},
-      year={2019},
-      eprint={1905.07830},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+
+@misc{suzgun2022challengingbigbenchtaskschainofthought,
+  title={Challenging BIG-Bench Tasks and Whether Chain-of-Thought Can Solve Them},
+  author={Mirac Suzgun and Nathan Scales and Nathanael Schärli and Sebastian Gehrmann and Yi Tay and Hyung Won Chung and Aakanksha Chowdhery and Quoc V. Le and Ed H. Chi and Denny Zhou and Jason Wei},
+  year={2022},
+  eprint={2210.09261},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2210.09261},
 }
-@misc{hendrycks2021measuring,
-      title={Measuring Massive Multitask Language Understanding},
-      author={Dan Hendrycks and Collin Burns and Steven Basart and Andy Zou and Mantas Mazeika and Dawn Song and Jacob Steinhardt},
-      year={2021},
-      eprint={2009.03300},
-      archivePrefix={arXiv},
-      primaryClass={cs.CY}
+
+@misc{hendrycks2021measuringmathematicalproblemsolving,
+  title={Measuring Mathematical Problem Solving With the MATH Dataset},
+  author={Dan Hendrycks and Collin Burns and Saurav Kadavath and Akul Arora and Steven Basart and Eric Tang and Dawn Song and Jacob Steinhardt},
+  year={2021},
+  eprint={2103.03874},
+  archivePrefix={arXiv},
+  primaryClass={cs.LG},
+  url={https://arxiv.org/abs/2103.03874},
 }
-@misc{lin2022truthfulqa,
-      title={TruthfulQA: Measuring How Models Mimic Human Falsehoods},
-      author={Stephanie Lin and Jacob Hilton and Owain Evans},
-      year={2022},
-      eprint={2109.07958},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+
+@misc{rein2023gpqagraduatelevelgoogleproofqa,
+  title={GPQA: A Graduate-Level Google-Proof Q&A Benchmark},
+  author={David Rein and Betty Li Hou and Asa Cooper Stickland and Jackson Petty and Richard Yuanzhe Pang and Julien Dirani and Julian Michael and Samuel R. Bowman},
+  year={2023},
+  eprint={2311.12022},
+  archivePrefix={arXiv},
+  primaryClass={cs.AI},
+  url={https://arxiv.org/abs/2311.12022},
 }
-@misc{DBLP:journals/corr/abs-1907-10641,
-      title={{WINOGRANDE:} An Adversarial Winograd Schema Challenge at Scale},
-      author={Keisuke Sakaguchi and Ronan Le Bras and Chandra Bhagavatula and Yejin Choi},
-      year={2019},
-      eprint={1907.10641},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+
+@misc{sprague2024musrtestinglimitschainofthought,
+  title={MuSR: Testing the Limits of Chain-of-thought with Multistep Soft Reasoning},
+  author={Zayne Sprague and Xi Ye and Kaj Bostrom and Swarat Chaudhuri and Greg Durrett},
+  year={2024},
+  eprint={2310.16049},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2310.16049},
 }
-@misc{DBLP:journals/corr/abs-2110-14168,
-      title={Training Verifiers to Solve Math Word Problems},
-      author={Karl Cobbe and
-                  Vineet Kosaraju and
-                  Mohammad Bavarian and
-                  Mark Chen and
-                  Heewoo Jun and
-                  Lukasz Kaiser and
-                  Matthias Plappert and
-                  Jerry Tworek and
-                  Jacob Hilton and
-                  Reiichiro Nakano and
-                  Christopher Hesse and
-                  John Schulman},
-      year={2021},
-      eprint={2110.14168},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+
+@misc{wang2024mmluprorobustchallengingmultitask,
+  title={MMLU-Pro: A More Robust and Challenging Multi-Task Language Understanding Benchmark},
+  author={Yubo Wang and Xueguang Ma and Ge Zhang and Yuansheng Ni and Abhranil Chandra and Shiguang Guo and Weiming Ren and Aaran Arulraj and Xuan He and Ziyan Jiang and Tianle Li and Max Ku and Kai Wang and Alex Zhuang and Rongqi Fan and Xiang Yue and Wenhu Chen},
+  year={2024},
+  eprint={2406.01574},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2406.01574},
 }
 """
