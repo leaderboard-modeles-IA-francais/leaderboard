@@ -4,7 +4,7 @@ import plotly.express as px
 from plotly.graph_objs import Figure
 
 from src.display.utils import BENCHMARK_COLS, AutoEvalColumn, Task, Tasks
-from src.display.utils import human_baseline_row as HUMAN_BASELINE
+# from src.display.utils import human_baseline_row as HUMAN_BASELINE
 from src.leaderboard.filter_models import FLAGGED_MODELS
 
 

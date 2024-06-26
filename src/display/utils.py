@@ -49,12 +49,23 @@ class Task:
 
 
 class Tasks(Enum):
-    arc = Task("arc:challenge", "acc_norm", "ARC")
-    hellaswag = Task("hellaswag", "acc_norm", "HellaSwag")
-    mmlu = Task("hendrycksTest", "acc", "MMLU")
-    truthfulqa = Task("truthfulqa:mc", "mc2", "TruthfulQA")
-    winogrande = Task("winogrande", "acc", "Winogrande")
-    gsm8k = Task("gsm8k", "acc", "GSM8K")
+    ifeval = Task("leaderboard_ifeval", "strict_acc,none", "IFEval")
+    ifeval_raw = Task("leaderboard_ifeval", "strict_acc,none", "IFEval Raw")
+
+    bbh = Task("leaderboard_bbh", "acc_norm,none", "BBH")
+    bbh_raw = Task("leaderboard_bbh", "acc_norm,none", "BBH Raw")
+
+    math = Task("leaderboard_math_hard", "exact_match,none", "MATH Lvl 5")
+    math_raw = Task("leaderboard_math_hard", "exact_match,none", "MATH Lvl 5 Raw")
+
+    gpqa = Task("leaderboard_gpqa", "acc_norm,none", "GPQA")
+    gpqa_raw = Task("leaderboard_gpqa", "acc_norm,none", "GPQA Raw")
+
+    musr = Task("leaderboard_musr", "acc_norm,none", "MUSR")
+    musr_raw = Task("leaderboard_musr", "acc_norm,none", "MUSR Raw")
+
+    mmlu_pro = Task("leaderboard_mmlu_pro", "acc,none", "MMLU-PRO")
+    mmlu_pro_raw = Task("leaderboard_mmlu_pro", "acc,none", "MMLU-PRO Raw")
 
 
 # These classes are for user facing column names,
@@ -77,7 +88,8 @@ auto_eval_column_dict.append(["model", ColumnContent, ColumnContent("Model", "ma
 # Scores
 auto_eval_column_dict.append(["average", ColumnContent, ColumnContent("Average ⬆️", "number", True)])
 for task in Tasks:
-    auto_eval_column_dict.append([task.name, ColumnContent, ColumnContent(task.value.col_name, "number", True)])
+    displayed_by_default = not task.name.endswith("_raw")
+    auto_eval_column_dict.append([task.name, ColumnContent, ColumnContent(task.value.col_name, "number", displayed_by_default=displayed_by_default)])
 # Model information
 auto_eval_column_dict.append(["model_type", ColumnContent, ColumnContent("Type", "str", False)])
 auto_eval_column_dict.append(["architecture", ColumnContent, ColumnContent("Architecture", "str", False)])
@@ -94,7 +106,10 @@ auto_eval_column_dict.append(["revision", ColumnContent, ColumnContent("Model sh
 auto_eval_column_dict.append(["not_flagged", ColumnContent, ColumnContent("Flagged", "bool", False, hidden=True)])
 auto_eval_column_dict.append(["moe", ColumnContent, ColumnContent("MoE", "bool", False, hidden=True)])
 auto_eval_column_dict.append(["date", ColumnContent, ColumnContent("date", "bool", False, hidden=True)])
-# Dummy column for the search bar (hidden by the custom CSS)
+auto_eval_column_dict.append(["use_chat_template", ColumnContent, ColumnContent("Chat Template", "bool", False)])
+auto_eval_column_dict.append(["maintainers_highlight", ColumnContent, ColumnContent("Maintainer's Highlight", "bool", False, hidden=True)])
+
+# fullname structure: <user>/<model_name>
 auto_eval_column_dict.append(["fullname", ColumnContent, ColumnContent("fullname", "str", False, dummy=True)])
 
 # We use make dataclass to dynamically fill the scores from Tasks
@@ -103,30 +118,31 @@ AutoEvalColumn = make_dataclass("AutoEvalColumn", auto_eval_column_dict, frozen=
 
 @dataclass(frozen=True)
 class EvalQueueColumn:  # Queue column
-    model = ColumnContent("model", "markdown", True)
+    model_link = ColumnContent("model_link", "markdown", True)
+    model_name = ColumnContent("model_name", "str", True)
     revision = ColumnContent("revision", "str", True)
-    private = ColumnContent("private", "bool", True)
+    #private = ColumnContent("private", "bool", True)  # Should not be displayed
     precision = ColumnContent("precision", "str", True)
-    weight_type = ColumnContent("weight_type", "str", "Original")
+    #weight_type = ColumnContent("weight_type", "str", "Original") # Might be confusing, to think about
     status = ColumnContent("status", "str", True)
 
 
-baseline_row = {
-    AutoEvalColumn.model.name: "<p>Baseline</p>",
-    AutoEvalColumn.revision.name: "N/A",
-    AutoEvalColumn.precision.name: None,
-    AutoEvalColumn.merged.name: False,
-    AutoEvalColumn.average.name: 31.0,
-    AutoEvalColumn.arc.name: 25.0,
-    AutoEvalColumn.hellaswag.name: 25.0,
-    AutoEvalColumn.mmlu.name: 25.0,
-    AutoEvalColumn.truthfulqa.name: 25.0,
-    AutoEvalColumn.winogrande.name: 50.0,
-    AutoEvalColumn.gsm8k.name: 0.21,
-    AutoEvalColumn.fullname.name: "baseline",
-    AutoEvalColumn.model_type.name: "",
-    AutoEvalColumn.not_flagged.name: False,
-}
+# baseline_row = {
+#     AutoEvalColumn.model.name: "<p>Baseline</p>",
+#     AutoEvalColumn.revision.name: "N/A",
+#     AutoEvalColumn.precision.name: None,
+#     AutoEvalColumn.merged.name: False,
+#     AutoEvalColumn.average.name: 31.0,
+#     AutoEvalColumn.arc.name: 25.0,
+#     AutoEvalColumn.hellaswag.name: 25.0,
+#     AutoEvalColumn.mmlu.name: 25.0,
+#     AutoEvalColumn.truthfulqa.name: 25.0,
+#     AutoEvalColumn.winogrande.name: 50.0,
+#     AutoEvalColumn.gsm8k.name: 0.21,
+#     AutoEvalColumn.fullname.name: "baseline",
+#     AutoEvalColumn.model_type.name: "",
+#     AutoEvalColumn.not_flagged.name: False,
+# }
 
 # Average ⬆️ human baseline is 0.897 (source: averaging human baselines below)
 # ARC human baseline is 0.80 (source: https://lab42.global/arc/)
@@ -136,22 +152,22 @@ baseline_row = {
 # Winogrande: https://leaderboard.allenai.org/winogrande/submissions/public
 # GSM8K: paper
 # Define the human baselines
-human_baseline_row = {
-    AutoEvalColumn.model.name: "<p>Human performance</p>",
-    AutoEvalColumn.revision.name: "N/A",
-    AutoEvalColumn.precision.name: None,
-    AutoEvalColumn.average.name: 92.75,
-    AutoEvalColumn.merged.name: False,
-    AutoEvalColumn.arc.name: 80.0,
-    AutoEvalColumn.hellaswag.name: 95.0,
-    AutoEvalColumn.mmlu.name: 89.8,
-    AutoEvalColumn.truthfulqa.name: 94.0,
-    AutoEvalColumn.winogrande.name: 94.0,
-    AutoEvalColumn.gsm8k.name: 100,
-    AutoEvalColumn.fullname.name: "human_baseline",
-    AutoEvalColumn.model_type.name: "",
-    AutoEvalColumn.not_flagged.name: False,
-}
+# human_baseline_row = {
+#     AutoEvalColumn.model.name: "<p>Human performance</p>",
+#     AutoEvalColumn.revision.name: "N/A",
+#     AutoEvalColumn.precision.name: None,
+#     AutoEvalColumn.average.name: 92.75,
+#     AutoEvalColumn.merged.name: False,
+#     AutoEvalColumn.arc.name: 80.0,
+#     AutoEvalColumn.hellaswag.name: 95.0,
+#     AutoEvalColumn.mmlu.name: 89.8,
+#     AutoEvalColumn.truthfulqa.name: 94.0,
+#     AutoEvalColumn.winogrande.name: 94.0,
+#     AutoEvalColumn.gsm8k.name: 100,
+#     AutoEvalColumn.fullname.name: "human_baseline",
+#     AutoEvalColumn.model_type.name: "",
+#     AutoEvalColumn.not_flagged.name: False,
+# }
 
 
 @dataclass
@@ -166,22 +182,22 @@ class ModelType(Enum):
     FT = ModelDetails(name="🔶 fine-tuned on domain-specific datasets", symbol="🔶")
     chat = ModelDetails(name="💬 chat models (RLHF, DPO, IFT, ...)", symbol="💬")
     merges = ModelDetails(name="🤝 base merges and moerges", symbol="🤝")
-    Unknown = ModelDetails(name="", symbol="?")
+    Unknown = ModelDetails(name="❓ other", symbol="❓")
 
     def to_str(self, separator=" "):
         return f"{self.value.symbol}{separator}{self.value.name}"
 
     @staticmethod
-    def from_str(type):
-        if "fine-tuned" in type or "🔶" in type:
+    def from_str(m_type):
+        if any([k for k in m_type if k in ["fine-tuned","🔶", "finetuned"]]):
             return ModelType.FT
-        if "continously pretrained" in type or "🟩" in type:
+        if "continuously pretrained" in m_type or "🟩" in m_type:
             return ModelType.CPT
-        if "pretrained" in type or "🟢" in type:
+        if "pretrained" in m_type or "🟢" in m_type:
             return ModelType.PT
-        if any([k in type for k in ["instruction-tuned", "RL-tuned", "chat", "🟦", "⭕", "💬"]]):
+        if any([k in m_type for k in ["instruction-tuned", "RL-tuned", "chat", "🟦", "⭕", "💬"]]):
             return ModelType.chat
-        if "merge" in type or "🤝" in type:
+        if "merge" in m_type or "🤝" in m_type:
             return ModelType.merges
         return ModelType.Unknown
 
@@ -200,6 +216,7 @@ class Precision(Enum):
     qt_GPTQ = ModelDetails("GPTQ")
     Unknown = ModelDetails("?")
 
+    @staticmethod
     def from_str(precision):
         if precision in ["torch.float16", "float16"]:
             return Precision.float16

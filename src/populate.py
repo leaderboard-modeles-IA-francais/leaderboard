@@ -2,14 +2,15 @@ import pathlib
 import pandas as pd
 from datasets import Dataset
 from src.display.formatting import has_no_nan_values, make_clickable_model
-from src.display.utils import AutoEvalColumn, EvalQueueColumn, baseline_row
+from src.display.utils import AutoEvalColumn, EvalQueueColumn
 from src.leaderboard.filter_models import filter_models_flags
 from src.display.utils import load_json_data
 
 
 def _process_model_data(entry, model_name_key="model", revision_key="revision"):
     """Enrich model data with clickable links and revisions."""
-    entry[EvalQueueColumn.model.name] = make_clickable_model(entry.get(model_name_key, ""))
+    entry[EvalQueueColumn.model_name.name] = entry.get(model_name_key, "")
+    entry[EvalQueueColumn.model_link.name] = make_clickable_model(entry.get(model_name_key, ""))
     entry[EvalQueueColumn.revision.name] = entry.get(revision_key, "main")
     return entry
 

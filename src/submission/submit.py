@@ -32,6 +32,7 @@ def add_new_eval(
     precision: str,
     weight_type: str,
     model_type: str,
+    use_chat_template: bool,
 ):
     global REQUESTED_MODELS
     global USERS_TO_SUBMISSION_DATES
@@ -129,6 +130,7 @@ def add_new_eval(
         "model_type": model_type,
         "job_id": -1,
         "job_start_time": None,
+        "use_chat_template": use_chat_template,
     }
 
     supplementary_info = {

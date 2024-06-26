@@ -9,7 +9,7 @@ table th:first-child {
 
 /* Full width space */
 .gradio-container {
-  max-width: 95%!important;
+    max-width: 95% !important;
 }
 
 /* Text style and margins */
@@ -48,7 +48,7 @@ table th:first-child {
 }
 
 /* Filters style */
-#filter_type{
+#filter_type {
     border: 0;
     padding-left: 0;
     padding-top: 0;
@@ -56,29 +56,53 @@ table th:first-child {
 #filter_type label {
     display: flex;
 }
-#filter_type label > span{
+#filter_type label > span {
     margin-top: var(--spacing-lg);
     margin-right: 0.5em;
 }
-#filter_type label > .wrap{
+#filter_type label > .wrap {
     width: 103px;
 }
-#filter_type label > .wrap .wrap-inner{  
+#filter_type label > .wrap .wrap-inner {
     padding: 2px;
 }
-#filter_type label > .wrap .wrap-inner input{
-    width: 1px
+#filter_type label > .wrap .wrap-inner input {
+    width: 1px;
 }
-#filter-columns-type{
-    border:0;
-    padding:0.5;
+#filter-columns-type {
+    border: 0;
+    padding: 0.5;
 }
-#filter-columns-size{
-    border:0;
-    padding:0.5;
+#filter-columns-size {
+    border: 0;
+    padding: 0.5;
 }
-#box-filter > .form{
-    border: 0
+#box-filter > .form {
+    border: 0;
+}
+
+/* Header styles */
+#header-title {
+    text-align: left;
+    display: inline-block;
+}
+
+#header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#header-row .gradio-html {
+    flex-grow: 1;
+}
+
+#oauth-button {
+    height: auto;
+    min-width: max-content;
+    white-space: nowrap;
+    padding: 10px 20px;
+    border-radius: 4px;
 }
 """
 

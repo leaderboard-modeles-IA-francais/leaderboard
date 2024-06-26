@@ -11,7 +11,7 @@ def make_clickable_model(model_name):
     link = f"https://huggingface.co/{model_name}"
 
     details_model_name = model_name.replace("/", "__")
-    details_link = f"https://huggingface.co/datasets/open-llm-leaderboard-old/details_{details_model_name}"
+    details_link = f"https://huggingface.co/datasets/open-llm-leaderboard/{details_model_name}-details"
 
     return model_hyperlink(link, model_name) + "  " + model_hyperlink(details_link, "📑")
 
