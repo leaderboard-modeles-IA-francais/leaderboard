@@ -4,7 +4,7 @@ from huggingface_hub import HfApi
 # clone / pull the lmeh eval data
 HF_TOKEN = os.environ.get("HF_TOKEN", None)
 
-REPO_ID = "open-llm-leaderboard/open_llm_leaderboard_v2"
+REPO_ID = "open-llm-leaderboard/open_llm_leaderboard"
 QUEUE_REPO = "open-llm-leaderboard/requests"
 AGGREGATED_REPO = "open-llm-leaderboard/contents"
 VOTES_REPO = "open-llm-leaderboard/votes"
