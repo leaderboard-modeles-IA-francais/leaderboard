@@ -221,6 +221,9 @@ with main_block:
     
     gr.Markdown(INTRODUCTION_TEXT, elem_classes="markdown-text")
 
+    # Adding a markdown element with the documentation link
+    gr.Markdown("Feeling lost? Documentation is [here](https://huggingface.co/docs/leaderboards/open_llm_leaderboard/about) 📄", elem_classes="markdown-text")
+
     with gr.Tabs(elem_classes="tab-buttons") as tabs:
         with gr.TabItem("🏅 LLM Benchmark", elem_id="llm-benchmark-tab-table", id=0):
             leaderboard = init_leaderboard(LEADERBOARD_DF)
