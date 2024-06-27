@@ -3,6 +3,8 @@ from src.display.utils import ModelType
 TITLE = """<h1 style="text-align:left;float:left; id="space-title">🤗 Open LLM Leaderboard</h1> <h3 style="text-align:left;float:left;> Track, rank and evaluate open LLMs and chatbots </h3>"""
 
 INTRODUCTION_TEXT = """
+Feeling lost? Documentation is [here](https://huggingface.co/docs/leaderboards/open_llm_leaderboard/about) 📄
+You'll notably find explanations on the evaluations we are using, reproducibility guidelines, best practices on how to submit a model, and our FAQ.
 """
 
 icons = f"""

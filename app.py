@@ -58,8 +58,8 @@ from gradio_space_ci.webhook import IS_EPHEMERAL_SPACE, SPACE_ID, configure_spac
 
 # Convert the environment variable "LEADERBOARD_FULL_INIT" to a boolean value, defaulting to True if the variable is not set.
 # This controls whether a full initialization should be performed.
-DO_FULL_INIT = os.getenv("LEADERBOARD_FULL_INIT", "True") == "True"
-LAST_UPDATE_LEADERBOARD = datetime.datetime.now()
+DO_FULL_INIT = True # os.getenv("LEADERBOARD_FULL_INIT", "True") == "True"
+NEW_DATA_ON_LEADERBOARD = True
 LEADERBOARD_DF = None
 
 def restart_space():
@@ -103,28 +103,29 @@ def download_dataset(repo_id, local_dir, repo_type="dataset", max_attempts=3, ba
     raise Exception(f"Failed to download {repo_id} after {max_attempts} attempts")
 
 def get_latest_data_leaderboard(leaderboard_initial_df = None):
-    current_time = datetime.datetime.now()
-    global LAST_UPDATE_LEADERBOARD
-    if current_time - LAST_UPDATE_LEADERBOARD < datetime.timedelta(minutes=10) and leaderboard_initial_df is not None:
-        return leaderboard_initial_df
-    LAST_UPDATE_LEADERBOARD = current_time
-    leaderboard_dataset = datasets.load_dataset(
-        AGGREGATED_REPO, 
-        "default", 
-        split="train", 
-        cache_dir=HF_HOME, 
-        download_mode=datasets.DownloadMode.REUSE_DATASET_IF_EXISTS, # Uses the cached dataset 
-        verification_mode="no_checks"
-    )
-
+    global NEW_DATA_ON_LEADERBOARD
     global LEADERBOARD_DF
-    LEADERBOARD_DF = get_leaderboard_df(
-        leaderboard_dataset=leaderboard_dataset, 
-        cols=COLS,
-        benchmark_cols=BENCHMARK_COLS,
-    )
+    if NEW_DATA_ON_LEADERBOARD:
+        leaderboard_dataset = datasets.load_dataset(
+            AGGREGATED_REPO, 
+            "default", 
+            split="train", 
+            cache_dir=HF_HOME, 
+            download_mode=datasets.DownloadMode.REUSE_DATASET_IF_EXISTS, # Uses the cached dataset 
+            verification_mode="no_checks"
+        )
+        LEADERBOARD_DF = get_leaderboard_df(
+            leaderboard_dataset=leaderboard_dataset, 
+            cols=COLS,
+            benchmark_cols=BENCHMARK_COLS,
+        )
+        NEW_DATA_ON_LEADERBOARD = False
+
+    else:
+        LEADERBOARD_DF = leaderboard_initial_df
 
     return LEADERBOARD_DF
+
 
 def get_latest_data_queue():
     eval_queue_dfs = get_evaluation_queue_df(EVAL_REQUESTS_PATH, EVAL_COLS)
@@ -220,9 +221,6 @@ with main_block:
         gr.HTML(TITLE)
     
     gr.Markdown(INTRODUCTION_TEXT, elem_classes="markdown-text")
-
-    # Adding a markdown element with the documentation link
-    gr.Markdown("Feeling lost? Documentation is [here](https://huggingface.co/docs/leaderboards/open_llm_leaderboard/about) 📄", elem_classes="markdown-text")
 
     with gr.Tabs(elem_classes="tab-buttons") as tabs:
         with gr.TabItem("🏅 LLM Benchmark", elem_id="llm-benchmark-tab-table", id=0):
@@ -436,6 +434,9 @@ webhooks_server = enable_space_ci_and_return_server(ui=main_block)
 def update_leaderboard(payload: WebhookPayload) -> None:
     """Redownloads the leaderboard dataset each time it updates"""
     if payload.repo.type == "dataset" and payload.event.action == "update":
+        global NEW_DATA_ON_LEADERBOARD
+        NEW_DATA_ON_LEADERBOARD = True
+
         datasets.load_dataset(
             AGGREGATED_REPO, 
             "default", 
@@ -457,7 +458,7 @@ def update_queue(payload: WebhookPayload) -> None:
             print("Would have updated the queue")
             # We only redownload is last update was more than 10 minutes ago, as the queue is 
             # updated regularly and heavy to download
-            #download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
+            download_dataset(QUEUE_REPO, EVAL_REQUESTS_PATH)
             LAST_UPDATE_QUEUE = datetime.datetime.now()
 
 webhooks_server.launch()
