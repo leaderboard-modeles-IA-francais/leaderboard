@@ -9,6 +9,11 @@ import pandas as pd
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
+# Convert ISO 8601 dates to datetime objects for comparison
+def parse_iso8601_datetime(date_str):
+    if date_str.endswith('Z'):
+        date_str = date_str[:-1] + '+00:00'
+    return datetime.fromisoformat(date_str)
 
 def parse_datetime(datetime_str):
     formats = [

@@ -10,10 +10,13 @@ __pycache__/
 .python-version
 .profile_app.python
 *pstats
-poetry.lock
+*.lock
 
 eval-queue/
 eval-results/
 dynamic-info/
+downloads/
+model-votes/
+open-llm-leaderboard___contents/
 
 src/assets/model_counts.html

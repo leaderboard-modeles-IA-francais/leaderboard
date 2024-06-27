@@ -9,6 +9,7 @@ from huggingface_hub import ModelCard
 from huggingface_hub.hf_api import ModelInfo, get_safetensors_metadata
 from transformers import AutoConfig, AutoTokenizer
 
+from src.display.utils import parse_iso8601_datetime
 from src.envs import HAS_HIGHER_RATE_LIMIT
 
 
@@ -103,25 +104,29 @@ def get_model_arch(model_info: ModelInfo):
 
 
 def user_submission_permission(org_or_user, users_to_submission_dates, rate_limit_period, rate_limit_quota):
+    # Increase quota first if user has higher limits
+    if org_or_user in HAS_HIGHER_RATE_LIMIT:
+        rate_limit_quota *= 2
+
     if org_or_user not in users_to_submission_dates:
         return True, ""
-    submission_dates = sorted(users_to_submission_dates[org_or_user])
 
-    time_limit = (datetime.now(timezone.utc) - timedelta(days=rate_limit_period)).strftime("%Y-%m-%dT%H:%M:%SZ")
-    submissions_after_timelimit = [d for d in submission_dates if d > time_limit]
+    submission_dates = sorted(users_to_submission_dates[org_or_user])
+    time_limit = datetime.now(timezone.utc) - timedelta(days=rate_limit_period)
+
+    submissions_after_timelimit = [
+        parse_iso8601_datetime(d) for d in submission_dates
+        if parse_iso8601_datetime(d) > time_limit
+    ]
 
     num_models_submitted_in_period = len(submissions_after_timelimit)
-    if org_or_user in HAS_HIGHER_RATE_LIMIT:
-        rate_limit_quota = 2 * rate_limit_quota
 
-    if num_models_submitted_in_period > rate_limit_quota:
-        error_msg = f"Organisation or user `{org_or_user}`"
-        error_msg += f"already has {num_models_submitted_in_period} model requests submitted to the leaderboard "
-        error_msg += f"in the last {rate_limit_period} days.\n"
-        error_msg += (
-            "Please wait a couple of days before resubmitting, so that everybody can enjoy using the leaderboard 🤗"
-        )
+    # Use >= to correctly enforce the rate limit
+    if num_models_submitted_in_period >= rate_limit_quota:
+        error_msg = f"Organisation or user `{org_or_user}` already has {num_models_submitted_in_period} model requests submitted in the last {rate_limit_period} days.\n"
+        error_msg += "Please wait a couple of days before resubmitting, so that everybody can enjoy using the leaderboard 🤗"
         return False, error_msg
+
     return True, ""
 
 

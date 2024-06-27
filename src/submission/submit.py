@@ -63,11 +63,6 @@ def add_new_eval(
     if model in DO_NOT_SUBMIT_MODELS or base_model in DO_NOT_SUBMIT_MODELS:
         return styled_warning("Model authors have requested that their model be not submitted on the leaderboard.")
 
-    if model == "CohereForAI/c4ai-command-r-plus":
-        return styled_warning(
-            "This model cannot be submitted manually on the leaderboard before the transformers release."
-        )
-
     # Does the model actually exist?
     if revision == "":
         revision = "main"
