@@ -106,6 +106,7 @@ def get_latest_data_leaderboard(leaderboard_initial_df = None):
     global NEW_DATA_ON_LEADERBOARD
     global LEADERBOARD_DF
     if NEW_DATA_ON_LEADERBOARD:
+        print("Leaderboard updated at reload!")
         leaderboard_dataset = datasets.load_dataset(
             AGGREGATED_REPO, 
             "default", 
