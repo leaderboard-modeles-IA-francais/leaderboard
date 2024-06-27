@@ -282,6 +282,7 @@ with main_block:
                                 headers=EVAL_COLS,
                                 datatype=EVAL_TYPES,
                                 row_count=5,
+                                interactive=False,
                             )
                 with gr.Accordion(
                     f"🔄 Running Evaluation Queue ({len(running_eval_queue_df)})",
@@ -293,6 +294,7 @@ with main_block:
                             headers=EVAL_COLS,
                             datatype=EVAL_TYPES,
                             row_count=5,
+                            interactive=False,
                         )
 
                 with gr.Accordion(
@@ -305,6 +307,7 @@ with main_block:
                             headers=EVAL_COLS,
                             datatype=EVAL_TYPES,
                             row_count=5,
+                            interactive=False,
                         )
 
             submit_button = gr.Button("Submit Eval")
