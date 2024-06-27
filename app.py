@@ -435,6 +435,8 @@ def update_leaderboard(payload: WebhookPayload) -> None:
     """Redownloads the leaderboard dataset each time it updates"""
     if payload.repo.type == "dataset" and payload.event.action == "update":
         global NEW_DATA_ON_LEADERBOARD
+        if NEW_DATA_ON_LEADERBOARD:
+            return
         NEW_DATA_ON_LEADERBOARD = True
 
         datasets.load_dataset(
