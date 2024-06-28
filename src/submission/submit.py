@@ -16,7 +16,6 @@ from src.submission.check_validity import (
     already_submitted_models,
     check_model_card,
     get_model_size,
-    get_model_tags,
     is_model_on_hub,
     user_submission_permission,
 )
@@ -66,48 +65,43 @@ def add_new_eval(
     # Does the model actually exist?
     if revision == "":
         revision = "main"
+    try:
+        model_info = API.model_info(repo_id=model, revision=revision)
+    except Exception as e:
+        return styled_error("Could not get your model information. Please fill it up properly.")
 
+    # Check for duplicate submission
+    if f"{model}_{model_info.sha}_{precision}" in REQUESTED_MODELS:
+        return styled_warning("This model has been already submitted.")
+
+    architecture = "?"
     # Is the model on the hub?
     if weight_type in ["Delta", "Adapter"]:
         base_model_on_hub, error, _ = is_model_on_hub(
-            model_name=base_model, revision=revision, token=HF_TOKEN, test_tokenizer=True
+            model_name=base_model, revision=model_info.sha, token=HF_TOKEN, test_tokenizer=True
         )
         if not base_model_on_hub:
             return styled_error(f'Base model "{base_model}" {error}')
-
-    architecture = "?"
-    downloads = 0
-    created_at = ""
     if not weight_type == "Adapter":
-        model_on_hub, error, model_config = is_model_on_hub(model_name=model, revision=revision, test_tokenizer=True)
+        model_on_hub, error, model_config = is_model_on_hub(model_name=model, revision=model_info.sha, test_tokenizer=True)
         if not model_on_hub or model_config is None:
             return styled_error(f'Model "{model}" {error}')
         if model_config is not None:
             architectures = getattr(model_config, "architectures", None)
             if architectures:
                 architecture = ";".join(architectures)
-            downloads = getattr(model_config, "downloads", 0)
-            created_at = getattr(model_config, "created_at", "")
-
-    # Is the model info correctly filled?
-    try:
-        model_info = API.model_info(repo_id=model, revision=revision)
-    except Exception:
-        return styled_error("Could not get your model information. Please fill it up properly.")
 
     model_size = get_model_size(model_info=model_info, precision=precision)
 
     # Were the model card and license filled?
     try:
-        license = model_info.cardData["license"]
+        model_info.cardData["license"]
     except Exception:
         return styled_error("Please select a license for your model")
 
     modelcard_OK, error_msg, model_card = check_model_card(model)
     if not modelcard_OK:
         return styled_error(error_msg)
-
-    tags = get_model_tags(model_card, model)
 
     # Seems good, creating the eval
     print("Adding new eval")
@@ -127,19 +121,6 @@ def add_new_eval(
         "job_start_time": None,
         "use_chat_template": use_chat_template,
     }
-
-    supplementary_info = {
-        "likes": model_info.likes,
-        "license": license,
-        "still_on_hub": True,
-        "tags": tags,
-        "downloads": downloads,
-        "created_at": created_at,
-    }
-
-    # Check for duplicate submission
-    if f"{model}_{revision}_{precision}" in REQUESTED_MODELS:
-        return styled_warning("This model has been already submitted.")
 
     print("Creating eval file")
     OUT_DIR = f"{EVAL_REQUESTS_PATH}/{user_name}"
