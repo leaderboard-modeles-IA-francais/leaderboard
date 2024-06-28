@@ -8,6 +8,7 @@ from threading import Thread
 import datasets
 from huggingface_hub import snapshot_download, WebhooksServer, WebhookPayload, RepoCard
 from gradio_leaderboard import Leaderboard, ColumnFilter, SelectColumns
+from apscheduler.schedulers.background import BackgroundScheduler
 
 # Start ephemeral Spaces on PRs (see config in README.md)
 from gradio_space_ci.webhook import IS_EPHEMERAL_SPACE, SPACE_ID, configure_space_ci
@@ -465,3 +466,7 @@ def update_queue(payload: WebhookPayload) -> None:
             LAST_UPDATE_QUEUE = datetime.datetime.now()
 
 webhooks_server.launch()
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(restart_space, "interval", hours=3) # restarted every 3h as backup in case automatic updates are not working
+scheduler.start()
