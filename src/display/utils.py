@@ -100,7 +100,7 @@ auto_eval_column_dict.append(["model_type", ColumnContent, ColumnContent("Type",
 auto_eval_column_dict.append(["architecture", ColumnContent, ColumnContent("Architecture", "str", False)])
 auto_eval_column_dict.append(["weight_type", ColumnContent, ColumnContent("Weight type", "str", False, True)])
 auto_eval_column_dict.append(["precision", ColumnContent, ColumnContent("Precision", "str", False)])
-auto_eval_column_dict.append(["merged", ColumnContent, ColumnContent("Merged", "bool", False)])
+auto_eval_column_dict.append(["merged", ColumnContent, ColumnContent("Not_Merged", "bool", False)])
 auto_eval_column_dict.append(["license", ColumnContent, ColumnContent("Hub License", "str", False)])
 auto_eval_column_dict.append(["params", ColumnContent, ColumnContent("#Params (B)", "number", False)])
 auto_eval_column_dict.append(["likes", ColumnContent, ColumnContent("Hub ❤️", "number", False)])
