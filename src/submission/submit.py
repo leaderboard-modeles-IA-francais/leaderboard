@@ -70,6 +70,11 @@ def add_new_eval(
     except Exception as e:
         return styled_error("Could not get your model information. Please fill it up properly.")
 
+    # Check model size early
+    model_size = get_model_size(model_info=model_info, precision=precision)
+    if model_size > 100:
+        return styled_error(f"You can't submit this model, since it's too big for one node evaluation. Model size: {model_size} billion parameters")
+
     # Check for duplicate submission
     if f"{model}_{model_info.sha}_{precision}" in REQUESTED_MODELS:
         return styled_warning("This model has been already submitted.")
@@ -90,8 +95,6 @@ def add_new_eval(
             architectures = getattr(model_config, "architectures", None)
             if architectures:
                 architecture = ";".join(architectures)
-
-    model_size = get_model_size(model_info=model_info, precision=precision)
 
     # Were the model card and license filled?
     try:
