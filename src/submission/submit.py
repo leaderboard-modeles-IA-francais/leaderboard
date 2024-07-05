@@ -73,7 +73,7 @@ def add_new_eval(
     # Check model size early
     model_size = get_model_size(model_info=model_info, precision=precision)
     if model_size > 100:
-        return styled_error(f"You can't submit this model, since it's too big for one node evaluation. Model size: {model_size} billion parameters")
+        return styled_error(f"Sadly, models this big ({model_size}b parameters) cannot be evaluated automatically at the moment on our cluster")
 
     # Check for duplicate submission
     if f"{model}_{model_info.sha}_{precision}" in REQUESTED_MODELS:
