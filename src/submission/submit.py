@@ -105,14 +105,15 @@ def add_new_eval(
         return styled_error(f"Sadly, models larger than 100B parameters cannot be submitted in {precision} precision at this time. "
                             f"Your model size: {model_size:.2f}B parameters.")
 
-    # Second check: Precision-adjusted size limit
-    size_checker = ModelSizeChecker(model=model, precision=precision, model_size_in_b=model_size)
-    
-    if not size_checker.can_evaluate():
-        precision_factor = size_checker.get_precision_factor()
-        max_size = 140 * precision_factor
-        return styled_error(f"Sadly, models this big ({model_size:.2f}B parameters) cannot be evaluated automatically "
-                            f"at the moment on our cluster. The maximum size for {precision} precision is {max_size:.2f}B parameters.")
+    # Second check: Precision-adjusted size limit for 8bit, 4bit, and GPTQ
+    if precision in ["8bit", "4bit", "GPTQ"]:
+        size_checker = ModelSizeChecker(model=model, precision=precision, model_size_in_b=model_size)
+        
+        if not size_checker.can_evaluate():
+            precision_factor = size_checker.get_precision_factor()
+            max_size = 140 * precision_factor
+            return styled_error(f"Sadly, models this big ({model_size:.2f}B parameters) cannot be evaluated automatically "
+                                f"at the moment on our cluster. The maximum size for {precision} precision is {max_size:.2f}B parameters.")
 
     architecture = "?"
     # Is the model on the hub?
