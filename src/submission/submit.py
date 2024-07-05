@@ -169,13 +169,13 @@ def add_new_eval(
         f.write(json.dumps(eval_entry))
 
     print("Uploading eval file")
-    # API.upload_file(
-    #     path_or_fileobj=out_path,
-    #     path_in_repo=out_path.split("eval-queue/")[1],
-    #     repo_id=QUEUE_REPO,
-    #     repo_type="dataset",
-    #     commit_message=f"Add {model} to eval queue",
-    # )
+    API.upload_file(
+        path_or_fileobj=out_path,
+        path_in_repo=out_path.split("eval-queue/")[1],
+        repo_id=QUEUE_REPO,
+        repo_type="dataset",
+        commit_message=f"Add {model} to eval queue",
+    )
 
     # Remove the local file
     os.remove(out_path)
