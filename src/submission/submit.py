@@ -119,7 +119,7 @@ def add_new_eval(
     # Is the model on the hub?
     if weight_type in ["Delta", "Adapter"]:
         base_model_on_hub, error, _ = is_model_on_hub(
-            model_name=base_model, revision=model_info.sha, token=HF_TOKEN, test_tokenizer=True
+            model_name=base_model, revision="main", token=HF_TOKEN, test_tokenizer=True
         )
         if not base_model_on_hub:
             return styled_error(f'Base model "{base_model}" {error}')
