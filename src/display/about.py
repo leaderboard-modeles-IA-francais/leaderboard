@@ -222,6 +222,14 @@ CITATION_BUTTON_TEXT = r"""
   howpublished = "\url{https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard}",
 }
 
+@misc{open-llm-leaderboard-v1,
+  author = {Edward Beeching and Clémentine Fourrier and Nathan Habib and Sheon Han and Nathan Lambert and Nazneen Rajani and Omar Sanseviero and Lewis Tunstall and Thomas Wolf},
+  title = {Open LLM Leaderboard (2023-2024)},
+  year = {2023},
+  publisher = {Hugging Face},
+  howpublished = "\url{https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard}"
+}
+
 @software{eval-harness,
   author       = {Gao, Leo and
                   Tow, Jonathan and
