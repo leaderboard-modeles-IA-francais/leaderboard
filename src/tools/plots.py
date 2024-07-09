@@ -71,10 +71,10 @@ def create_plot_df(scores_df: dict[str : pd.DataFrame]) -> pd.DataFrame:
     # Concatenate all the created DataFrames
     concat_df = pd.concat(dfs, ignore_index=True)
 
-    # Sort values by 'date'
-    concat_df.sort_values(by="date", inplace=True)
-    concat_df.reset_index(drop=True, inplace=True)
-    return concat_df
+    # # Sort values by 'date'
+    # concat_df.sort_values(by="date", inplace=True)
+    # concat_df.reset_index(drop=True, inplace=True)
+    # return concat_df
 
 
 def create_metric_plot_obj(df: pd.DataFrame, metrics: list[str], title: str) -> Figure:

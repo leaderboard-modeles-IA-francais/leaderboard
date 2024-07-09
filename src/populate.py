@@ -49,6 +49,5 @@ def get_leaderboard_df(leaderboard_dataset: Dataset, cols: list, benchmark_cols:
 
     df = pd.DataFrame.from_records(all_data_json_list)
     df = df.sort_values(by=[AutoEvalColumn.average.name], ascending=False)
-    df = df[cols].round(decimals=2)
     df = df[has_no_nan_values(df, benchmark_cols)]
     return df
