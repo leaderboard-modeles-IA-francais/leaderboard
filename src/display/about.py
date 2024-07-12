@@ -179,35 +179,47 @@ EVALUATION_QUEUE_TEXT = f"""
 
 Models added here will be automatically evaluated on the 🤗 cluster.
 
-## Don't forget to read the FAQ and the About tabs for more information!
+> **Important:** Don't forget to read the [FAQ](https://huggingface.co/docs/leaderboards/open_llm_leaderboard/faq) and [documentation](https://huggingface.co/docs/leaderboards/open_llm_leaderboard/about) for more information! 📄
 
-## First steps before submitting a model
+## Submission Disclaimer
+**By submitting a model, you acknowledge that:**
+- We store information about who submitted each model in [Requests dataset](https://huggingface.co/datasets/open-llm-leaderboard/requests).
+- This practice helps maintain the integrity of our leaderboard, prevent spam, and ensure responsible submissions.
+- Your submission will be visible to the community and you may be contacted regarding your model.
+- Please submit carefully and responsibly 💛
 
-### 1) Make sure you can load your model and tokenizer using AutoClasses:
+## First Steps Before Submitting a Model
+
+### 1. Ensure Your Model Loads with AutoClasses
+Verify that you can load your model and tokenizer using AutoClasses:
+
 ```python
 from transformers import AutoConfig, AutoModel, AutoTokenizer
 config = AutoConfig.from_pretrained("your model name", revision=revision)
 model = AutoModel.from_pretrained("your model name", revision=revision)
 tokenizer = AutoTokenizer.from_pretrained("your model name", revision=revision)
 ```
-If this step fails, follow the error messages to debug your model before submitting it. It's likely your model has been improperly uploaded.
+Note:
+- If this step fails, debug your model before submitting.
+- Ensure your model is public.
+- We are working on adding support for models requiring `use_remote_code=True`.
 
-Note: make sure your model is public!
-Note: if your model needs `use_remote_code=True`, we do not support this option yet but we are working on adding it, stay posted!
+### 2. Convert Weights to Safetensors
+[Safetensors](https://huggingface.co/docs/safetensors/index) is a new format for storing weights which is safer and faster to load and use. It will also allow us to add the number of parameters of your model to the `Extended Viewer`!
 
-### 2) Convert your model weights to [safetensors](https://huggingface.co/docs/safetensors/index)
-It's a new format for storing weights which is safer and faster to load and use. It will also allow us to add the number of parameters of your model to the `Extended Viewer`!
-
-### 3) Make sure your model has an open license!
+### 3. Verify Your Model Open License
 This is a leaderboard for Open LLMs, and we'd love for as many people as possible to know they can use your model 🤗
 
-### 4) Fill up your model card
+### 4. Complete Your Model Card
 When we add extra information about models to the leaderboard, it will be automatically taken from the model card
 
-### 5) Select the correct precision
-Not all models are converted properly from `float16` to `bfloat16`, and selecting the wrong precision can sometimes cause evaluation error (as loading a `bf16` model in `fp16` can sometimes generate NaNs, depending on the weight range).
+### 5. Select Correct Precision
+Choose the right precision to avoid evaluation errors:
+- Not all models convert properly from float16 to bfloat16.
+- Incorrect precision can cause issues (e.g., loading a bf16 model in fp16 may generate NaNs).
 
-<b>Note:</b> Please be advised that when submitting, git <b>branches</b> and <b>tags</b> will be strictly tied to the <b>specific commit</b> present at the time of submission. This ensures revision consistency.
+> **Important:** When submitting, git branches and tags will be strictly tied to the specific commit present at the time of submission to ensure revision consistency.
+
 ## Model types
 {icons}
 """

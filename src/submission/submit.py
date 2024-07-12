@@ -1,5 +1,6 @@
 import json
 import os
+import gradio as gr
 from datetime import datetime, timezone
 
 from dataclasses import dataclass
@@ -59,16 +60,25 @@ def add_new_eval(
     weight_type: str,
     model_type: str,
     use_chat_template: bool,
-):
+    profile: gr.OAuthProfile | None
+):  
+    # Login require
+    if profile is None:
+        return styled_error("Hub Login Required")
+
+    # Name of the actual user who sent the request
+    username = profile.username
+
     global REQUESTED_MODELS
     global USERS_TO_SUBMISSION_DATES
     if not REQUESTED_MODELS:
         REQUESTED_MODELS, USERS_TO_SUBMISSION_DATES = already_submitted_models(EVAL_REQUESTS_PATH)
 
-    user_name = ""
+
+    org_or_user = ""
     model_path = model
     if "/" in model:
-        user_name = model.split("/")[0]
+        org_or_user = model.split("/")[0]
         model_path = model.split("/")[1]
 
     precision = precision.split(" ")[0]
@@ -77,10 +87,14 @@ def add_new_eval(
     if model_type is None or model_type == "":
         return styled_error("Please select a model type.")
 
+    # Is user submitting own model?
+    # Check that username in the org. 
+    # if org_or_user != profile.username:
+
     # Is the user rate limited?
-    if user_name != "":
+    if org_or_user != "":
         user_can_submit, error_msg = user_submission_permission(
-            user_name, USERS_TO_SUBMISSION_DATES, RATE_LIMIT_PERIOD, RATE_LIMIT_QUOTA
+            org_or_user, USERS_TO_SUBMISSION_DATES, RATE_LIMIT_PERIOD, RATE_LIMIT_QUOTA
         )
         if not user_can_submit:
             return styled_error(error_msg)
@@ -144,7 +158,6 @@ def add_new_eval(
 
     # Seems good, creating the eval
     print("Adding new eval")
-
     eval_entry = {
         "model": model,
         "base_model": base_model,
@@ -159,10 +172,11 @@ def add_new_eval(
         "job_id": -1,
         "job_start_time": None,
         "use_chat_template": use_chat_template,
+        "sender": username
     }
 
     print("Creating eval file")
-    OUT_DIR = f"{EVAL_REQUESTS_PATH}/{user_name}"
+    OUT_DIR = f"{EVAL_REQUESTS_PATH}/{org_or_user}"
     os.makedirs(OUT_DIR, exist_ok=True)
     out_path = f"{OUT_DIR}/{model_path}_eval_request_False_{precision}_{weight_type}.json"
 
@@ -170,6 +184,7 @@ def add_new_eval(
         f.write(json.dumps(eval_entry))
 
     print("Uploading eval file")
+    print(eval_entry)
     API.upload_file(
         path_or_fileobj=out_path,
         path_in_repo=out_path.split("eval-queue/")[1],

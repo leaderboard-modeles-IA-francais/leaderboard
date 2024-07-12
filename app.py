@@ -235,6 +235,7 @@ with main_block:
 
             with gr.Row():
                 gr.Markdown("# ✉️✨ Submit your model here!", elem_classes="markdown-text")
+                login_button = gr.LoginButton(elem_id="oauth-button")
 
             with gr.Row():
                 with gr.Column():
