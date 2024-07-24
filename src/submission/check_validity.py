@@ -46,8 +46,7 @@ def is_model_on_hub(
 ) -> tuple[bool, str, AutoConfig]:
     try:
         config = AutoConfig.from_pretrained(
-            model_name, revision=revision, trust_remote_code=trust_remote_code, token=token
-        )  # , force_download=True)
+            model_name, revision=revision, trust_remote_code=trust_remote_code, token=token, force_download=True)
         if test_tokenizer:
             try:
                 tk = AutoTokenizer.from_pretrained(
