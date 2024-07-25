@@ -14,6 +14,8 @@ from src.envs import (
     QUEUE_REPO,
     RATE_LIMIT_PERIOD,
     RATE_LIMIT_QUOTA,
+    VOTES_REPO,
+    VOTES_PATH,
 )
 from src.leaderboard.filter_models import DO_NOT_SUBMIT_MODELS
 from src.submission.check_validity import (
@@ -24,8 +26,12 @@ from src.submission.check_validity import (
     user_submission_permission,
 )
 
+from src.voting.vote_system import VoteManager
+
 REQUESTED_MODELS = None
 USERS_TO_SUBMISSION_DATES = None
+
+vote_manager = VoteManager(VOTES_PATH, EVAL_REQUESTS_PATH, VOTES_REPO)
 
 @dataclass
 class ModelSizeChecker:
@@ -62,7 +68,7 @@ def add_new_eval(
     use_chat_template: bool,
     profile: gr.OAuthProfile | None
 ):  
-    # Login require
+    # Login required
     if profile is None:
         return styled_error("Hub Login Required")
 
@@ -86,10 +92,6 @@ def add_new_eval(
 
     if model_type is None or model_type == "":
         return styled_error("Please select a model type.")
-
-    # Is user submitting own model?
-    # Check that username in the org. 
-    # if org_or_user != profile.username:
 
     # Is the user rate limited?
     if org_or_user != "":
@@ -196,6 +198,17 @@ def add_new_eval(
     # Remove the local file
     os.remove(out_path)
 
+    # Always add a vote for the submitted model
+    vote_manager.add_vote(
+        selected_model=model,
+        pending_models_df=None,
+        profile=profile
+    )
+    print(f"Automatically added a vote for {model} submitted by {username}")
+
+    # Upload votes to the repository
+    vote_manager.upload_votes()
+
     return styled_message(
-        "Your request has been submitted to the evaluation queue!\nPlease wait for up to an hour for the model to show in the PENDING list."
+        "Your request and vote has been submitted to the evaluation queue!\nPlease wait for up to an hour for the model to show in the PENDING list."
     )
