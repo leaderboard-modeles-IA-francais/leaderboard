@@ -56,8 +56,9 @@ class VoteManager:
         return "main"
 
     def create_request_vote_df(self, pending_models_df: gr.Dataframe):
-        if pending_models_df.empty or not "model_name" in pending_models_df.columns:
+        if pending_models_df.empty or "model_name" not in pending_models_df.columns:
             return pending_models_df
+
         self.vote_dataset = self.read_vote_dataset()
         vote_counts = self.vote_dataset.groupby(['model', 'revision']).size().reset_index(name='vote_count')
 
@@ -79,7 +80,7 @@ class VoteManager:
     def add_vote(
             self,
             selected_model: str,
-            pending_models_df: gr.Dataframe,
+            pending_models_df: gr.Dataframe | None,
             profile: gr.OAuthProfile | None
         ):
         logger.debug(f"Type of list before usage: {type(list)}")
@@ -125,6 +126,9 @@ class VoteManager:
         
         self.vote_check_set.add(check_tuple)
         gr.Info(f"Voted for {selected_model}")
+
+        if pending_models_df is None:
+            return
 
         return self.create_request_vote_df(pending_models_df)
 
