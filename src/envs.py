@@ -8,6 +8,7 @@ REPO_ID = "open-llm-leaderboard/open_llm_leaderboard"
 QUEUE_REPO = "open-llm-leaderboard/requests"
 AGGREGATED_REPO = "open-llm-leaderboard/contents"
 VOTES_REPO = "open-llm-leaderboard/votes"
+MAINTAINERS_HIGHLIGHT_REPO = "open-llm-leaderboard/maintainers-highlight"
 
 HF_HOME = os.getenv("HF_HOME", ".")
 

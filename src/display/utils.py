@@ -1,14 +1,19 @@
 from dataclasses import dataclass, make_dataclass
+from datasets import load_dataset
 from enum import Enum
 import json
 import logging
 from datetime import datetime
 import pandas as pd
 
+from src.envs import MAINTAINERS_HIGHLIGHT_REPO
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-        
+dataset = load_dataset(MAINTAINERS_HIGHLIGHT_REPO)
+curated_authors = dataset["train"][0]["CURATED_SET"]
+
 # Convert ISO 8601 dates to datetime objects for comparison
 def parse_iso8601_datetime(date_str):
     if date_str.endswith('Z'):

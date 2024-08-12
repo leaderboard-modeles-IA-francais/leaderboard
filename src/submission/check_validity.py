@@ -9,7 +9,7 @@ from huggingface_hub import ModelCard
 from huggingface_hub.hf_api import ModelInfo, get_safetensors_metadata
 from transformers import AutoConfig, AutoTokenizer
 
-from src.display.utils import parse_iso8601_datetime
+from src.display.utils import parse_iso8601_datetime, curated_authors
 from src.envs import HAS_HIGHER_RATE_LIMIT
 
 
@@ -103,6 +103,10 @@ def get_model_arch(model_info: ModelInfo):
 
 
 def user_submission_permission(org_or_user, users_to_submission_dates, rate_limit_period, rate_limit_quota):
+    # No limit for curated authors
+    if org_or_user in curated_authors:
+        return True, ""
+    
     # Increase quota first if user has higher limits
     if org_or_user in HAS_HIGHER_RATE_LIMIT:
         rate_limit_quota *= 2
