@@ -17,9 +17,7 @@ from src.display.about import (
     CITATION_BUTTON_LABEL,
     CITATION_BUTTON_TEXT,
     EVALUATION_QUEUE_TEXT,
-    FAQ_TEXT,
     INTRODUCTION_TEXT,
-    LLM_BENCHMARKS_TEXT,
     TITLE,
 )
 from src.display.css_html_js import custom_css
@@ -48,7 +46,6 @@ from src.envs import (
 )
 from src.populate import get_evaluation_queue_df, get_leaderboard_df
 from src.submission.submit import add_new_eval
-from src.tools.plots import create_metric_plot_obj, create_plot_df, create_scores_df
 from src.voting.vote_system import VoteManager, run_scheduler
 
 # Configure logging
@@ -168,11 +165,6 @@ scheduler_thread.start()
 LEADERBOARD_DF, eval_queue_dfs = init_space()
 finished_eval_queue_df, running_eval_queue_df, pending_eval_queue_df = eval_queue_dfs
 
-
-# Data processing for plots now only on demand in the respective Gradio tab
-def load_and_create_plots():
-    plot_df = create_plot_df(create_scores_df(LEADERBOARD_DF))
-    return plot_df
 
 # Function to check if a user is logged in
 def check_login(profile: gr.OAuthProfile | None) -> bool:

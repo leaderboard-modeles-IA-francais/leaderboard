@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import logging
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 
@@ -75,28 +76,33 @@ def is_model_on_hub(
         return False, f"was not found or misconfigured on the hub! Error raised was {e.args[0]}", None
 
 
-def get_model_size(model_info: ModelInfo, precision: str):
+def get_model_size(model_info: ModelInfo, precision: str) -> float:
     size_pattern = re.compile(r"(\d+\.)?\d+(b|m)")
     safetensors = None
+
     try:
         safetensors = get_safetensors_metadata(model_info.id)
     except Exception as e:
-        print(e)
+        logging.error(f"Failed to get safetensors metadata for model {model_info.id}: {str(e)}")
 
     if safetensors is not None:
         model_size = round(sum(safetensors.parameter_count.values()) / 1e9, 3)
     else:
         try:
             size_match = re.search(size_pattern, model_info.id.lower())
-            model_size = size_match.group(0)
-            model_size = round(float(model_size[:-1]) if model_size[-1] == "b" else float(model_size[:-1]) / 1e3, 3)
+            if size_match:
+                model_size = size_match.group(0)
+                model_size = round(float(model_size[:-1]) if model_size[-1] == "b" else float(model_size[:-1]) / 1e3, 3)
+            else:
+                return -1  # Unknown model size
         except AttributeError:
-            return 0  # Unknown model sizes are indicated as 0, see NUMERIC_INTERVALS in app.py
+            logging.warning(f"Unable to parse model size from ID: {model_info.id}")
+            return -1  # Unknown model size
 
     size_factor = 8 if (precision == "GPTQ" or "gptq" in model_info.id.lower()) else 1
     model_size = size_factor * model_size
-    return model_size
 
+    return model_size
 
 def get_model_arch(model_info: ModelInfo):
     return model_info.config.get("architectures", "Unknown")
