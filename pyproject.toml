@@ -46,7 +46,7 @@ gradio-space-ci = {git = "https://huggingface.co/spaces/Wauplin/gradio-space-ci"
 isort = "^5.13.2"
 ruff = "^0.3.5"
 gradio-leaderboard = "0.0.11"
-gradio = {extras = ["oauth"], version = "^4.36.1"}
+gradio = {extras = ["oauth"], version = "^4.42.0"}
 requests = "^2.31.0"
 requests-oauthlib = "^1.3.1"
 schedule = "^1.2.2"
