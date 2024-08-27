@@ -259,10 +259,10 @@ with main_block:
                         choices=[i.value.name for i in WeightType],
                         label="Weights type",
                         multiselect=False,
-                        value="Original",
+                        value=WeightType.Original.value.name,
                         interactive=True,
                     )
-                    base_model_name_textbox = gr.Textbox(label="Base model (for delta or adapter weights)")
+                    base_model_name_textbox = gr.Textbox(label="Base model (for delta or adapter weights)", interactive=False)
             
             with gr.Column():
                 with gr.Accordion(
@@ -314,6 +314,25 @@ with main_block:
                 fn=update_chat_checkbox,
                 inputs=[model_type],  # Pass the current checkbox value
                 outputs=chat_template_toggle,
+            )
+
+            # The base_model_name_textbox interactivity and value reset function
+            def update_base_model_name_textbox(weight_type_value):
+                # Convert the dropdown value back to the corresponding WeightType Enum
+                weight_type_enum = WeightType[weight_type_value]
+                
+                # Determine if the textbox should be interactive
+                interactive = weight_type_enum in [WeightType.Adapter, WeightType.Delta]
+                
+                # Reset the value if weight type is "Original"
+                reset_value = "" if not interactive else None
+
+                return gr.update(interactive=interactive, value=reset_value)
+            
+            weight_type.change(
+                fn=update_base_model_name_textbox,
+                inputs=[weight_type],
+                outputs=[base_model_name_textbox],
             )
 
             submit_button.click(
