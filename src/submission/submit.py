@@ -66,8 +66,10 @@ def add_new_eval(
     weight_type: str,
     model_type: str,
     use_chat_template: bool,
-    profile: gr.OAuthProfile | None
-):  
+    profile: gr.OAuthProfile | None,
+    requested_models: set[str] = None,
+    users_to_submission_dates: dict[str, list[str]] = None,
+):
     # Login required
     if profile is None:
         return styled_error("Hub Login Required")
@@ -75,11 +77,10 @@ def add_new_eval(
     # Name of the actual user who sent the request
     username = profile.username
 
-    global REQUESTED_MODELS
-    global USERS_TO_SUBMISSION_DATES
-    if not REQUESTED_MODELS:
-        REQUESTED_MODELS, USERS_TO_SUBMISSION_DATES = already_submitted_models(EVAL_REQUESTS_PATH)
-
+    # Initialize the requested_models and users_to_submission_dates variables
+    # If the caller did not provide these values, fetch them from the EVAL_REQUESTS_PATH
+    if requested_models is None or users_to_submission_dates is None:
+        requested_models, users_to_submission_dates = already_submitted_models(EVAL_REQUESTS_PATH)
 
     org_or_user = ""
     model_path = model
@@ -96,7 +97,7 @@ def add_new_eval(
     # Is the user rate limited?
     if org_or_user != "":
         user_can_submit, error_msg = user_submission_permission(
-            org_or_user, USERS_TO_SUBMISSION_DATES, RATE_LIMIT_PERIOD, RATE_LIMIT_QUOTA
+            org_or_user, users_to_submission_dates, RATE_LIMIT_PERIOD, RATE_LIMIT_QUOTA
         )
         if not user_can_submit:
             return styled_error(error_msg)
@@ -112,15 +113,18 @@ def add_new_eval(
         model_info = API.model_info(repo_id=model, revision=revision)
     except Exception as e:
         return styled_error("Could not get your model information. Please fill it up properly.")
+    
+    model_key = f"{model}_{model_info.sha}_{precision}"
+    if model_key in requested_models:
+        return styled_error(f"The model '{model}' with revision '{model_info.sha}' and precision '{precision}' has already been submitted.")
 
     # Check model size early
     model_size = get_model_size(model_info=model_info, precision=precision)
-    
     # First check: Absolute size limit for float16 and bfloat16
     if precision in ["float16", "bfloat16"] and model_size > 100:
         return styled_error(f"Sadly, models larger than 100B parameters cannot be submitted in {precision} precision at this time. "
                             f"Your model size: {model_size:.2f}B parameters.")
-
+    
     # Second check: Precision-adjusted size limit for 8bit, 4bit, and GPTQ
     if precision in ["8bit", "4bit", "GPTQ"]:
         size_checker = ModelSizeChecker(model=model, precision=precision, model_size_in_b=model_size)
@@ -147,7 +151,6 @@ def add_new_eval(
             architectures = getattr(model_config, "architectures", None)
             if architectures:
                 architecture = ";".join(architectures)
-
     # Were the model card and license filled?
     try:
         model_info.cardData["license"]
