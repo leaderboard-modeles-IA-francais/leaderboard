@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, timezone
 
 import huggingface_hub
 from huggingface_hub import ModelCard
-from huggingface_hub.hf_api import ModelInfo, get_safetensors_metadata
+from huggingface_hub.hf_api import ModelInfo, get_safetensors_metadata, parse_safetensors_file_metadata
 from transformers import AutoConfig, AutoTokenizer
 
 from src.display.utils import parse_iso8601_datetime, curated_authors
@@ -24,16 +24,15 @@ def check_model_card(repo_id: str) -> tuple[bool, str]:
         return False, "Please add a model card to your model to explain how you trained/fine-tuned it.", None
 
     # Enforce license metadata
-    if card.data.license is None:
-        if not ("license_name" in card.data and "license_link" in card.data):
-            return (
-                False,
-                (
-                    "License not found. Please add a license to your model card using the `license` metadata or a"
-                    " `license_name`/`license_link` pair."
-                ),
-                None,
-            )
+    if card.data.license is None and not ("license_name" in card.data and "license_link" in card.data):
+        return (
+            False,
+            (
+                "License not found. Please add a license to your model card using the `license` metadata or a"
+                " `license_name`/`license_link` pair."
+            ),
+            None,
+        )
 
     # Enforce card content
     if len(card.text) < 200:
@@ -43,18 +42,24 @@ def check_model_card(repo_id: str) -> tuple[bool, str]:
 
 
 def is_model_on_hub(
-    model_name: str, revision: str, token: str = None, trust_remote_code=False, test_tokenizer=False
+    model_name: str, revision: str, token: str | None = None, trust_remote_code: bool = False, test_tokenizer: bool = False,
 ) -> tuple[bool, str, AutoConfig]:
     try:
         config = AutoConfig.from_pretrained(
             model_name, revision=revision, trust_remote_code=trust_remote_code, token=token, force_download=True)
         if test_tokenizer:
             try:
-                tk = AutoTokenizer.from_pretrained(
-                    model_name, revision=revision, trust_remote_code=trust_remote_code, token=token
+                AutoTokenizer.from_pretrained(
+                    model_name, revision=revision, trust_remote_code=trust_remote_code, token=token,
                 )
             except ValueError as e:
                 return (False, f"uses a tokenizer which is not in a transformers release: {e}", None)
+            except Exception:
+                return (
+                    False,
+                    "'s tokenizer cannot be loaded. Is your tokenizer class in a stable transformers release, and correctly configured?",
+                    None,
+                )
             except Exception:
                 return (
                     False,
@@ -76,17 +81,30 @@ def is_model_on_hub(
         return False, f"was not found or misconfigured on the hub! Error raised was {e.args[0]}", None
 
 
-def get_model_size(model_info: ModelInfo, precision: str) -> float:
+def get_model_size(model_info: ModelInfo, precision: str, base_model: str| None) -> tuple[float | None, str]:
     size_pattern = re.compile(r"(\d+\.)?\d+(b|m)")
     safetensors = None
+    adapter_safetensors = None
+    # hack way to check that model is adapter
+    is_adapter = "adapter_config.json" in (s.rfilename for s in model_info.siblings)
 
     try:
-        safetensors = get_safetensors_metadata(model_info.id)
+        if is_adapter:
+            if not base_model:
+                return None, "Adapter model submission detected. Please ensure the base model information is provided."
+
+            adapter_safetensors = parse_safetensors_file_metadata(model_info.id, "adapter_model.safetensors")
+            safetensors = get_safetensors_metadata(base_model)
+        else:
+            safetensors = get_safetensors_metadata(model_info.id)
     except Exception as e:
-        logging.error(f"Failed to get safetensors metadata for model {model_info.id}: {str(e)}")
+        logging.warning(f"Failed to get safetensors metadata for model {model_info.id}: {e!s}")
 
     if safetensors is not None:
-        model_size = round(sum(safetensors.parameter_count.values()) / 1e9, 3)
+        model_size = sum(safetensors.parameter_count.values())
+        if adapter_safetensors is not None:
+            model_size += sum(safetensors.parameter_count.values())
+        model_size = round(model_size / 1e9, 3)
     else:
         try:
             size_match = re.search(size_pattern, model_info.id.lower())
@@ -94,15 +112,15 @@ def get_model_size(model_info: ModelInfo, precision: str) -> float:
                 model_size = size_match.group(0)
                 model_size = round(float(model_size[:-1]) if model_size[-1] == "b" else float(model_size[:-1]) / 1e3, 3)
             else:
-                return -1  # Unknown model size
+                return None, "Unknown model size"
         except AttributeError:
             logging.warning(f"Unable to parse model size from ID: {model_info.id}")
-            return -1  # Unknown model size
+            return None, "Unknown model size"
 
     size_factor = 8 if (precision == "GPTQ" or "gptq" in model_info.id.lower()) else 1
     model_size = size_factor * model_size
 
-    return model_size
+    return model_size, ""
 
 def get_model_arch(model_info: ModelInfo):
     return model_info.config.get("architectures", "Unknown")
@@ -112,7 +130,6 @@ def user_submission_permission(org_or_user, users_to_submission_dates, rate_limi
     # No limit for curated authors
     if org_or_user in curated_authors:
         return True, ""
-    
     # Increase quota first if user has higher limits
     if org_or_user in HAS_HIGHER_RATE_LIMIT:
         rate_limit_quota *= 2

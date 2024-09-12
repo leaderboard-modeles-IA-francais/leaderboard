@@ -119,7 +119,10 @@ def add_new_eval(
         return styled_error(f"The model '{model}' with revision '{model_info.sha}' and precision '{precision}' has already been submitted.")
 
     # Check model size early
-    model_size = get_model_size(model_info=model_info, precision=precision)
+    model_size, error_text = get_model_size(model_info=model_info, precision=precision, base_model=base_model)
+    if model_size is None:
+        return styled_error(error_text)
+
     # First check: Absolute size limit for float16 and bfloat16
     if precision in ["float16", "bfloat16"] and model_size > 100:
         return styled_error(f"Sadly, models larger than 100B parameters cannot be submitted in {precision} precision at this time. "
