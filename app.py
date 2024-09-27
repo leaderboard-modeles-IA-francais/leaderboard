@@ -1,4 +1,3 @@
-import os
 import logging
 import time
 import schedule
@@ -100,29 +99,27 @@ def download_dataset(repo_id, local_dir, repo_type="dataset", max_attempts=3, ba
             attempt += 1
     raise Exception(f"Failed to download {repo_id} after {max_attempts} attempts")
 
-def get_latest_data_leaderboard(leaderboard_initial_df = None):
+def get_latest_data_leaderboard(leaderboard_initial_df=None):
     global NEW_DATA_ON_LEADERBOARD
     global LEADERBOARD_DF
     if NEW_DATA_ON_LEADERBOARD:
         print("Leaderboard updated at reload!")
         leaderboard_dataset = datasets.load_dataset(
-            AGGREGATED_REPO, 
-            "default", 
-            split="train", 
-            cache_dir=HF_HOME, 
-            download_mode=datasets.DownloadMode.REUSE_DATASET_IF_EXISTS, # Uses the cached dataset 
+            AGGREGATED_REPO,
+            "default",
+            split="train",
+            cache_dir=None,  # Disable cache directory usage
+            download_mode=datasets.DownloadMode.FORCE_REDOWNLOAD,  # Always download fresh data
             verification_mode="no_checks"
         )
         LEADERBOARD_DF = get_leaderboard_df(
-            leaderboard_dataset=leaderboard_dataset, 
+            leaderboard_dataset=leaderboard_dataset,
             cols=COLS,
             benchmark_cols=BENCHMARK_COLS,
         )
         NEW_DATA_ON_LEADERBOARD = False
-
     else:
         LEADERBOARD_DF = leaderboard_initial_df
-
     return LEADERBOARD_DF
 
 
