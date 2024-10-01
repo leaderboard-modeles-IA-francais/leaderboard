@@ -60,8 +60,12 @@ NEW_DATA_ON_LEADERBOARD = True
 LEADERBOARD_DF = None
 
 def restart_space():
-    API.restart_space(repo_id=REPO_ID, token=HF_TOKEN)
-
+    try:
+        logging.info(f"Attempting to restart space with repo ID: {REPO_ID}")
+        API.restart_space(repo_id=REPO_ID, token=HF_TOKEN)
+        logging.info("Space restarted successfully.")
+    except Exception as e:
+        logging.error(f"Failed to restart space: {e}")
 
 def time_diff_wrapper(func):
     def wrapper(*args, **kwargs):
@@ -129,6 +133,9 @@ def get_latest_data_queue():
 
 def init_space():
     """Initializes the application space, loading only necessary data."""
+    global NEW_DATA_ON_LEADERBOARD
+    NEW_DATA_ON_LEADERBOARD = True  # Ensure new data is always pulled on restart
+
     if DO_FULL_INIT:
         # These downloads only occur on full initialization
         try:
@@ -443,13 +450,16 @@ webhooks_server = enable_space_ci_and_return_server(ui=main_block)
 # Add webhooks
 @webhooks_server.add_webhook
 def update_leaderboard(payload: WebhookPayload) -> None:
-    """Redownloads the leaderboard dataset each time it updates"""
+    """Redownloads the leaderboard dataset each time it updates."""
     if payload.repo.type == "dataset" and payload.event.action == "update":
         global NEW_DATA_ON_LEADERBOARD
         if NEW_DATA_ON_LEADERBOARD:
+            logging.info("Leaderboard data is already marked for update, skipping...")
             return
+        logging.info("New data detected, downloading updated leaderboard dataset.")
         NEW_DATA_ON_LEADERBOARD = True
 
+        # Download the latest version of the dataset
         datasets.load_dataset(
             AGGREGATED_REPO, 
             "default", 
@@ -458,6 +468,7 @@ def update_leaderboard(payload: WebhookPayload) -> None:
             download_mode=datasets.DownloadMode.FORCE_REDOWNLOAD, 
             verification_mode="no_checks"
         )
+        logging.info("Leaderboard dataset successfully downloaded.")
 
 # The below code is not used at the moment, as we can manage the queue file locally
 LAST_UPDATE_QUEUE = datetime.datetime.now()
@@ -477,5 +488,6 @@ def update_queue(payload: WebhookPayload) -> None:
 webhooks_server.launch()
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(restart_space, "interval", hours=3) # restarted every 3h as backup in case automatic updates are not working
+scheduler.add_job(restart_space, "interval", hours=1)  # Restart every 1h
+logging.info("Scheduler initialized to restart space every 1 hour.")
 scheduler.start()
