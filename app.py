@@ -60,8 +60,14 @@ NEW_DATA_ON_LEADERBOARD = True
 LEADERBOARD_DF = None
 
 def restart_space():
+    logging.info(f"Restarting space with repo ID: {REPO_ID}")
     try:
-        logging.info(f"Attempting to restart space with repo ID: {REPO_ID}")
+        # Check if new data is pending and download if necessary
+        if NEW_DATA_ON_LEADERBOARD:
+            logging.info("Fetching latest leaderboard data before restart.")
+            get_latest_data_leaderboard()
+
+        # Now restart the space
         API.restart_space(repo_id=REPO_ID, token=HF_TOKEN)
         logging.info("Space restarted successfully.")
     except Exception as e:
@@ -107,23 +113,31 @@ def get_latest_data_leaderboard(leaderboard_initial_df=None):
     global NEW_DATA_ON_LEADERBOARD
     global LEADERBOARD_DF
     if NEW_DATA_ON_LEADERBOARD:
-        print("Leaderboard updated at reload!")
-        leaderboard_dataset = datasets.load_dataset(
-            AGGREGATED_REPO,
-            "default",
-            split="train",
-            cache_dir=None,  # Disable cache directory usage
-            download_mode=datasets.DownloadMode.FORCE_REDOWNLOAD,  # Always download fresh data
-            verification_mode="no_checks"
-        )
-        LEADERBOARD_DF = get_leaderboard_df(
-            leaderboard_dataset=leaderboard_dataset,
-            cols=COLS,
-            benchmark_cols=BENCHMARK_COLS,
-        )
+        logging.info("Leaderboard updated at reload!")
+        try:
+            leaderboard_dataset = datasets.load_dataset(
+                AGGREGATED_REPO,
+                "default",
+                split="train",
+                cache_dir=HF_HOME,
+                download_mode=datasets.DownloadMode.FORCE_REDOWNLOAD,  # Always download fresh data
+                verification_mode="no_checks"
+            )
+            LEADERBOARD_DF = get_leaderboard_df(
+                leaderboard_dataset=leaderboard_dataset,
+                cols=COLS,
+                benchmark_cols=BENCHMARK_COLS,
+            )
+            logging.info("Leaderboard dataset successfully downloaded.")
+        except Exception as e:
+            logging.error(f"Failed to download leaderboard dataset: {e}")
+            return
+
+        # Reset the flag after successful download
         NEW_DATA_ON_LEADERBOARD = False
     else:
         LEADERBOARD_DF = leaderboard_initial_df
+        logging.info("Using cached leaderboard dataset.")
     return LEADERBOARD_DF
 
 
@@ -450,25 +464,16 @@ webhooks_server = enable_space_ci_and_return_server(ui=main_block)
 # Add webhooks
 @webhooks_server.add_webhook
 def update_leaderboard(payload: WebhookPayload) -> None:
-    """Redownloads the leaderboard dataset each time it updates."""
+    """Redownloads the leaderboard dataset each time it updates"""
     if payload.repo.type == "dataset" and payload.event.action == "update":
         global NEW_DATA_ON_LEADERBOARD
-        if NEW_DATA_ON_LEADERBOARD:
-            logging.info("Leaderboard data is already marked for update, skipping...")
-            return
         logging.info("New data detected, downloading updated leaderboard dataset.")
+        
+        # Mark the flag for new data
         NEW_DATA_ON_LEADERBOARD = True
 
-        # Download the latest version of the dataset
-        datasets.load_dataset(
-            AGGREGATED_REPO, 
-            "default", 
-            split="train", 
-            cache_dir=HF_HOME, 
-            download_mode=datasets.DownloadMode.FORCE_REDOWNLOAD, 
-            verification_mode="no_checks"
-        )
-        logging.info("Leaderboard dataset successfully downloaded.")
+        # Now actually download the latest data immediately
+        get_latest_data_leaderboard()
 
 # The below code is not used at the moment, as we can manage the queue file locally
 LAST_UPDATE_QUEUE = datetime.datetime.now()
