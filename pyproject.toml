@@ -20,8 +20,8 @@ dependencies = [
     "gradio-space-ci",
     "isort>=5.13.2",
     "ruff>=0.6.4",
-    "gradio-leaderboard==0.0.11",
-    "gradio[oauth]==4.44.0",
+    "gradio-leaderboard==0.0.12",
+    "gradio[oauth]==4.44.1",
     "schedule>=1.2.2",
     "pigar>=2.1.6",
 ]
