@@ -196,6 +196,7 @@ class ModelType(Enum):
     PT = ModelDetails(name="🟢 pretrained", symbol="🟢")
     CPT = ModelDetails(name="🟩 continuously pretrained", symbol="🟩")
     FT = ModelDetails(name="🔶 fine-tuned on domain-specific datasets", symbol="🔶")
+    MM = ModelDetails(name="🌸 multimodal", symbol="🌸")
     chat = ModelDetails(name="💬 chat models (RLHF, DPO, IFT, ...)", symbol="💬")
     merges = ModelDetails(name="🤝 base merges and moerges", symbol="🤝")
     Unknown = ModelDetails(name="❓ other", symbol="❓")
@@ -215,8 +216,9 @@ class ModelType(Enum):
             return ModelType.chat
         if "merge" in m_type or "🤝" in m_type:
             return ModelType.merges
+        if "multimodal" in m_type or "🌸" in m_type:
+            return ModelType.MM
         return ModelType.Unknown
-
 
 class WeightType(Enum):
     Adapter = ModelDetails("Adapter")

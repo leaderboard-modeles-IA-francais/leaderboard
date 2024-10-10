@@ -13,6 +13,7 @@ icons = f"""
 - {ModelType.FT.to_str(" : ")} model: pretrained models finetuned on more data
 - {ModelType.chat.to_str(" : ")} model: chat like fine-tunes, either using IFT (datasets of task instruction), RLHF or DPO (changing the model loss a bit with an added policy), etc
 - {ModelType.merges.to_str(" : ")} model: merges or MoErges, models which have been merged or fused without additional fine-tuning. 
+- {ModelType.MM.to_str(" : ")} model: models integrating multiple data types (e.g., text, image, audio) for tasks like image captioning and visual question answering.
 """
 LLM_BENCHMARKS_TEXT = """
 ## ABOUT
