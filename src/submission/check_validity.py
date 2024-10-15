@@ -6,7 +6,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 
 import huggingface_hub
-from huggingface_hub import ModelCard
+from huggingface_hub import ModelCard, hf_hub_download
 from huggingface_hub.hf_api import ModelInfo, get_safetensors_metadata, parse_safetensors_file_metadata
 from transformers import AutoConfig, AutoTokenizer
 
@@ -179,7 +179,28 @@ def already_submitted_models(requested_models_dir: str) -> set[str]:
 
     return set(file_names), users_to_submission_dates
 
+def check_chat_template(model: str, revision: str) -> tuple[bool, str]:
+    try:
+        # Attempt to download only the tokenizer_config.json file
+        config_file = hf_hub_download(
+            repo_id=model,
+            filename="tokenizer_config.json",
+            revision=revision,
+            repo_type="model"
+        )
 
+        # Read and parse the tokenizer_config.json file
+        with open(config_file, 'r') as f:
+            tokenizer_config = json.load(f)
+
+        # Check if chat_template exists in the tokenizer configuration
+        if 'chat_template' not in tokenizer_config:
+            return False, f"The model {model} doesn't have a chat_template in its tokenizer_config.json. Please add a chat_template before submitting or submit without it."
+
+        return True, ""
+    except Exception as e:
+        return False, f"Error checking chat_template for model {model}: {str(e)}"
+    
 def get_model_tags(model_card, model: str):
     is_merge_from_metadata = False
     is_moe_from_metadata = False

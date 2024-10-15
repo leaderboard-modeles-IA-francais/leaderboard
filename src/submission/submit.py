@@ -24,6 +24,7 @@ from src.submission.check_validity import (
     get_model_size,
     is_model_on_hub,
     user_submission_permission,
+    check_chat_template,
 )
 
 from src.voting.vote_system import VoteManager
@@ -114,6 +115,7 @@ def add_new_eval(
     except Exception as e:
         return styled_error("Could not get your model information. Please fill it up properly.")
     
+    # Has it been submitted already?
     model_key = f"{model}_{model_info.sha}_{precision}"
     if model_key in requested_models:
         return styled_error(f"The model '{model}' with revision '{model_info.sha}' and precision '{precision}' has already been submitted.")
@@ -123,12 +125,12 @@ def add_new_eval(
     if model_size is None:
         return styled_error(error_text)
 
-    # First check: Absolute size limit for float16 and bfloat16
+    # Absolute size limit for float16 and bfloat16
     if precision in ["float16", "bfloat16"] and model_size > 100:
         return styled_error(f"Sadly, models larger than 100B parameters cannot be submitted in {precision} precision at this time. "
                             f"Your model size: {model_size:.2f}B parameters.")
     
-    # Second check: Precision-adjusted size limit for 8bit, 4bit, and GPTQ
+    # Precision-adjusted size limit for 8bit, 4bit, and GPTQ
     if precision in ["8bit", "4bit", "GPTQ"]:
         size_checker = ModelSizeChecker(model=model, precision=precision, model_size_in_b=model_size)
         
@@ -163,6 +165,12 @@ def add_new_eval(
     modelcard_OK, error_msg, model_card = check_model_card(model)
     if not modelcard_OK:
         return styled_error(error_msg)
+    
+    # Check the chat template submission
+    if use_chat_template:
+        chat_template_valid, chat_template_error = check_chat_template(model, revision)
+        if not chat_template_valid:
+            return styled_error(chat_template_error)
 
     # Seems good, creating the eval
     print("Adding new eval")
