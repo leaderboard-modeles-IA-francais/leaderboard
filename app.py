@@ -184,12 +184,6 @@ LEADERBOARD_DF, eval_queue_dfs = init_space()
 finished_eval_queue_df, running_eval_queue_df, pending_eval_queue_df = eval_queue_dfs
 
 
-# Function to check if a user is logged in
-def check_login(profile: gr.OAuthProfile | None) -> bool:
-    if profile is None:
-        return False
-    return True
-
 def init_leaderboard(dataframe):
     if dataframe is None or dataframe.empty:
         raise ValueError("Leaderboard DataFrame is empty or None.")

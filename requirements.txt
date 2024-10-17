@@ -2,7 +2,7 @@ APScheduler==3.10.4
 black==24.8.0
 click==8.1.7
 datasets==3.0.0
-huggingface-hub>=0.24.7
+huggingface-hub>=0.26.0rc0
 pandas==2.2.2
 python-dateutil==2.9.0
 sentencepiece==0.2.0
