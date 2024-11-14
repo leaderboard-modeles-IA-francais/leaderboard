@@ -128,6 +128,8 @@ auto_eval_column_dict.append(["fullname", ColumnContent, ColumnContent("fullname
 auto_eval_column_dict.append(["generation", ColumnContent, ColumnContent("Generation", "number", False)])
 auto_eval_column_dict.append(["base_model", ColumnContent, ColumnContent("Base Model", "str", False)])
 
+auto_eval_column_dict.append(["co2_emissions_kg", ColumnContent, ColumnContent("CO₂ Emissions for Evaluation (kg)", "number", False)])
+
 # We use make dataclass to dynamically fill the scores from Tasks
 AutoEvalColumn = make_dataclass("AutoEvalColumn", auto_eval_column_dict, frozen=True)
 
