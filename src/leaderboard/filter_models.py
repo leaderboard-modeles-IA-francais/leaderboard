@@ -19,8 +19,8 @@ DO_NOT_SUBMIT_MODELS = [
 def flag_models(leaderboard_data: list[dict]):
     """Flags models based on external criteria or flagged status."""
     for model_data in leaderboard_data:
-        # Skip flagging if maintainers_highlight is True
-        if model_data.get(AutoEvalColumn.maintainers_highlight.name, False):
+        # Skip flagging if official providers is True
+        if model_data.get(AutoEvalColumn.official_providers.name, False):
             model_data[AutoEvalColumn.not_flagged.name] = True
             continue
 

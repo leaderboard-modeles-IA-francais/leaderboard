@@ -215,7 +215,7 @@ def init_leaderboard(dataframe):
             ),
             ColumnFilter(AutoEvalColumn.moe.name, type="boolean", label="MoE", default=False),
             ColumnFilter(AutoEvalColumn.not_flagged.name, type="boolean", label="Flagged", default=True),
-            ColumnFilter(AutoEvalColumn.maintainers_highlight.name, type="boolean", label="Show only maintainer's highlight", default=False),
+            ColumnFilter(AutoEvalColumn.official_providers.name, type="boolean", label="Show only official providers", default=False),
         ],
         bool_checkboxgroup_label="Hide models",
         interactive=False,

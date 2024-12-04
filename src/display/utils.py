@@ -6,13 +6,13 @@ import logging
 from datetime import datetime
 import pandas as pd
 
-from src.envs import MAINTAINERS_HIGHLIGHT_REPO
+from src.envs import OFFICIAL_PROVIDERS_REPO
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-dataset = load_dataset(MAINTAINERS_HIGHLIGHT_REPO)
-curated_authors = dataset["train"][0]["CURATED_SET"]
+dataset = load_dataset(OFFICIAL_PROVIDERS_REPO)
+official_providers = dataset["train"][0]["CURATED_SET"]
 
 # Convert ISO 8601 dates to datetime objects for comparison
 def parse_iso8601_datetime(date_str):
@@ -120,7 +120,7 @@ auto_eval_column_dict.append(["submission_date", ColumnContent, ColumnContent("S
 auto_eval_column_dict.append(["upload_to_hub", ColumnContent, ColumnContent("Upload To Hub Date", "bool", False, hidden=False)])
 
 auto_eval_column_dict.append(["use_chat_template", ColumnContent, ColumnContent("Chat Template", "bool", False)])
-auto_eval_column_dict.append(["maintainers_highlight", ColumnContent, ColumnContent("Maintainer's Highlight", "bool", False, hidden=True)])
+auto_eval_column_dict.append(["official_providers", ColumnContent, ColumnContent("Official Providers", "bool", False, hidden=True)])
 
 # fullname structure: <user>/<model_name>
 auto_eval_column_dict.append(["fullname", ColumnContent, ColumnContent("fullname", "str", False, dummy=True)])
