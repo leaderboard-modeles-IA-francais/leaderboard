@@ -15,7 +15,7 @@ dependencies = [
     "pandas>=2.2.2",
     "python-dateutil>=2.9.0",
     "sentencepiece>=0.2.0",
-    "transformers==4.46.1",
+    "transformers>=4.47.0",
     "tokenizers>=0.19.0",
     "gradio-space-ci",
     "isort>=5.13.2",
