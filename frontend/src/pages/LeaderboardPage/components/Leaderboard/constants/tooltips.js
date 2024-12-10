@@ -324,20 +324,25 @@ export const UI_TOOLTIPS = {
     },
   ]),
   QUICK_FILTERS: createTooltipContent(
-    "Filter models based on their size and capabilities:",
+    "Filter models based on their size and applicable hardware:",
     [
       {
-        label: "Small Models (1.7B-7B)",
+        label: "Edge devices (Up to 3BB)",
+        description:
+          "Efficient models for edge devices, optimized for blazing fast inference.",
+      },
+      {
+        label: "Smol Models (1.7B-7B)",
         description:
           "Efficient models for consumer hardware and edge devices, optimized for fast inference.",
       },
       {
-        label: "Medium Models (7B-70B)",
+        label: "Middle ground models (7B-65B)",
         description:
-          "Balanced performance and resource usage, ideal for most production use cases.",
+          "A bit of everything here, with overall balanced performance and resource usage around 30B.",
       },
       {
-        label: "Large Models (70B+)",
+        label: "GPU-rich models (65B+)",
         description:
           "State-of-the-art performance for complex tasks, requires significant computing power.",
       },
