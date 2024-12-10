@@ -140,7 +140,7 @@ export const useFilteredData = (
     // Filter by parameters
     filteredUnpinned = filteredUnpinned.filter((row) => {
       const params = row.metadata.params_billions;
-      return params >= paramsRange[0] && params <= paramsRange[1];
+      return params >= paramsRange[0] && params < paramsRange[1];
     });
 
     // Filter by search
