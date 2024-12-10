@@ -236,7 +236,7 @@ Swagger documentation available at http://localhost:7860/docs
       "Hub ❤️": number,
       "#Params (B)": number,
       "Available on the hub": boolean,
-      Not_Merged: boolean,
+      Merged: boolean,
       MoE: boolean,
       Flagged: boolean,
       "Chat Template": boolean,
