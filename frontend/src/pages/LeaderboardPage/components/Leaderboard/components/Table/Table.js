@@ -613,7 +613,7 @@ const LeaderboardTable = ({
                 <col
                   key={column.id}
                   style={
-                    index < 3
+                    index < 4
                       ? {
                           width: column.columnDef.size,
                           minWidth: column.columnDef.size,
@@ -621,7 +621,7 @@ const LeaderboardTable = ({
                         }
                       : {
                           minWidth: column.columnDef.size,
-                          width: `${100 / (table.getAllColumns().length - 3)}%`,
+                          width: `${100 / (table.getAllColumns().length - 4)}%`,
                         }
                   }
                 />
