@@ -77,8 +77,8 @@ const useModelCount = ({ totalCount, filteredCount, data, table, loading }) => {
         // Filter by parameters
         const params = model.metadata.params_billions;
         if (
-          params <= filterConfig.paramsRange[0] ||
-          params > filterConfig.paramsRange[1]
+          params < filterConfig.paramsRange[0] ||
+          params >= filterConfig.paramsRange[1]
         ) {
           return false;
         }
