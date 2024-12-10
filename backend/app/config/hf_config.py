@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 # Organization or user who owns the datasets
 HF_ORGANIZATION = "open-llm-leaderboard"
-# HF_ORGANIZATION = "open-llm-leaderboard"
 
 # Get HF token directly from environment
 HF_TOKEN = os.environ.get("HF_TOKEN")

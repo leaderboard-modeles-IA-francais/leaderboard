@@ -35,7 +35,7 @@ export const QUICK_FILTER_PRESETS = [
     shortDescription: 'Large models: 65B+ parameters',
     description: 'Large-scale models offering (in theory) the best performance but requiring significant resources. Require adapted infrastructure.',
     filters: {
-      paramsRange: [65, 140],
+      paramsRange: [65, 141],
       selectedBooleanFilters: []
     }
   },
