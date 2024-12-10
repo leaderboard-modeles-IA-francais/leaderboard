@@ -139,7 +139,12 @@ export const useFilteredData = (
 
     // Filter by parameters
     filteredUnpinned = filteredUnpinned.filter((row) => {
-      const params = row.metadata.params_billions;
+      // Skip parameter filtering if no filter is active
+      if (paramsRange[0] === -1 && paramsRange[1] === 140) return true;
+
+      const params =
+        row.metadata?.params_billions || row.features?.params_billions;
+      if (params === undefined || params === null) return false;
       return params >= paramsRange[0] && params < paramsRange[1];
     });
 
