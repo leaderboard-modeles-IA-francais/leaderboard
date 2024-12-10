@@ -211,7 +211,7 @@ def init_leaderboard(dataframe):
                 AutoEvalColumn.still_on_hub.name, type="boolean", label="Deleted/incomplete", default=True
             ),
             ColumnFilter(
-                AutoEvalColumn.merged.name, type="boolean", label="Merge/MoErge", default=True
+                AutoEvalColumn.merged.name, type="boolean", label="Merge/MoErge", default=False
             ),
             ColumnFilter(AutoEvalColumn.moe.name, type="boolean", label="MoE", default=False),
             ColumnFilter(AutoEvalColumn.not_flagged.name, type="boolean", label="Flagged", default=True),
