@@ -172,7 +172,7 @@ const COLUMNS = {
     "metadata.hub_hearts": {
       group: "model_info",
       size: COLUMN_SIZES.HUB_HEARTS,
-      defaultVisible: true,
+      defaultVisible: false,
       label: "Hub ❤️",
     },
     "model.architecture": {
