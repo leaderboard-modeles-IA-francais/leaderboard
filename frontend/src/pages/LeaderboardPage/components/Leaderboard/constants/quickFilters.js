@@ -11,8 +11,8 @@ export const QUICK_FILTER_PRESETS = [
   },
   {
     id: 'small_models',
-    label: 'For consumers',
-    shortDescription: 'Smol-LMs: Up to 7B parameters',
+    label: 'For Consumers',
+    shortDescription: 'Smol-LMs: 3-7B parameters',
     description: 'Lightweight models optimized for consumer hardware with up to one GPU. Ideal for private consumer hardware.',
     filters: {
       paramsRange: [3, 7],
@@ -21,7 +21,7 @@ export const QUICK_FILTER_PRESETS = [
   },
   {
     id: 'medium_models',
-    label: 'For production',
+    label: 'Mid-range',
     shortDescription: 'Medium-sized models: 7B-65B parameters',
     description: 'Overall balance between performance and required resources.',
     filters: {
@@ -33,7 +33,7 @@ export const QUICK_FILTER_PRESETS = [
     id: 'large_models',
     label: 'For the GPU-rich',
     shortDescription: 'Large models: 65B+ parameters',
-    description: 'Large-scale models offering (in theory) the best performance but requiring significant resources. Requires adapted infrastructure.',
+    description: 'Large-scale models offering (in theory) the best performance but requiring significant resources. Require adapted infrastructure.',
     filters: {
       paramsRange: [65, 140],
       selectedBooleanFilters: []
@@ -43,7 +43,7 @@ export const QUICK_FILTER_PRESETS = [
     id: 'official_providers',
     label: 'Only Official Providers',
     shortDescription: 'Officially provided models',
-    description: 'Models that are officially provided and maintained by their original creators or organizations.',
+    description: 'Models that are officially provided and maintained by official creators or organizations.',
     filters: {
       selectedBooleanFilters: ['is_highlighted_by_maintainer']
     }

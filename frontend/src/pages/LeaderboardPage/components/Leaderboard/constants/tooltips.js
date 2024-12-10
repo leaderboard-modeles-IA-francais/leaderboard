@@ -48,15 +48,15 @@ export const COLUMN_TOOLTIPS = {
       subItems: ["Instruction following", "Formatting", "Generation"],
     },
     {
-      label: "Scoring",
-      description: "Accuracy: was the format asked for strictly respected.",
+      label: "Scoring: Accuracy",
+      description: "Was the format asked for strictly respected.",
     },
   ]),
 
   BBH: createTooltipContent("Big Bench Hard (BBH):", [
     {
       label: "Overview",
-      description: "Collection of challenging for LLM tasks across domains",
+      description: "Collection of challenging for LLM tasks across domains, for example",
       subItems: [
         "Language understanding",
         "Mathematical reasoning",
@@ -64,9 +64,9 @@ export const COLUMN_TOOLTIPS = {
       ],
     },
     {
-      label: "Scoring",
+      label: "Scoring: Accuracy",
       description:
-        "Accuracy: was the correct choice selected among the options.",
+        "Was the correct choice selected among the options.",
     },
   ]),
 
@@ -79,9 +79,9 @@ export const COLUMN_TOOLTIPS = {
         subItems: ["Complex algebra", "Geometry problems", "Advanced calculus"],
       },
       {
-        label: "Evaluation",
+        label: "Scoring: Exact match",
         description:
-          "Accuracy: is the solution generated correct and in the expected format",
+          "Was the solution generated correct and in the expected format",
       },
     ]
   ),
@@ -91,15 +91,15 @@ export const COLUMN_TOOLTIPS = {
       label: "Focus",
       description: "PhD-level knowledge multiple choice questions in science",
       subItems: [
-        "PhD-level chemistry",
-        "PhD-level biology",
-        "PhD-level physics",
+        "Chemistry",
+        "Biology",
+        "Physics",
       ],
     },
     {
-      label: "Methodology",
+      label: "Scoring: Accuracy",
       description:
-        "Accuracy: was the correct choice selected among the options.",
+        "Was the correct choice selected among the options.",
     },
   ]),
 
@@ -114,9 +114,9 @@ export const COLUMN_TOOLTIPS = {
       ],
     },
     {
-      label: "Scoring",
+      label: "Scoring: Accuracy",
       description:
-        "Accuracy: was the correct choice selected among the options.",
+        "Was the correct choice selected among the options.",
     },
   ]),
 
@@ -125,7 +125,7 @@ export const COLUMN_TOOLTIPS = {
     [
       {
         label: "Coverage",
-        description: "Expertly reviewed multichoice questions across domains",
+        description: "Expertly reviewed multichoice questions across domains, for example:",
         subItems: [
           "Medicine and healthcare",
           "Law and ethics",
@@ -134,9 +134,9 @@ export const COLUMN_TOOLTIPS = {
         ],
       },
       {
-        label: "Evaluation",
+        label: "Scoring: Accuracy",
         description:
-          "Accuracy: was the correct choice selected among the options.",
+          "Was the correct choice selected among the options.",
       },
     ]
   ),
@@ -146,19 +146,21 @@ export const COLUMN_TOOLTIPS = {
       label: "Definition",
       description: "The fundamental structure and design of the model",
       subItems: [
-        "Base architecture type (e.g., Llama, Mistral, GPT-J)",
-        "Specific architectural innovations and improvements",
-        "Model family and version information",
-        "Core design principles and techniques used",
+        "Pretrained: Foundational models, initially trained on large datasets without task-specific tuning, serving as a versatile base for further development.",
+        "Continuously Pretrained: Base models trained with a data mix evolving as the model is trained, with the addition of specialized data during the last training steps.",
+        "Fine-tuned: Base models, fine-tuned on specialised domain data (legal, medical, ...), and optimized for particular tasks.",
+        "Chat: Models fine-tuned with IFT, RLHF, DPO, and other techniques, to handle conversational contexts effectively.",
+        "Merged: Combining multiple models through weights averaging or similar methods.",
+        "Multimodal: Models which can handle several modalities (text & image/audio/video/...). We only evaluate the text capabilities.",
       ],
     },
     {
       label: "Impact",
       description: "How architecture affects model capabilities",
       subItems: [
-        "Influences model's learning capacity and efficiency",
-        "Determines hardware compatibility and requirements",
-        "Affects inference speed and memory usage",
+        "Base models are expected to perform less well on instruction following evaluations, like IFEval.",
+        "Fine-tuned and chat models can be more verbose and more chatty than base models.",
+        "Merged models tend to exhibit good performance on benchmarks, which do not translate to real-world situations.",
       ],
     },
   ]),
@@ -169,10 +171,10 @@ export const COLUMN_TOOLTIPS = {
       description:
         "Data format used to store model weights and perform computations",
       subItems: [
-        "BFloat16: Brain Float format, good for training stability",
-        "Float16: Half precision, balances accuracy and speed",
-        "Int8/Int4: Quantized formats for efficiency",
-        "GPTQ/AWQ: Advanced quantization techniques",
+        "bfloat16: Half precision (Brain Float format), good for stability",
+        "float16: Half precision",
+        "8bit/4bit: Quantized formats, for efficiency",
+        "GPTQ/AWQ: Quantized methods",
       ],
     },
     {
@@ -181,40 +183,28 @@ export const COLUMN_TOOLTIPS = {
       subItems: [
         "Higher precision = better accuracy but more memory usage",
         "Lower precision = faster inference and smaller size",
-        "Different hardware compatibility requirements",
         "Trade-off between model quality and resource usage",
-      ],
-    },
-    {
-      label: "Use Cases",
-      description: "Choosing the right precision format",
-      subItems: [
-        "Production deployment optimization",
-        "Resource-constrained environments",
-        "High-performance computing scenarios",
       ],
     },
   ]),
 
   FLAGS: createTooltipContent("Model Flags and Special Features:", [
     {
-      label: "Purpose",
-      description: "Special indicators and capabilities of the model",
+      label: "Filters",
       subItems: [
-        "Safeguards and content filtering features",
-        "Specialized training techniques used",
-        "Hardware optimization flags",
-        "Deployment-specific configurations",
+        "Mixture of Expert: Uses a MoE architecture",
+        "Merged models: Created by averaging other models",
+        "Contaminated: Flagged by users from the community for (possibly accidental) cheating",
+        "Unavailable: No longer on the hub (private, deleted) or missing a license tag",
       ],
     },
     {
-      label: "Common Flags",
-      description: "Frequently used model indicators",
+      label: "Purpose",
+      description: "Why do people want to hide these models?",
       subItems: [
-        "RLHF: Reinforcement Learning from Human Feedback",
-        "DPO: Direct Preference Optimization",
-        "MoE: Mixture of Experts architecture",
-        "Flash Attention: Optimized attention implementation",
+        "Mixture of Experts: These models can be too parameter heavy",
+        "Merged models: Performance on benchmarks tend to be inflated compared to real life usage",
+        "Contaminated: Performance on benchmarks is inflated and not reflecting real life usage",
       ],
     },
   ]),
@@ -260,7 +250,6 @@ export const COLUMN_TOOLTIPS = {
       subItems: [
         "Large models can have significant carbon footprints",
         "Helps make informed choices about model selection",
-        "Promotes awareness of AI's environmental impact",
       ],
     },
     {
@@ -332,12 +321,12 @@ export const UI_TOOLTIPS = {
           "Efficient models for edge devices, optimized for blazing fast inference.",
       },
       {
-        label: "Smol Models (1.7B-7B)",
+        label: "Smol Models (3B-7B)",
         description:
-          "Efficient models for consumer hardware and edge devices, optimized for fast inference.",
+          "Efficient models for consumer hardware, optimized for fast inference.",
       },
       {
-        label: "Middle ground models (7B-65B)",
+        label: "Mid-range models (7B-65B)",
         description:
           "A bit of everything here, with overall balanced performance and resource usage around 30B.",
       },

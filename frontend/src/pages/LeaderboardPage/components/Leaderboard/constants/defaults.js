@@ -44,13 +44,13 @@ const FILTERS = {
       hide: true,
     },
     {
-      value: "is_flagged",
-      label: "Potentially contaminated model",
+      value: "is_merged",
+      label: "Merged model",
       hide: true,
     },
     {
-      value: "is_merged",
-      label: "Merged model",
+      value: "is_flagged",
+      label: "Potentially contaminated model",
       hide: true,
     },
     {
