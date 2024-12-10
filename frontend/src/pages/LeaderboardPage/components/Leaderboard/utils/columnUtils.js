@@ -841,7 +841,7 @@ export const createColumns = (
           }}
         >
           <Typography variant="body2">
-            {row.original.metadata.params_billions.toFixed(2)}
+            {row.original.metadata.params_billions} 
             <span style={{ opacity: 0.6 }}>B</span>
           </Typography>
         </Box>
