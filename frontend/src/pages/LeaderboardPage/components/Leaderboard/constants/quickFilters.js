@@ -25,7 +25,7 @@ export const QUICK_FILTER_PRESETS = [
     shortDescription: 'Medium-sized models: 7B-65B parameters',
     description: 'Overall balance between performance and required resources.',
     filters: {
-      paramsRange: [7, 70],
+      paramsRange: [7, 65],
       selectedBooleanFilters: []
     }
   },
@@ -35,7 +35,7 @@ export const QUICK_FILTER_PRESETS = [
     shortDescription: 'Large models: 65B+ parameters',
     description: 'Large-scale models offering (in theory) the best performance but requiring significant resources. Requires adapted infrastructure.',
     filters: {
-      paramsRange: [85, 140],
+      paramsRange: [65, 140],
       selectedBooleanFilters: []
     }
   },
