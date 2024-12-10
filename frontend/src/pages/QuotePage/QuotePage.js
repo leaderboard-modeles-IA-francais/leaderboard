@@ -74,7 +74,7 @@ const benchmarks = [
     url: "https://arxiv.org/abs/2311.07911",
   },
   {
-    title: "CBT: Challenging BIG-Bench Tasks",
+    title: "BBH: Big-Bench Hard",
     authors: "Suzgun et al.",
     citation: `@misc{suzgun2022challengingbigbenchtaskschainofthought,
   title={Challenging BIG-Bench Tasks and Whether Chain-of-Thought Can Solve Them},
@@ -88,7 +88,7 @@ const benchmarks = [
     url: "https://arxiv.org/abs/2210.09261",
   },
   {
-    title: "MATH: Mathematical Problem Solving Dataset",
+    title: "MATH: Mathematics Aptitude Test of Heuristics - Level 5",
     authors: "Hendrycks et al.",
     citation: `@misc{hendrycks2021measuringmathematicalproblemsolving,
   title={Measuring Mathematical Problem Solving With the MATH Dataset},
@@ -130,7 +130,7 @@ const benchmarks = [
     url: "https://arxiv.org/abs/2310.16049",
   },
   {
-    title: "MMLU-Pro: Multi-Task Language Understanding Pro",
+    title: "MMLU-Pro: Massive Multitask Language Understanding Professional",
     authors: "Wang et al.",
     citation: `@misc{wang2024mmluprorobustchallengingmultitask,
   title={MMLU-Pro: A More Robust and Challenging Multi-Task Language Understanding Benchmark},

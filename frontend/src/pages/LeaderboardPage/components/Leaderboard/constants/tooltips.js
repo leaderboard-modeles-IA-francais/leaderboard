@@ -103,7 +103,7 @@ export const COLUMN_TOOLTIPS = {
     },
   ]),
 
-  MUSR: createTooltipContent("Multistep Soft Reasoning (MUSR):", [
+  MUSR: createTooltipContent("Multistep Soft Reasoning (MuSR):", [
     {
       label: "Scope",
       description: "Reasoning and understanding on/of long texts",
