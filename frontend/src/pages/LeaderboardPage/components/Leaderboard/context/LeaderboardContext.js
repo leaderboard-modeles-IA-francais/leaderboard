@@ -53,6 +53,7 @@ const createInitialCounts = () => {
     merged: 0,
     notOnHub: 0,
     parameterRanges: {
+      edge: 0,
       small: 0,
       medium: 0,
       large: 0,
@@ -227,9 +228,10 @@ const calculateModelCounts = (models) => {
         model.metadata?.params_billions || model.features?.params_billions
       );
       if (!isNaN(params)) {
-        if (isInParamRange(params, [1.7, 7])) counts.parameterRanges.small++;
-        if (isInParamRange(params, [7, 70])) counts.parameterRanges.medium++;
-        if (isInParamRange(params, [70, 140])) counts.parameterRanges.large++;
+        if (isInParamRange(params, [0, 3])) counts.parameterRanges.edge++;
+        if (isInParamRange(params, [3, 7])) counts.parameterRanges.small++;
+        if (isInParamRange(params, [7, 65])) counts.parameterRanges.medium++;
+        if (isInParamRange(params, [65, 140])) counts.parameterRanges.large++;
       }
     });
   });
