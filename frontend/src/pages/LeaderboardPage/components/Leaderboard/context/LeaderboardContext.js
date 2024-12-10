@@ -231,7 +231,7 @@ const calculateModelCounts = (models) => {
         if (isInParamRange(params, [0, 3])) counts.parameterRanges.edge++;
         if (isInParamRange(params, [3, 7])) counts.parameterRanges.small++;
         if (isInParamRange(params, [7, 65])) counts.parameterRanges.medium++;
-        if (isInParamRange(params, [65, 140])) counts.parameterRanges.large++;
+        if (isInParamRange(params, [65, 141])) counts.parameterRanges.large++;
       }
     });
   });
