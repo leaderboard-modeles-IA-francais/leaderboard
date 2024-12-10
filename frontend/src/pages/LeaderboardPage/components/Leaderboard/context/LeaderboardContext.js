@@ -77,10 +77,19 @@ const initialState = {
   },
 };
 
+// Function to normalize parameter value
+const normalizeParams = (params) => {
+  const numParams = Number(params);
+  if (isNaN(numParams)) return null;
+  return Math.round(numParams * 100) / 100;
+};
+
 // Function to check if a parameter count is within a range
 const isInParamRange = (params, range) => {
   if (range[0] === -1 && range[1] === 140) return true;
-  return params >= range[0] && params < range[1];
+  const normalizedParams = normalizeParams(params);
+  if (normalizedParams === null) return false;
+  return normalizedParams >= range[0] && normalizedParams < range[1];
 };
 
 // Function to check if a model matches filter criteria
