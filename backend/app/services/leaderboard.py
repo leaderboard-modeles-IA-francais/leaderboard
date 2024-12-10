@@ -136,7 +136,7 @@ class LeaderboardService:
             }
 
             features = {
-                "is_not_available_on_hub": not data.get("Available on the hub", False),
+                "is_not_available_on_hub": data.get("Available on the hub", False),
                 "is_merged": data.get("Merged", False),
                 "is_moe": data.get("MoE", False),
                 "is_flagged": data.get("Flagged", False),
