@@ -190,6 +190,7 @@ const SearchBar = ({
             flex: 1,
             fontSize: "1rem",
             color: "text.primary",
+            mr: 4,
             "& .MuiInputBase-input": {
               padding: "2px 0",
               fontWeight: 600,
@@ -244,7 +245,7 @@ const SearchBar = ({
                 variant="body2"
                 sx={{
                   fontWeight: 600,
-                  display: { xs: "none", sm: "block" },
+                  display: { xs: "none", md: "block" },
                 }}
               >
                 Reset
@@ -282,7 +283,7 @@ const SearchBar = ({
               variant="body2"
               sx={{
                 fontWeight: 600,
-                display: { xs: "none", sm: "block" },
+                display: { xs: "none", md: "block" },
               }}
             >
               Advanced Filters
@@ -290,11 +291,13 @@ const SearchBar = ({
           </Box>
           <InfoIconWithTooltip
             tooltip={UI_TOOLTIPS.SEARCH_BAR}
-            iconProps={{ sx: { fontSize: "1.2rem" } }}
+            iconProps={{
+              sx: { fontSize: "1.2rem", display: { xs: "none", md: "block" } },
+            }}
           />
         </Box>
       </Paper>
-      <Box sx={{ ml: 3.5 }}>
+      <Box sx={{ ml: 3.5, mr: 3.5 }}>
         {localValue ? (
           <SearchDescription searchValue={localValue} />
         ) : (
@@ -304,10 +307,13 @@ const SearchBar = ({
               sx={{
                 color: "text.secondary",
                 fontSize: "0.75rem",
-                textAlign: "left",
+                textAlign: { xs: "center", sm: "left" },
                 opacity: 1,
                 transition: "opacity 0.2s ease",
-                height: "18px",
+                minHeight: "18px",
+                width: "100%",
+                whiteSpace: "normal",
+                lineHeight: 1.5,
               }}
             >
               Supports strict search and regex • Use semicolons for multiple

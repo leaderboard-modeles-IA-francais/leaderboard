@@ -151,34 +151,37 @@ const QuickFilters = ({ totalCount = 0, loading = false }) => {
     <Box sx={{ width: "100%" }}>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          alignItems: { xs: "flex-start", md: "center" },
-          gap: 2,
+          backgroundColor: (theme) => ({
+            xs: alpha(theme.palette.primary.main, 0.02),
+            lg: "transparent",
+          }),
+          borderColor: (theme) => ({
+            xs: alpha(theme.palette.primary.main, 0.2),
+            lg: "transparent",
+          }),
+          border: "1px solid",
+          borderRadius: 1,
+          p: 3,
+          position: "relative",
           width: "100%",
-          minHeight: { xs: "auto", md: "48px" },
-          py: 1,
-          px: 2,
+          display: "flex",
+          flexDirection: { xs: "column", lg: "row" },
+          transition: (theme) =>
+            theme.transitions.create(["border-color", "background-color"], {
+              duration: theme.transitions.duration.short,
+            }),
         }}
       >
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            gap: 1,
-            width: { xs: "100%", md: "auto" },
-            mb: { xs: 1, md: 0 },
+            gap: 0.5,
+            mb: 1.5,
+            mr: 2,
           }}
         >
-          <Typography
-            variant="subtitle2"
-            sx={{
-              fontSize: "0.8rem",
-              fontWeight: 700,
-              color: "text.secondary",
-              whiteSpace: "nowrap",
-            }}
-          >
+          <Typography variant="body2" sx={{ fontWeight: 600 }}>
             Quick Filters
           </Typography>
           <InfoIconWithTooltip
@@ -190,8 +193,8 @@ const QuickFilters = ({ totalCount = 0, loading = false }) => {
         <Box
           sx={{
             display: "flex",
-            flexDirection: { xs: "column", md: "row" },
-            alignItems: { xs: "stretch", md: "center" },
+            flexDirection: { xs: "column", lg: "row" },
+            alignItems: { xs: "stretch", lg: "center" },
             gap: 2,
             flex: 1,
             width: { xs: "100%", md: "auto" },
@@ -200,9 +203,9 @@ const QuickFilters = ({ totalCount = 0, loading = false }) => {
           <Box
             sx={{
               display: "flex",
-              flexDirection: { xs: "column", md: "row" },
+              flexDirection: { xs: "column", lg: "row" },
               gap: 0.5,
-              flexWrap: { xs: "nowrap", md: "nowrap" },
+              flexWrap: { xs: "nowrap", lg: "nowrap" },
               borderRight: {
                 xs: "none",
                 md: (theme) => `1px solid ${alpha(theme.palette.divider, 0.2)}`,

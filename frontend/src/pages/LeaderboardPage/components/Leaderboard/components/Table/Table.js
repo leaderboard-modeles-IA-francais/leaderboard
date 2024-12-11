@@ -194,9 +194,10 @@ const TableControls = React.memo(
     <Box
       sx={{
         display: "flex",
-        justifyContent: "flex-end",
+        justifyContent: { xs: "center", md: "flex-end" },
         gap: 1,
         mb: 2,
+        pt: { xs: 2, md: 0 },
       }}
     >
       <TableOptions

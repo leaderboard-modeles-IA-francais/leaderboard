@@ -70,45 +70,55 @@ function App() {
   const theme = getTheme(mode);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Router>
-          <LeaderboardProvider>
-            <UrlHandler />
-            <Box
-              sx={{
-                minHeight: "100vh",
-                display: "flex",
-                flexDirection: "column",
-                bgcolor: "background.default",
-                color: "text.primary",
-              }}
-            >
-              <Navigation onToggleTheme={toggleTheme} mode={mode} />
+    <div
+      className="App"
+      style={{
+        height: "100%",
+        width: "100%",
+        WebkitOverflowScrolling: "touch",
+        overflow: "auto",
+      }}
+    >
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Router>
+            <LeaderboardProvider>
+              <UrlHandler />
               <Box
                 sx={{
-                  flex: 1,
+                  minHeight: "100vh",
                   display: "flex",
                   flexDirection: "column",
-                  width: "100%",
-                  px: 4,
-                  pb: 4,
+                  bgcolor: "background.default",
+                  color: "text.primary",
                 }}
               >
-                <Routes>
-                  <Route path="/" element={<LeaderboardPage />} />
-                  <Route path="/add" element={<AddModelPage />} />
-                  <Route path="/quote" element={<QuotePage />} />
-                  <Route path="/vote" element={<VoteModelPage />} />
-                </Routes>
+                <Navigation onToggleTheme={toggleTheme} mode={mode} />
+                <Box
+                  sx={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100%",
+                    px: 4,
+                    pb: 4,
+                  }}
+                >
+                  <Routes>
+                    <Route path="/" element={<LeaderboardPage />} />
+                    <Route path="/add" element={<AddModelPage />} />
+                    <Route path="/quote" element={<QuotePage />} />
+                    <Route path="/vote" element={<VoteModelPage />} />
+                  </Routes>
+                </Box>
+                <Footer />
               </Box>
-              <Footer />
-            </Box>
-          </LeaderboardProvider>
-        </Router>
-      </ThemeProvider>
-    </QueryClientProvider>
+            </LeaderboardProvider>
+          </Router>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </div>
   );
 }
 

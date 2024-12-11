@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Typography } from '@mui/material';
+import React from "react";
+import { Box, Typography } from "@mui/material";
 
 const PageHeader = ({ title, subtitle }) => {
   return (
@@ -8,6 +8,7 @@ const PageHeader = ({ title, subtitle }) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        textAlign: "center",
         mb: 6,
         mt: 6,
         gap: 2,
@@ -25,4 +26,4 @@ const PageHeader = ({ title, subtitle }) => {
   );
 };
 
-export default PageHeader; 
+export default PageHeader;
