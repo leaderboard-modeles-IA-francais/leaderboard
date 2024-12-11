@@ -164,7 +164,7 @@ const QuickFilters = ({ totalCount = 0, loading = false }) => {
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
             gap: 1,
-            width: "100%",
+            width: { xs: "100%", md: "100%", lg: "auto" },
             "& > div": {
               width: { xs: "100%", md: 0, lg: "auto" },
               flex: {
