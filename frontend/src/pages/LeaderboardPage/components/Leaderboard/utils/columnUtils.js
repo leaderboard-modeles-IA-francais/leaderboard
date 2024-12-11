@@ -808,7 +808,7 @@ export const createColumns = (
 
   const optionalColumns = [
     {
-      id: "architecture",
+      accessorKey: "model.architecture",
       header: createHeaderCell("Architecture", COLUMN_TOOLTIPS.ARCHITECTURE),
       accessorFn: (row) => row.model.architecture,
       cell: ({ row }) => (
@@ -819,7 +819,7 @@ export const createColumns = (
       size: TABLE_DEFAULTS.COLUMNS.COLUMN_SIZES["model.architecture"],
     },
     {
-      id: "precision",
+      accessorKey: "model.precision",
       header: createHeaderCell("Precision", COLUMN_TOOLTIPS.PRECISION),
       accessorFn: (row) => row.model.precision,
       cell: ({ row }) => (
@@ -841,7 +841,7 @@ export const createColumns = (
           }}
         >
           <Typography variant="body2">
-            {row.original.metadata.params_billions} 
+            {row.original.metadata.params_billions}
             <span style={{ opacity: 0.6 }}>B</span>
           </Typography>
         </Box>
