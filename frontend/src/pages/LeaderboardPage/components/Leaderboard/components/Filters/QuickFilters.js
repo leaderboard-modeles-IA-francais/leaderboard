@@ -55,18 +55,23 @@ export const QuickFiltersSkeleton = () => (
         }}
       />
 
-      {[1, 2, 3].map((i) => (
+      {[1, 2, 3, 4].map((i) => (
         <Skeleton
           key={i}
-          width={{ xs: "100%", md: 150 }}
           height={32}
-          sx={{ borderRadius: 1 }}
+          sx={{
+            width: { xs: "100%", md: 120 },
+            borderRadius: 1,
+          }}
         />
       ))}
       <Skeleton
-        width={{ xs: "100%", md: 150 }}
         height={32}
-        sx={{ borderRadius: 1 }}
+        sx={{
+          width: { xs: "100%", md: 150 },
+          borderRadius: 1,
+          ml: 2,
+        }}
       />
     </Box>
   </Box>
