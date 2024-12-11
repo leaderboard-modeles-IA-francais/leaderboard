@@ -307,7 +307,7 @@ const SearchBar = ({
               sx={{
                 color: "text.secondary",
                 fontSize: "0.75rem",
-                textAlign: { xs: "center", sm: "left" },
+                textAlign: { xs: "center", md: "left" },
                 opacity: 1,
                 transition: "opacity 0.2s ease",
                 minHeight: "18px",

@@ -11,14 +11,21 @@ export const QuickFiltersSkeleton = () => (
   <Box sx={{ width: "100%" }}>
     <Box
       sx={{
+        backgroundColor: (theme) => ({
+          xs: alpha(theme.palette.primary.main, 0.02),
+          lg: "transparent",
+        }),
+        borderColor: (theme) => ({
+          xs: alpha(theme.palette.primary.main, 0.2),
+          lg: "transparent",
+        }),
+        border: "1px solid",
+        borderRadius: 1,
+        p: 3,
         display: "flex",
-        flexDirection: { xs: "column", md: "row" },
-        alignItems: { xs: "flex-start", md: "center" },
+        flexDirection: { xs: "column", md: "column", lg: "row" },
         gap: 2,
         width: "100%",
-        minHeight: { xs: "auto", md: "48px" },
-        py: 1,
-        px: 2,
       }}
     >
       <Box
@@ -26,8 +33,8 @@ export const QuickFiltersSkeleton = () => (
           display: "flex",
           alignItems: "center",
           gap: 1,
-          width: { xs: "100%", md: "auto" },
-          mb: { xs: 1, md: 0 },
+          width: "100%",
+          mb: { xs: 1, md: 2, lg: 0 },
         }}
       >
         <Typography
@@ -36,7 +43,6 @@ export const QuickFiltersSkeleton = () => (
             fontSize: "0.8rem",
             fontWeight: 700,
             color: "text.secondary",
-            whiteSpace: "nowrap",
           }}
         >
           Quick Filters
@@ -50,42 +56,27 @@ export const QuickFiltersSkeleton = () => (
         sx={{
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
-          alignItems: { xs: "stretch", md: "center" },
-          gap: 2,
-          flex: 1,
-          width: { xs: "100%", md: "auto" },
+          gap: 1,
+          width: "100%",
+          "& > *": {
+            flex: { md: 1 },
+          },
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: { xs: "column", md: "row" },
-            gap: 0.5,
-            flexWrap: { xs: "nowrap", md: "nowrap" },
-            borderRight: {
-              xs: "none",
-              md: (theme) => `1px solid ${alpha(theme.palette.divider, 0.2)}`,
-            },
-            borderBottom: {
-              xs: (theme) => `1px solid ${alpha(theme.palette.divider, 0.2)}`,
-              md: "none",
-            },
-            pr: { xs: 0, md: 2 },
-            pb: { xs: 2, md: 0 },
-            mr: 0,
-          }}
-        >
-          {[1, 2, 3].map((i) => (
-            <Skeleton
-              key={i}
-              width={120}
-              height={32}
-              sx={{ borderRadius: 1 }}
-            />
-          ))}
-        </Box>
-        <Skeleton width={150} height={32} sx={{ borderRadius: 1 }} />
+        {[1, 2, 3].map((i) => (
+          <Skeleton
+            key={i}
+            width={{ xs: "100%", md: "auto" }}
+            height={32}
+            sx={{ borderRadius: 1 }}
+          />
+        ))}
       </Box>
+      <Skeleton
+        width={{ xs: "100%", md: 150 }}
+        height={32}
+        sx={{ borderRadius: 1 }}
+      />
     </Box>
   </Box>
 );
@@ -162,14 +153,10 @@ const QuickFilters = ({ totalCount = 0, loading = false }) => {
           border: "1px solid",
           borderRadius: 1,
           p: 3,
-          position: "relative",
-          width: "100%",
           display: "flex",
-          flexDirection: { xs: "column", lg: "row" },
-          transition: (theme) =>
-            theme.transitions.create(["border-color", "background-color"], {
-              duration: theme.transitions.duration.short,
-            }),
+          flexDirection: { xs: "column", md: "column", lg: "row" },
+          gap: 2,
+          width: "100%",
         }}
       >
         <Box
@@ -177,8 +164,7 @@ const QuickFilters = ({ totalCount = 0, loading = false }) => {
             display: "flex",
             alignItems: "center",
             gap: 0.5,
-            mb: 1.5,
-            mr: 2,
+            mb: { xs: 1, md: 2, lg: 0 },
           }}
         >
           <Typography variant="body2" sx={{ fontWeight: 600 }}>
@@ -193,30 +179,21 @@ const QuickFilters = ({ totalCount = 0, loading = false }) => {
         <Box
           sx={{
             display: "flex",
-            flexDirection: { xs: "column", lg: "row" },
-            alignItems: { xs: "stretch", lg: "center" },
+            flexDirection: { xs: "column", md: "column", lg: "row" },
             gap: 2,
             flex: 1,
-            width: { xs: "100%", md: "auto" },
+            width: "100%",
           }}
         >
           <Box
             sx={{
               display: "flex",
-              flexDirection: { xs: "column", lg: "row" },
-              gap: 0.5,
-              flexWrap: { xs: "nowrap", lg: "nowrap" },
-              borderRight: {
-                xs: "none",
-                md: (theme) => `1px solid ${alpha(theme.palette.divider, 0.2)}`,
+              flexDirection: { xs: "column", md: "row" },
+              gap: 1,
+              width: "100%",
+              "& > *": {
+                flex: { md: 1 },
               },
-              borderBottom: {
-                xs: (theme) => `1px solid ${alpha(theme.palette.divider, 0.2)}`,
-                md: "none",
-              },
-              pr: { xs: 0, md: 2 },
-              pb: { xs: 2, md: 0 },
-              mr: 0,
             }}
           >
             {modelSizePresets.map((preset) => (
@@ -230,6 +207,9 @@ const QuickFilters = ({ totalCount = 0, loading = false }) => {
                 onChange={() => handleSizePresetClick(preset)}
                 count={getPresetCount(preset)}
                 totalCount={totalCount}
+                sx={{
+                  width: { xs: "100%", md: "auto" },
+                }}
               />
             ))}
           </Box>
@@ -243,6 +223,7 @@ const QuickFilters = ({ totalCount = 0, loading = false }) => {
               totalCount={totalCount}
               showCheckbox={true}
               variant="secondary"
+              sx={{ width: { xs: "100%", md: "100%", lg: "auto" } }}
             />
           )}
         </Box>
