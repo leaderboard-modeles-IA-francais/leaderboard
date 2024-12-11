@@ -484,7 +484,7 @@ const LeaderboardTable = ({
         <Paper
           sx={{
             height: "calc(100vh - 380px)",
-            minHeight: "300px",
+            minHeight: "500px",
             resize: "vertical",
             overflow: "hidden",
             boxShadow: "none",
@@ -555,7 +555,7 @@ const LeaderboardTable = ({
         elevation={0}
         sx={{
           height: "calc(100vh - 380px)",
-          minHeight: "300px",
+          minHeight: "500px",
           resize: "vertical",
           overflow: "hidden",
           boxShadow: "none",
