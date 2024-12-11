@@ -45,6 +45,7 @@ export const QuickFiltersSkeleton = () => (
         display: "flex",
         flexDirection: { xs: "column", md: "column", lg: "row" },
         gap: 2,
+        mb: 2,
         width: "100%",
       }}
     >
@@ -55,9 +56,18 @@ export const QuickFiltersSkeleton = () => (
       />
 
       {[1, 2, 3].map((i) => (
-        <Skeleton key={i} width={120} height={32} sx={{ borderRadius: 1 }} />
+        <Skeleton
+          key={i}
+          width={{ xs: "100%", md: 150 }}
+          height={32}
+          sx={{ borderRadius: 1 }}
+        />
       ))}
-      <Skeleton width={150} height={32} sx={{ borderRadius: 1 }} />
+      <Skeleton
+        width={{ xs: "100%", md: 150 }}
+        height={32}
+        sx={{ borderRadius: 1 }}
+      />
     </Box>
   </Box>
 );
@@ -149,17 +159,19 @@ const QuickFilters = ({ totalCount = 0, loading = false }) => {
         >
           <QuickFiltersTitle />
         </Box>
-
         <Box
           sx={{
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
-            flexWrap: { md: "wrap" },
             gap: 1,
-            width: { xs: "100%", lg: "auto" },
-            "& > *": {
-              width: { xs: "100%", md: "auto" },
-              flex: { md: "0 0 auto" },
+            width: "100%",
+            "& > div": {
+              width: { xs: "100%", md: 0, lg: "auto" },
+              flex: {
+                xs: "auto",
+                md: "1 1 0",
+                lg: "0 0 auto",
+              },
             },
           }}
         >
