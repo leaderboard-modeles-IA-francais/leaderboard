@@ -7,6 +7,26 @@ import { useLeaderboard } from "../../context/LeaderboardContext";
 import InfoIconWithTooltip from "../../../../../../components/shared/InfoIconWithTooltip";
 import { UI_TOOLTIPS } from "../../constants/tooltips";
 
+const QuickFiltersTitle = ({ sx = {} }) => (
+  <Box
+    sx={{
+      display: "flex",
+      alignItems: "center",
+      gap: 0.5,
+      whiteSpace: "nowrap",
+      ...sx,
+    }}
+  >
+    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+      Quick Filters
+    </Typography>
+    <InfoIconWithTooltip
+      tooltip={UI_TOOLTIPS.QUICK_FILTERS}
+      iconProps={{ sx: { fontSize: "1rem" } }}
+    />
+  </Box>
+);
+
 export const QuickFiltersSkeleton = () => (
   <Box sx={{ width: "100%" }}>
     <Box
@@ -28,55 +48,16 @@ export const QuickFiltersSkeleton = () => (
         width: "100%",
       }}
     >
-      <Box
+      <QuickFiltersTitle
         sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: 1,
-          width: "100%",
           mb: { xs: 1, md: 2, lg: 0 },
         }}
-      >
-        <Typography
-          variant="subtitle2"
-          sx={{
-            fontSize: "0.8rem",
-            fontWeight: 700,
-            color: "text.secondary",
-          }}
-        >
-          Quick Filters
-        </Typography>
-        <InfoIconWithTooltip
-          tooltip={UI_TOOLTIPS.QUICK_FILTERS}
-          iconProps={{ sx: { fontSize: "1rem" } }}
-        />
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          gap: 1,
-          width: "100%",
-          "& > *": {
-            flex: { md: 1 },
-          },
-        }}
-      >
-        {[1, 2, 3].map((i) => (
-          <Skeleton
-            key={i}
-            width={{ xs: "100%", md: "auto" }}
-            height={32}
-            sx={{ borderRadius: 1 }}
-          />
-        ))}
-      </Box>
-      <Skeleton
-        width={{ xs: "100%", md: 150 }}
-        height={32}
-        sx={{ borderRadius: 1 }}
       />
+
+      {[1, 2, 3].map((i) => (
+        <Skeleton key={i} width={120} height={32} sx={{ borderRadius: 1 }} />
+      ))}
+      <Skeleton width={150} height={32} sx={{ borderRadius: 1 }} />
     </Box>
   </Box>
 );
@@ -139,7 +120,7 @@ const QuickFilters = ({ totalCount = 0, loading = false }) => {
   }
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box>
       <Box
         sx={{
           backgroundColor: (theme) => ({
@@ -154,66 +135,55 @@ const QuickFilters = ({ totalCount = 0, loading = false }) => {
           borderRadius: 1,
           p: 3,
           display: "flex",
-          flexDirection: { xs: "column", md: "column", lg: "row" },
+          flexDirection: { xs: "column", lg: "row" },
+          alignItems: "center",
           gap: 2,
           width: "100%",
         }}
       >
         <Box
           sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 0.5,
+            width: { xs: "100%", lg: "auto" },
             mb: { xs: 1, md: 2, lg: 0 },
           }}
         >
-          <Typography variant="body2" sx={{ fontWeight: 600 }}>
-            Quick Filters
-          </Typography>
-          <InfoIconWithTooltip
-            tooltip={UI_TOOLTIPS.QUICK_FILTERS}
-            iconProps={{ sx: { fontSize: "1rem" } }}
-          />
+          <QuickFiltersTitle />
         </Box>
 
         <Box
           sx={{
             display: "flex",
-            flexDirection: { xs: "column", md: "column", lg: "row" },
-            gap: 2,
-            flex: 1,
-            width: "100%",
+            flexDirection: { xs: "column", md: "row" },
+            flexWrap: { md: "wrap" },
+            gap: 1,
+            width: { xs: "100%", lg: "auto" },
+            "& > *": {
+              width: { xs: "100%", md: "auto" },
+              flex: { md: "0 0 auto" },
+            },
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: { xs: "column", md: "row" },
-              gap: 1,
-              width: "100%",
-              "& > *": {
-                flex: { md: 1 },
-              },
-            }}
-          >
-            {modelSizePresets.map((preset) => (
-              <FilterTag
-                key={preset.id}
-                label={preset.label}
-                checked={
-                  currentParams[0] === preset.filters.paramsRange[0] &&
-                  currentParams[1] === preset.filters.paramsRange[1]
-                }
-                onChange={() => handleSizePresetClick(preset)}
-                count={getPresetCount(preset)}
-                totalCount={totalCount}
-                sx={{
-                  width: { xs: "100%", md: "auto" },
-                }}
-              />
-            ))}
-          </Box>
+          {modelSizePresets.map((preset) => (
+            <FilterTag
+              key={preset.id}
+              label={preset.label}
+              checked={
+                currentParams[0] === preset.filters.paramsRange[0] &&
+                currentParams[1] === preset.filters.paramsRange[1]
+              }
+              onChange={() => handleSizePresetClick(preset)}
+              count={getPresetCount(preset)}
+              totalCount={totalCount}
+            />
+          ))}
+        </Box>
 
+        <Box
+          sx={{
+            width: { xs: "100%", md: "100%", lg: "auto" },
+            display: "flex",
+          }}
+        >
           {officialProvidersPreset && (
             <FilterTag
               label={officialProvidersPreset.label}
@@ -223,7 +193,9 @@ const QuickFilters = ({ totalCount = 0, loading = false }) => {
               totalCount={totalCount}
               showCheckbox={true}
               variant="secondary"
-              sx={{ width: { xs: "100%", md: "100%", lg: "auto" } }}
+              sx={{
+                width: { xs: "100%", md: "100%", lg: "auto" },
+              }}
             />
           )}
         </Box>

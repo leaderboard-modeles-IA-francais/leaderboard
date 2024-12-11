@@ -15,6 +15,7 @@ const FilterTag = ({
   variant = "tag",
   showCheckbox = false,
   stacked = false,
+  sx = {},
 }) => {
   const theme = useTheme();
 
@@ -129,6 +130,7 @@ const FilterTag = ({
             ? "secondary.main"
             : "primary.main"
           : "divider",
+        ...sx,
       }}
     />
   );

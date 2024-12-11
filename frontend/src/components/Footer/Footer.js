@@ -1,21 +1,22 @@
-import React from 'react';
-import { Box, Typography, Link } from '@mui/material';
+import React from "react";
+import { Box, Typography, Link } from "@mui/material";
 
 const Footer = () => {
   return (
     <Box
       component="footer"
       sx={{
-        width: '100%',
+        width: "100%",
         py: 4,
-        textAlign: 'center',
+        textAlign: "center",
       }}
     >
-      <Typography variant="body2" color="text.secondary">
-        © 2024 Hugging Face - Open LLM Leaderboard - Made with 🤗 by the HF team - {' '}
-        <Link 
-          href="https://huggingface.co" 
-          target="_blank" 
+      <Typography variant="body2" color="text.secondary" sx={{ mx: 4 }}>
+        © 2024 Hugging Face - Open LLM Leaderboard - Made with 🤗 by the HF team
+        -{" "}
+        <Link
+          href="https://huggingface.co"
+          target="_blank"
           rel="noopener noreferrer"
           color="inherit"
         >
@@ -26,4 +27,4 @@ const Footer = () => {
   );
 };
 
-export default Footer; 
+export default Footer;
