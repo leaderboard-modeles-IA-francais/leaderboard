@@ -1,5 +1,5 @@
 ---
-title: Open LLM Leaderboard 2
+title: Open LLM Leaderboard
 emoji: 🏆
 colorFrom: blue
 colorTo: red
