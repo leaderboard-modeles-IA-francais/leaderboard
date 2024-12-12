@@ -297,12 +297,12 @@ const reducer = (state, action) => {
       };
 
     case "TOGGLE_PINNED_MODEL":
-      const modelName = action.payload;
+      const modelKey = action.payload;
       const pinnedModels = [...state.pinnedModels];
-      const modelIndex = pinnedModels.indexOf(modelName);
+      const modelIndex = pinnedModels.indexOf(modelKey);
 
       if (modelIndex === -1) {
-        pinnedModels.push(modelName);
+        pinnedModels.push(modelKey);
       } else {
         pinnedModels.splice(modelIndex, 1);
       }
@@ -659,25 +659,10 @@ const LeaderboardProvider = ({ children }) => {
       precisionsChanged ||
       typesChanged
     ) {
-      setSearchParams(newSearchParams, { replace: true });
+      // Update search params and let HashRouter handle the URL
+      setSearchParams(newSearchParams);
     }
-  }, [
-    state.filters.paramsRange,
-    state.filters.booleanFilters,
-    state.filters.search,
-    state.filters.isOfficialProviderActive,
-    state.filters.precisions,
-    state.filters.types,
-    state.pinnedModels,
-    state.display.visibleColumns,
-    state.display.rowSize,
-    state.display.scoreDisplay,
-    state.display.averageMode,
-    state.display.rankingMode,
-    searchParams,
-    setSearchParams,
-    location.state,
-  ]);
+  }, [state, searchParams, location.state]);
 
   const actions = useMemo(
     () => ({
@@ -688,8 +673,8 @@ const LeaderboardProvider = ({ children }) => {
       setFilter: (key, value) => dispatch({ type: "SET_FILTER", key, value }),
       setDisplayOption: (key, value) =>
         dispatch({ type: "SET_DISPLAY_OPTION", key, value }),
-      togglePinnedModel: (modelName) =>
-        dispatch({ type: "TOGGLE_PINNED_MODEL", payload: modelName }),
+      togglePinnedModel: (modelKey) =>
+        dispatch({ type: "TOGGLE_PINNED_MODEL", payload: modelKey }),
       toggleOfficialProvider: () =>
         dispatch({ type: "TOGGLE_OFFICIAL_PROVIDER" }),
       toggleFiltersExpanded: () =>
@@ -707,19 +692,13 @@ const LeaderboardProvider = ({ children }) => {
         ].forEach((param) => {
           newParams.delete(param);
         });
-        setSearchParams(newParams, { replace: true });
+        setSearchParams(newParams);
       },
       resetAll: () => {
         // Reset all state
         dispatch({ type: "RESET_ALL" });
         // Clear all URL params with skipUrlSync flag
-        setSearchParams(
-          {},
-          {
-            replace: true,
-            state: { skipUrlSync: true },
-          }
-        );
+        setSearchParams({}, { state: { skipUrlSync: true } });
       },
     }),
     [searchParams, setSearchParams]

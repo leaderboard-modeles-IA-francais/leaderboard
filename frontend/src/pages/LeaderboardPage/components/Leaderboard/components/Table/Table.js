@@ -259,8 +259,8 @@ const LeaderboardTable = ({
     const pinnedModelRows = rows.filter((row) => row.original.isPinned);
     // Sort pinned models according to their original order in pinnedModels
     return pinnedModelRows.sort((a, b) => {
-      const aIndex = pinnedModels.indexOf(a.original.model.name);
-      const bIndex = pinnedModels.indexOf(b.original.model.name);
+      const aIndex = pinnedModels.indexOf(a.original.id);
+      const bIndex = pinnedModels.indexOf(b.original.id);
       return aIndex - bIndex;
     });
   }, [rows, pinnedModels]);

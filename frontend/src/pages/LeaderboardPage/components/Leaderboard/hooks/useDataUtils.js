@@ -104,12 +104,12 @@ export const useFilteredData = (
   isOfficialProviderActive = false
 ) => {
   return useMemo(() => {
-    const pinnedData = processedData.filter((row) =>
-      pinnedModels.includes(row.model.name)
-    );
-    const unpinnedData = processedData.filter(
-      (row) => !pinnedModels.includes(row.model.name)
-    );
+    const pinnedData = processedData.filter((row) => {
+      return pinnedModels.includes(row.id);
+    });
+    const unpinnedData = processedData.filter((row) => {
+      return !pinnedModels.includes(row.id);
+    });
 
     let filteredUnpinned = unpinnedData;
 
@@ -213,8 +213,8 @@ export const useFilteredData = (
 
     // Create ordered array of pinned models respecting pinnedModels order
     const orderedPinnedData = pinnedModels
-      .map((pinnedModelName) =>
-        pinnedData.find((item) => item.model.name === pinnedModelName)
+      .map((pinnedModelId) =>
+        pinnedData.find((item) => item.id === pinnedModelId)
       )
       .filter(Boolean);
 
@@ -223,31 +223,47 @@ export const useFilteredData = (
 
     // Sort all data by average_score for dynamic_rank
     const sortedByScore = [...allFilteredData].sort((a, b) => {
-      if (a.model.average_score === null && b.model.average_score === null)
-        return 0;
-      if (a.model.average_score === null) return 1;
-      if (b.model.average_score === null) return -1;
-      return b.model.average_score - a.model.average_score;
+      // Si les scores moyens sont différents, trier par score
+      if (a.model.average_score !== b.model.average_score) {
+        if (a.model.average_score === null && b.model.average_score === null)
+          return 0;
+        if (a.model.average_score === null) return 1;
+        if (b.model.average_score === null) return -1;
+        return b.model.average_score - a.model.average_score;
+      }
+
+      // Si les scores sont égaux, comparer le nom du modèle et la date de soumission
+      if (a.model.name === b.model.name) {
+        // Si même nom, trier par date de soumission (la plus récente d'abord)
+        const dateA = new Date(a.metadata?.submission_date || 0);
+        const dateB = new Date(b.metadata?.submission_date || 0);
+        return dateB - dateA;
+      }
+
+      // Si noms différents, trier par nom
+      return a.model.name.localeCompare(b.model.name);
     });
 
     // Create Map to store dynamic_ranks
     const dynamicRankMap = new Map();
     sortedByScore.forEach((item, index) => {
-      dynamicRankMap.set(item.model.name, index + 1);
+      dynamicRankMap.set(item.id, index + 1);
     });
 
     // Add ranks to final data
     const finalData = [...orderedPinnedData, ...filteredUnpinned].map(
-      (item) => ({
-        ...item,
-        dynamic_rank: dynamicRankMap.get(item.model.name),
-        rank: item.isPinned
-          ? pinnedModels.indexOf(item.model.name) + 1
-          : rankingMode === "static"
-          ? item.static_rank
-          : dynamicRankMap.get(item.model.name),
-        isPinned: pinnedModels.includes(item.model.name),
-      })
+      (item) => {
+        return {
+          ...item,
+          dynamic_rank: dynamicRankMap.get(item.id),
+          rank: item.isPinned
+            ? pinnedModels.indexOf(item.id) + 1
+            : rankingMode === "static"
+            ? item.static_rank
+            : dynamicRankMap.get(item.id),
+          isPinned: pinnedModels.includes(item.id),
+        };
+      }
     );
 
     return finalData;

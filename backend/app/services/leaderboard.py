@@ -102,6 +102,9 @@ class LeaderboardService:
             model_name = data.get("fullname", "Unknown")
             logger.debug(LogFormatter.info(f"Transforming data for model: {model_name}"))
             
+            # Create unique ID combining model name, precision, sha and chat template status
+            unique_id = f"{data.get('fullname', 'Unknown')}_{data.get('Precision', 'Unknown')}_{data.get('Model sha', 'Unknown')}_{str(data.get('Chat Template', False))}"
+            
             evaluations = {
                 "ifeval": {
                     "name": "IFEval",
@@ -174,14 +177,14 @@ class LeaderboardService:
                 "fine tuning": "fined-tuned-on-domain-specific-dataset",
                 "fine-tuning": "fined-tuned-on-domain-specific-dataset"
             }
-            
+
             mapped_type = model_type_mapping.get(model_type.lower().strip(), model_type)
             
             if mapped_type != model_type:
                 logger.debug(LogFormatter.info(f"Model type mapped: {original_type} -> {mapped_type}"))
             
             transformed_data = {
-                "id": data.get("eval_name"),
+                "id": unique_id,
                 "model": {
                     "name": data.get("fullname"),
                     "sha": data.get("Model sha"),

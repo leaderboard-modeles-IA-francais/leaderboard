@@ -379,9 +379,12 @@ const LeaderboardFilters = ({
       clearTimeout(stableTimerRef.current);
     }
 
-    // Trigger search after debounce
+    // Update URL immediately
+    onParamsRangeChange(newValue);
+
+    // Trigger data update after debounce
     stableTimerRef.current = setTimeout(() => {
-      onParamsRangeChange(newValue);
+      actions.updateFilteredData();
     }, TABLE_DEFAULTS.DEBOUNCE.SEARCH);
   };
 

@@ -119,8 +119,8 @@ export const useDataProcessing = (
 
           if (rowA.original.isPinned && rowB.original.isPinned) {
             return (
-              pinnedModels.indexOf(rowA.original.model.name) -
-              pinnedModels.indexOf(rowB.original.model.name)
+              pinnedModels.indexOf(rowA.original.id) -
+              pinnedModels.indexOf(rowB.original.id)
             );
           }
 

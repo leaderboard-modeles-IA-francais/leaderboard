@@ -473,7 +473,7 @@ export const createColumns = (
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
-              onTogglePin(row.original.model.name);
+              onTogglePin(row.original.id);
             }}
             sx={{
               padding: 0.5,

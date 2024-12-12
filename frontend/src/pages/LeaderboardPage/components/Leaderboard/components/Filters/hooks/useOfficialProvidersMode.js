@@ -117,10 +117,8 @@ export const useOfficialProvidersMode = () => {
         timestamp: now,
       };
 
-      // Update URL with a slight delay
-      setTimeout(() => {
-        setSearchParams(newSearchParams, { replace: true });
-      }, 0);
+      // Update search params and let HashRouter handle the URL
+      setSearchParams(newSearchParams);
     },
     [searchParams, setSearchParams]
   );
