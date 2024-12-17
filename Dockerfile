@@ -55,10 +55,10 @@ ENV HF_HOME=/app/.cache \
     NODE_ENV=production
 
 # Note: HF_TOKEN should be provided at runtime, not build time
+RUN chown -R user:user /app
+RUN chmod -R 775 /app/
 USER user
 EXPOSE 7860
-
-RUN chmod -R 775 /app/
 
 # Start both servers with wait-for
 CMD ["sh", "-c", "uv run uvicorn app.asgi:app --host 0.0.0.0 --port 7861 & while ! nc -z localhost 7861; do sleep 1; done && cd frontend && npm run serve"]
