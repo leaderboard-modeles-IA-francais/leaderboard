@@ -8,26 +8,23 @@ COPY frontend/ ./
 RUN npm run build
 
 # Build backend
-FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
-
+FROM python:3.9-slim
 WORKDIR /app
 
 # Create non-root user
-# RUN useradd -m -u 1000 user
+RUN useradd -m -u 1000 user
+
+# Install poetry
+RUN pip install poetry
 
 # Create and configure cache directory
-RUN mkdir -p /app/.cache
-#RUN chown -R user:user /app
+RUN mkdir -p /app/.cache && \
+    chown -R user:user /app
 
-# UV params
-ENV UV_COMPILE_BYTECODE=1
-ENV UV_CACHE_DIR=/app/.cache
-
-# Copy uv configuration files
-COPY backend/pyproject.toml backend/uv.lock ./
-
-# Install dependencies using uv
-RUN uv sync --frozen --no-install-project --no-dev
+# Copy and install backend dependencies
+COPY backend/pyproject.toml backend/poetry.lock* ./
+RUN poetry config virtualenvs.create false \
+    && poetry install --no-interaction --no-ansi --no-root --only main
 
 # Copy backend code
 COPY backend/ .
@@ -59,10 +56,8 @@ ENV HF_HOME=/app/.cache \
     NODE_ENV=production
 
 # Note: HF_TOKEN should be provided at runtime, not build time
-# RUN chown -R user:user /app
-RUN chmod -R 777 /app/
-# USER user
+USER user
 EXPOSE 7860
 
 # Start both servers with wait-for
-CMD ["sh", "-c", "uv run uvicorn app.asgi:app --host 0.0.0.0 --port 7861 & while ! nc -z localhost 7861; do sleep 1; done && cd frontend && npm run serve"]
+CMD ["sh", "-c", "uvicorn app.asgi:app --host 0.0.0.0 --port 7861 & while ! nc -z localhost 7861; do sleep 1; done && cd frontend && npm run serve"]
