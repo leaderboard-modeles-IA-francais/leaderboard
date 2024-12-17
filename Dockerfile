@@ -60,7 +60,7 @@ ENV HF_HOME=/app/.cache \
 
 # Note: HF_TOKEN should be provided at runtime, not build time
 # RUN chown -R user:user /app
-# RUN chmod -R 775 /app/
+RUN chmod -R 777 /app/
 # USER user
 EXPOSE 7860
 
