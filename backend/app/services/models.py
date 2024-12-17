@@ -414,7 +414,7 @@ class ModelService(HuggingFaceService):
             for status, models in existing_models.items():
                 for model in models:
                     if model["name"] == model_data["model_id"] and model["revision"] == model_data["revision"]:
-                        error_msg = f"Model {model_data['model_id']} revision {model_data["revision"]} is already in the system with status: {status}"
+                        error_msg = f"Model {model_data['model_id']} revision {model_data['revision']} is already in the system with status: {status}"
                         logger.error(LogFormatter.error("Submission rejected", error_msg))
                         raise ValueError(error_msg)
             
