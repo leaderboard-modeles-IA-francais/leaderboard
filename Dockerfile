@@ -58,5 +58,7 @@ ENV HF_HOME=/app/.cache \
 USER user
 EXPOSE 7860
 
+RUN chmod -R 775 /app/
+
 # Start both servers with wait-for
 CMD ["sh", "-c", "uv run uvicorn app.asgi:app --host 0.0.0.0 --port 7861 & while ! nc -z localhost 7861; do sleep 1; done && cd frontend && npm run serve"]
