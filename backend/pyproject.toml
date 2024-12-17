@@ -1,30 +1,54 @@
-[tool.poetry]
+[project]
 name = "llm-leaderboard-backend"
 version = "0.1.0"
 description = "Backend for the Open LLM Leaderboard"
-authors = ["Your Name <your.email@example.com>"]
+requires-python = "==3.12.1"
 
-[tool.poetry.dependencies]
-python = "^3.9"
-fastapi = "^0.104.1"
-uvicorn = {extras = ["standard"], version = "^0.24.0"}
-numpy = "1.24.3"
-pandas = "^2.0.0"
-datasets = "^2.0.0"
-pyarrow = "^14.0.1"
-python-multipart = "^0.0.6"
-huggingface-hub = "^0.19.0"
-transformers = "^4.35.0"
-safetensors = "^0.4.0"
-aiofiles = "^24.1.0"
-fastapi-cache2 = "^0.2.1"
+dependencies = [
+    "fastapi >=0.115.6",
+    "uvicorn >=0.34.0",
+    "numpy >=2.2.0",
+    "pandas >=2.2.3",
+    "datasets >=3.2.0",
+    "pyarrow >=18.1.0",
+    "python-multipart >=0.0.20",
+    "huggingface-hub >=0.27.0",
+    "transformers >=4.47.0",
+    "safetensors >=0.4.5",
+    "aiofiles >=24.1.0",
+    "fastapi-cache2 >=0.2.1",
+]
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.4.0"
-black = "^23.7.0"
-isort = "^5.12.0"
-flake8 = "^6.1.0"
+[project.optional-dependencies]
+dev = [
+    "pytest >=8.3.4",
+    "black >=24.10.0",
+    "isort >=5.13.2",
+    "flake8 >=7.1.1",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+include = ["*.py", "*.pyi", "**/pyproject.toml", "*.ipynb"]
+ignore=["I","EM","FBT","TRY003","S101","D101","D102","D103","D104","D105","G004","D107","FA102"]
+fixable=["ALL"]
+select=["ALL"]
+
+[tool.ruff.lint]
+select = ["E", "F"]
+fixable = ["ALL"]
+ignore = ["E501"] # line too long (black is taking care of this)
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 119
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api" 
+requires = ["hatchling>=1.0.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["backend"]

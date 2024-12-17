@@ -382,26 +382,6 @@ class ModelService(HuggingFaceService):
             if field not in model_data:
                 raise ValueError(f"Missing required field: {field}")
 
-        # Check if model already exists in the system
-        try:
-            logger.info(LogFormatter.subsection("CHECKING EXISTING SUBMISSIONS"))
-            existing_models = await self.get_models()
-            
-            # Check in all statuses (pending, evaluating, finished)
-            for status, models in existing_models.items():
-                for model in models:
-                    if model["name"] == model_data["model_id"]:
-                        error_msg = f"Model {model_data['model_id']} is already in the system with status: {status}"
-                        logger.error(LogFormatter.error("Submission rejected", error_msg))
-                        raise ValueError(error_msg)
-            
-            logger.info(LogFormatter.success("No existing submission found"))
-        except ValueError:
-            raise
-        except Exception as e:
-            logger.error(LogFormatter.error("Failed to check existing submissions", e))
-            raise
-
         # Get model info and validate it exists on HuggingFace
         try:
             logger.info(LogFormatter.subsection("MODEL VALIDATION"))
@@ -412,6 +392,7 @@ class ModelService(HuggingFaceService):
                 revision=model_data["revision"],
                 token=self.token
             )
+            
             if not model_info:
                 raise Exception(f"Model {model_data['model_id']} not found on HuggingFace Hub")
             
@@ -419,6 +400,29 @@ class ModelService(HuggingFaceService):
             
         except Exception as e:
             logger.error(LogFormatter.error("Model validation failed", e))
+            raise
+        
+        # Update model revision with commit sha
+        model_data["revision"] = model_info.sha
+
+        # Check if model already exists in the system
+        try:
+            logger.info(LogFormatter.subsection("CHECKING EXISTING SUBMISSIONS"))
+            existing_models = await self.get_models()
+            
+            # Check in all statuses (pending, evaluating, finished)
+            for status, models in existing_models.items():
+                for model in models:
+                    if model["name"] == model_data["model_id"] and model["revision"] == model_data["revision"]:
+                        error_msg = f"Model {model_data['model_id']} revision {model_data["revision"]} is already in the system with status: {status}"
+                        logger.error(LogFormatter.error("Submission rejected", error_msg))
+                        raise ValueError(error_msg)
+            
+            logger.info(LogFormatter.success("No existing submission found"))
+        except ValueError:
+            raise
+        except Exception as e:
+            logger.error(LogFormatter.error("Failed to check existing submissions", e))
             raise
 
         # Validate model card
@@ -434,7 +438,8 @@ class ModelService(HuggingFaceService):
         model_size, error = await self.validator.get_model_size(
             model_info,
             model_data["precision"],
-            model_data["base_model"]
+            model_data["base_model"],
+            revision=model_data["revision"]
         )
         if model_size is None:
             logger.error(LogFormatter.error("Model size validation failed", error))
@@ -458,6 +463,11 @@ class ModelService(HuggingFaceService):
                 raise Exception(error)
             logger.info(LogFormatter.success("Chat template validation passed"))
 
+
+        architectures = model_info.config.get("architectures", "")     
+        if architectures:
+            architectures = ";".join(architectures)
+
         # Create eval entry
         eval_entry = {
             "model": model_data["model_id"],
@@ -465,7 +475,7 @@ class ModelService(HuggingFaceService):
             "revision": model_info.sha,
             "precision": model_data["precision"],
             "params": model_size,
-            "architectures": model_info.pipeline_tag if hasattr(model_info, 'pipeline_tag') else None,
+            "architectures": architectures,
             "weight_type": model_data["weight_type"],
             "status": "PENDING",
             "submitted_time": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),

@@ -8,23 +8,22 @@ COPY frontend/ ./
 RUN npm run build
 
 # Build backend
-FROM python:3.9-slim
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+
 WORKDIR /app
 
 # Create non-root user
 RUN useradd -m -u 1000 user
 
-# Install poetry
-RUN pip install poetry
-
 # Create and configure cache directory
 RUN mkdir -p /app/.cache && \
     chown -R user:user /app
 
-# Copy and install backend dependencies
-COPY backend/pyproject.toml backend/poetry.lock* ./
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-interaction --no-ansi --no-root --only main
+# Copy uv configuration files
+COPY backend/pyproject.toml backend/uv.lock ./
+
+# Install dependencies using uv
+RUN uv sync  --all-extras --frozen
 
 # Copy backend code
 COPY backend/ .
@@ -60,4 +59,4 @@ USER user
 EXPOSE 7860
 
 # Start both servers with wait-for
-CMD ["sh", "-c", "uvicorn app.asgi:app --host 0.0.0.0 --port 7861 & while ! nc -z localhost 7861; do sleep 1; done && cd frontend && npm run serve"]
+CMD ["sh", "-c", "uv run uvicorn app.asgi:app --host 0.0.0.0 --port 7861 & while ! nc -z localhost 7861; do sleep 1; done && cd frontend && npm run serve"]

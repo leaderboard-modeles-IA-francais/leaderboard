@@ -113,7 +113,7 @@ const HELP_TEXTS = {
         Chat Template Support
       </Typography>
       <Typography variant="body2" sx={{ opacity: 0.9, lineHeight: 1.4 }}>
-        Activates automatically for chat models. Uses the standardized Hugging
+        Activates automatically for chat models. It uses the standardized Hugging
         Face chat template for consistent prompt formatting during evaluation.
         Required for models using RLHF, DPO, or instruction fine-tuning.
       </Typography>
@@ -137,7 +137,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
     isChatModel: false,
     useChatTemplate: false,
     precision: "float16",
-    weightsType: "original",
+    weightsType: "Original",
     baseModel: "",
   });
   const [error, setError] = useState(null);
@@ -333,7 +333,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                   isChatModel: false,
                   useChatTemplate: false,
                   precision: "float16",
-                  weightsType: "original",
+                  weightsType: "Original",
                   baseModel: "",
                 });
               }}
@@ -482,7 +482,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                         onChange={handleChange}
                       />
                     }
-                    label="Uses Chat Template"
+                    label="Use Chat Template"
                   />
                   <InfoIconWithTooltip tooltip={HELP_TEXTS.chatTemplate} />
                 </Stack>
@@ -536,13 +536,13 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                 </FormControl>
               </Grid>
 
-              {formData.weightsType !== "original" && (
+              {formData.weightsType !== "Original" && (
                 <Grid item xs={12}>
                   <TextField
                     fullWidth
                     required={
-                      formData.weightsType === "delta" ||
-                      formData.weightsType === "adapter"
+                      formData.weightsType === "Delta" ||
+                      formData.weightsType === "Adapter"
                     }
                     name="baseModel"
                     label="Base Model"

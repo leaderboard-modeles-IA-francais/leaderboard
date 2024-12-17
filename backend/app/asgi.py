@@ -44,18 +44,18 @@ LOGGING_CONFIG = {
         },
         "uvicorn.access": {
             "handlers": ["default"],
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": False,
         },
         "app": {
             "handlers": ["default"],
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": False,
         }
     },
     "root": {
         "handlers": ["default"],
-        "level": "INFO",
+        "level": "WARNING",
     }
 }
 

@@ -5,9 +5,11 @@ import re
 from typing import Tuple, Optional, Dict, Any
 import aiohttp
 from huggingface_hub import HfApi, ModelCard, hf_hub_download
+from huggingface_hub import hf_api
 from transformers import AutoConfig, AutoTokenizer
 from app.config.base import HF_TOKEN, API
 from app.utils.logging import LogFormatter
+
 
 logger = logging.getLogger(__name__)
 
@@ -54,78 +56,78 @@ class ModelValidator:
             logger.error(LogFormatter.error(error_msg, e))
             return False, str(e), None
             
-    async def get_safetensors_metadata(self, model_id: str, filename: str = "model.safetensors") -> Optional[Dict]:
+    async def get_safetensors_metadata(self, model_id: str, is_adapter: bool = False, revision: str = "main")  -> Optional[Dict]:
         """Get metadata from a safetensors file"""
         try:
-            url = f"{API['HUB']}/{model_id}/raw/main/{filename}"
-            async with aiohttp.ClientSession() as session:
-                async with session.get(url, headers=self.headers) as response:
-                    if response.status == 200:
-                        # Read only the first 32KB to get the metadata
-                        header = await response.content.read(32768)
-                        # Parse metadata length from the first 8 bytes
-                        metadata_len = int.from_bytes(header[:8], byteorder='little')
-                        metadata_bytes = header[8:8+metadata_len]
-                        return json.loads(metadata_bytes)
-            return None
+            if is_adapter:
+                metadata = await asyncio.to_thread(
+                    hf_api.parse_safetensors_file_metadata,
+                    model_id,
+                    "adapter_model.safetensors",
+                    token=self.token,
+                    revision=revision,
+                )
+            else:
+                metadata = await asyncio.to_thread(
+                    hf_api.get_safetensors_metadata,
+                    repo_id=model_id,
+                    token=self.token,
+                    revision=revision,
+                )
+            return metadata
+
         except Exception as e:
-            logger.warning(f"Failed to get safetensors metadata: {str(e)}")
+            logger.error(f"Failed to get safetensors metadata: {str(e)}")
             return None
-        
+
     async def get_model_size(
         self,
         model_info: Any,
         precision: str,
-        base_model: str
+        base_model: str,
+        revision: str
     ) -> Tuple[Optional[float], Optional[str]]:
         """Get model size in billions of parameters"""
         try:
             logger.info(LogFormatter.info(f"Checking model size for {model_info.modelId}"))
-            
+
             # Check if model is adapter
             is_adapter = any(s.rfilename == "adapter_config.json" for s in model_info.siblings if hasattr(s, 'rfilename'))
-            
+
             # Try to get size from safetensors first
             model_size = None
-            
+
             if is_adapter and base_model:
                 # For adapters, we need both adapter and base model sizes
-                adapter_meta = await self.get_safetensors_metadata(model_info.id, "adapter_model.safetensors")
-                base_meta = await self.get_safetensors_metadata(base_model)
-                
+                adapter_meta = await self.get_safetensors_metadata(model_info.id, is_adapter=True, revision=revision)
+                base_meta = await self.get_safetensors_metadata(base_model, revision="main")
+
                 if adapter_meta and base_meta:
-                    adapter_size = sum(int(v.split(',')[0]) for v in adapter_meta.get("tensor_metadata", {}).values())
-                    base_size = sum(int(v.split(',')[0]) for v in base_meta.get("tensor_metadata", {}).values())
+                    adapter_size = sum(adapter_meta.parameter_count.values())
+                    base_size = sum(base_meta.parameter_count.values())
                     model_size = (adapter_size + base_size) / (2 * 1e9)  # Convert to billions, assuming float16
             else:
                 # For regular models, just get the model size
-                meta = await self.get_safetensors_metadata(model_info.id)
+                meta = await self.get_safetensors_metadata(model_info.id, revision=revision)
                 if meta:
-                    total_params = sum(int(v.split(',')[0]) for v in meta.get("tensor_metadata", {}).values())
+                    total_params = sum(meta.parameter_count.values())
                     model_size = total_params / (2 * 1e9)  # Convert to billions, assuming float16
-            
+
             if model_size is None:
-                # Fallback: Try to get size from model name
-                size_pattern = re.compile(r"(\d+\.?\d*)b")  # Matches patterns like "7b", "13b", "1.1b"
-                size_match = re.search(size_pattern, model_info.id.lower())
-                
-                if size_match:
-                    size_str = size_match.group(1)
-                    model_size = float(size_str)
-                else:
-                    return None, "Could not determine model size from safetensors or model name"
-            
+                # If model size could not be determined, return an error
+                return None, "Model size could not be determined"
+
             # Adjust size for GPTQ models
             size_factor = 8 if (precision == "GPTQ" or "gptq" in model_info.id.lower()) else 1
             model_size = round(size_factor * model_size, 3)
-            
+
             logger.info(LogFormatter.success(f"Model size: {model_size}B parameters"))
             return model_size, None
-            
+
         except Exception as e:
-            error_msg = "Failed to get model size"
-            logger.error(LogFormatter.error(error_msg, e))
+            logger.error(LogFormatter.error(f"Error while determining model size: {e}"))
             return None, str(e)
+
             
     async def check_chat_template(
         self,

@@ -1,25 +1,35 @@
-FROM python:3.9-slim
+# Use a Python image with uv pre-installed
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
+# Set the working directory
 WORKDIR /app
+
+# Enable bytecode compilation
+ENV UV_COMPILE_BYTECODE=1
+
+# Copy from the cache instead of linking since it's a mounted volume
+ENV UV_LINK_MODE=copy
+
+# Environment variables configuration for logs
+ENV PYTHONUNBUFFERED=1
+ENV LOG_LEVEL=INFO
 
 # Install required system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Install poetry
-RUN pip install poetry
+# Copy uv configuration files
+COPY pyproject.toml uv.lock ./
 
-# Copy Poetry configuration files
-COPY pyproject.toml poetry.lock* ./
+# Install dependencies using uv
+RUN uv sync --frozen --no-install-project --no-dev
 
-# Install dependencies
-RUN poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi --no-root
+# Place executables in the environment at the front of the path
+ENV PATH="/app/.venv/bin:$PATH"
 
-# Environment variables configuration for logs
-ENV PYTHONUNBUFFERED=1
-ENV LOG_LEVEL=INFO
+# Reset the entrypoint, don't invoke `uv`
+ENTRYPOINT []
 
 # In dev, mount volume directly
-CMD ["uvicorn", "app.asgi:app", "--host", "0.0.0.0", "--port", "7860", "--reload", "--log-level", "warning", "--no-access-log"]
+CMD ["uv" "run" "uvicorn", "app.asgi:app", "--host", "0.0.0.0", "--port", "7860", "--reload", "--log-level", "warning", "--no-access-log"]
