@@ -5,7 +5,7 @@ description = "Backend for the Open LLM Leaderboard"
 authors = ["Your Name <your.email@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.12"
 fastapi = "^0.115.6"
 uvicorn = {extras = ["standard"], version = "^0.34.0"}
 numpy = "^2.2.0"
