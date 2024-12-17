@@ -19,11 +19,15 @@ WORKDIR /app
 RUN mkdir -p /app/.cache
 #RUN chown -R user:user /app
 
+# UV params
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_CACHE_DIR=/app/.cache
+
 # Copy uv configuration files
 COPY backend/pyproject.toml backend/uv.lock ./
 
 # Install dependencies using uv
-RUN uv sync  --all-extras --frozen
+RUN uv sync --frozen --no-install-project --no-dev
 
 # Copy backend code
 COPY backend/ .
