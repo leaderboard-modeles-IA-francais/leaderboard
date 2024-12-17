@@ -13,11 +13,11 @@ FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 WORKDIR /app
 
 # Create non-root user
-RUN useradd -m -u 1000 user
+# RUN useradd -m -u 1000 user
 
 # Create and configure cache directory
-RUN mkdir -p /app/.cache && \
-    chown -R user:user /app
+RUN mkdir -p /app/.cache
+#RUN chown -R user:user /app
 
 # Copy uv configuration files
 COPY backend/pyproject.toml backend/uv.lock ./
@@ -55,9 +55,9 @@ ENV HF_HOME=/app/.cache \
     NODE_ENV=production
 
 # Note: HF_TOKEN should be provided at runtime, not build time
-RUN chown -R user:user /app
-RUN chmod -R 775 /app/
-USER user
+# RUN chown -R user:user /app
+# RUN chmod -R 775 /app/
+# USER user
 EXPOSE 7860
 
 # Start both servers with wait-for
