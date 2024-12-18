@@ -26,9 +26,9 @@ import { SUBMISSION_PRECISIONS } from "../../../../pages/LeaderboardPage/compone
 import AuthContainer from "../../../../components/shared/AuthContainer";
 
 const WEIGHT_TYPES = [
-  { value: "original", label: "Original" },
-  { value: "delta", label: "Delta" },
-  { value: "adapter", label: "Adapter" },
+  { value: "Original", label: "Original" },
+  { value: "Delta", label: "Delta" },
+  { value: "Adapter", label: "Adapter" },
 ];
 
 const HELP_TEXTS = {

@@ -9,8 +9,7 @@ import asyncio
 import time
 from huggingface_hub import HfApi, CommitOperationAdd
 from huggingface_hub.utils import build_hf_headers
-import datasets
-from datasets import load_dataset, disable_progress_bar
+from datasets import disable_progress_bar
 import sys
 import contextlib
 from concurrent.futures import ThreadPoolExecutor
@@ -158,9 +157,9 @@ class ModelService(HuggingFaceService):
             status = content.get("status", "PENDING").upper()
             target_status = None
             status_map = {
-                "PENDING": ["PENDING", "RERUN"],
+                "PENDING": ["PENDING"],
                 "EVALUATING": ["RUNNING"],
-                "FINISHED": ["FINISHED", "PENDING_NEW_EVAL"]
+                "FINISHED": ["FINISHED"]
             }
             
             for target, source_statuses in status_map.items():
@@ -425,6 +424,17 @@ class ModelService(HuggingFaceService):
             logger.error(LogFormatter.error("Failed to check existing submissions", e))
             raise
 
+        # Check that model on hub and valid
+        valid, error, model_config = await self.validator.is_model_on_hub(
+            model_data["model_id"], 
+            model_data["revision"], 
+            test_tokenizer=True
+        )
+        if not valid:
+            logger.error(LogFormatter.error("Model on hub validation failed", error))
+            raise Exception(error)
+        logger.info(LogFormatter.success("Model on hub validation passed"))
+
         # Validate model card
         valid, error, model_card = await self.validator.check_model_card(
             model_data["model_id"]
@@ -541,7 +551,7 @@ class ModelService(HuggingFaceService):
 
         return {
             "status": "success",
-            "message": "Model submitted successfully and vote recorded"
+            "message": "The model was submitted successfully, and the vote has been recorded"
         }
 
     async def get_model_status(self, model_id: str) -> Dict[str, Any]:

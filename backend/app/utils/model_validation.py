@@ -196,15 +196,15 @@ class ModelValidator:
                         token=self.token
                     )
                 except ValueError as e:
-                    return False, f"uses a tokenizer which is not in a transformers release: {e}", None
+                    return False, f"The tokenizer is not available in an official Transformers release: {e}", None
                 except Exception:
-                    return False, "'s tokenizer cannot be loaded. Is your tokenizer class in a stable transformers release, and correctly configured?", None
+                    return False, "The tokenizer cannot be loaded. Ensure the tokenizer class is part of a stable Transformers release and correctly configured.", None
             
             return True, None, config
             
         except ValueError:
-            return False, "needs to be launched with `trust_remote_code=True`. For safety reason, we do not allow these models to be automatically submitted to the leaderboard.", None
+            return False, "The model requires `trust_remote_code=True` to launch, and for safety reasons, we don't accept such models automatically.", None
         except Exception as e:
             if "You are trying to access a gated repo." in str(e):
-                return True, "uses a gated model.", None
-            return False, f"was not found or misconfigured on the hub! Error raised was {e.args[0]}", None
+                return True, "The model is gated and requires special access permissions.", None
+            return False, f"The model was not found or is misconfigured on the Hub. Error: {e.args[0]}", None
