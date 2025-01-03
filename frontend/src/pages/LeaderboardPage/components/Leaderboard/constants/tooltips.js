@@ -258,7 +258,7 @@ export const COLUMN_TOOLTIPS = {
         "For detailed information about our CO₂ calculation methodology, visit:",
       subItems: [
         <a
-          href="https://huggingface.co/docs/hub/carbon-emissions"
+          href="https://huggingface.co/docs/leaderboards/open_llm_leaderboard/emissions"
           target="_blank"
           rel="noopener noreferrer"
           style={{ color: "#90caf9" }}
