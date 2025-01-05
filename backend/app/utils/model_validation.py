@@ -105,13 +105,12 @@ class ModelValidator:
                 if adapter_meta and base_meta:
                     adapter_size = sum(adapter_meta.parameter_count.values())
                     base_size = sum(base_meta.parameter_count.values())
-                    model_size = (adapter_size + base_size) / (2 * 1e9)  # Convert to billions, assuming float16
+                    model_size = adapter_size + base_size
             else:
                 # For regular models, just get the model size
                 meta = await self.get_safetensors_metadata(model_info.id, revision=revision)
                 if meta:
-                    total_params = sum(meta.parameter_count.values())
-                    model_size = total_params / (2 * 1e9)  # Convert to billions, assuming float16
+                    model_size = sum(meta.parameter_count.values()) # total params
 
             if model_size is None:
                 # If model size could not be determined, return an error
@@ -119,6 +118,7 @@ class ModelValidator:
 
             # Adjust size for GPTQ models
             size_factor = 8 if (precision == "GPTQ" or "gptq" in model_info.id.lower()) else 1
+            model_size = model_size / 1e9  # Convert to billions, assuming float16
             model_size = round(size_factor * model_size, 3)
 
             logger.info(LogFormatter.success(f"Model size: {model_size}B parameters"))
