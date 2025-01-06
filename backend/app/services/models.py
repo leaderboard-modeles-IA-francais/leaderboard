@@ -454,11 +454,11 @@ class ModelService(HuggingFaceService):
         if model_size is None:
             logger.error(LogFormatter.error("Model size validation failed", error))
             raise Exception(error)
-        logger.info(LogFormatter.success(f"Model size validation passed: {model_size:.1f}GB"))
+        logger.info(LogFormatter.success(f"Model size validation passed: {model_size:.1f}B"))
 
         # Size limits based on precision
         if model_data["precision"] in ["float16", "bfloat16"] and model_size > 100:
-            error_msg = f"Model too large for {model_data['precision']} (limit: 100GB)"
+            error_msg = f"Model too large for {model_data['precision']} (limit: 100B)"
             logger.error(LogFormatter.error("Size limit exceeded", error_msg))
             raise Exception(error_msg)
 
