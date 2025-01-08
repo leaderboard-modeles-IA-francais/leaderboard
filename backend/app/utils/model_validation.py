@@ -1,15 +1,14 @@
 import json
 import logging
 import asyncio
-import re
 from typing import Tuple, Optional, Dict, Any
-import aiohttp
+from datasets import load_dataset
 from huggingface_hub import HfApi, ModelCard, hf_hub_download
 from huggingface_hub import hf_api
 from transformers import AutoConfig, AutoTokenizer
-from app.config.base import HF_TOKEN, API
-from app.utils.logging import LogFormatter
-
+from app.config.base import HF_TOKEN
+from app.config.hf_config import OFFICIAL_PROVIDERS_REPO
+from app.core.formatting import LogFormatter
 
 logger = logging.getLogger(__name__)
 
@@ -208,3 +207,60 @@ class ModelValidator:
             if "You are trying to access a gated repo." in str(e):
                 return True, "The model is gated and requires special access permissions.", None
             return False, f"The model was not found or is misconfigured on the Hub. Error: {e.args[0]}", None
+
+    async def check_official_provider_status(
+        self, 
+        model_id: str,
+        existing_models: Dict[str, list]
+    ) -> Tuple[bool, Optional[str]]:
+        """
+        Check if model is from official provider and has finished submission.
+        
+        Args:
+            model_id: The model identifier (org/model-name)
+            existing_models: Dictionary of models by status from get_models()
+            
+        Returns:
+            Tuple[bool, Optional[str]]: (is_valid, error_message)
+        """
+        try:
+            logger.info(LogFormatter.info(f"Checking official provider status for {model_id}"))
+            
+            # Get model organization
+            model_org = model_id.split('/')[0] if '/' in model_id else None
+            
+            if not model_org:
+                return True, None
+                
+            # Load official providers dataset
+            dataset = load_dataset(OFFICIAL_PROVIDERS_REPO)
+            official_providers = dataset["train"][0]["CURATED_SET"]
+            
+            # Check if model org is in official providers
+            is_official = model_org in official_providers
+            
+            if is_official:
+                logger.info(LogFormatter.info(f"Model organization '{model_org}' is an official provider"))
+                
+                # Check for finished submissions
+                if "finished" in existing_models:
+                    for model in existing_models["finished"]:
+                        if model["name"] == model_id:
+                            error_msg = (
+                                f"Model {model_id} is an official provider model "
+                                f"with a completed evaluation. "
+                                f"To re-evaluate, please open a discussion."
+                            )
+                            logger.error(LogFormatter.error("Validation failed", error_msg))
+                            return False, error_msg
+                
+                logger.info(LogFormatter.success("No finished submission found for this official provider model"))
+            else:
+                logger.info(LogFormatter.info(f"Model organization '{model_org}' is not an official provider"))
+            
+            return True, None
+            
+        except Exception as e:
+            error_msg = f"Failed to check official provider status: {str(e)}"
+            logger.error(LogFormatter.error(error_msg))
+            return False, error_msg

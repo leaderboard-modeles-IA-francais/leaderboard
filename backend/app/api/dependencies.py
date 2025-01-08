@@ -2,7 +2,7 @@ from fastapi import Depends, HTTPException
 import logging
 from app.services.models import ModelService
 from app.services.votes import VoteService
-from app.utils.logging import LogFormatter
+from app.core.formatting import LogFormatter
 
 logger = logging.getLogger(__name__)
 

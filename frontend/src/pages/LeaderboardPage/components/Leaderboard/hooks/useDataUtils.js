@@ -58,8 +58,8 @@ export const useProcessedData = (data, averageMode, visibleColumns) => {
         ...item.features,
         is_moe: Boolean(item.features.is_moe),
         is_flagged: Boolean(item.features.is_flagged),
-        is_highlighted_by_maintainer: Boolean(
-          item.features.is_highlighted_by_maintainer
+        is_official_provider: Boolean(
+          item.features.is_official_provider
         ),
         is_merged: Boolean(item.features.is_merged),
         is_not_available_on_hub: Boolean(item.features.is_not_available_on_hub),
@@ -117,8 +117,8 @@ export const useFilteredData = (
     if (isOfficialProviderActive) {
       filteredUnpinned = filteredUnpinned.filter(
         (row) =>
-          row.features?.is_highlighted_by_maintainer ||
-          row.metadata?.is_highlighted_by_maintainer
+          row.features?.is_official_provider ||
+          row.metadata?.is_official_provider
       );
     }
 
@@ -197,7 +197,7 @@ export const useFilteredData = (
             typeof filter === "object" ? filter.value : filter;
 
           // Maintainer's Highlight keeps positive logic
-          if (filterValue === "is_highlighted_by_maintainer") {
+          if (filterValue === "is_official_provider") {
             return row.features[filterValue];
           }
 

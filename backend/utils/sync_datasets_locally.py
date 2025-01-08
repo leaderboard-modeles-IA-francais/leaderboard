@@ -30,7 +30,7 @@ DATASET_NAMES = [
     "results",
     "requests",
     "contents",
-    "maintainers-highlight",
+    "official-providers",
 ]
 
 # Build list of datasets with their source and destination paths

@@ -1,13 +1,9 @@
-"""
-Hugging Face configuration module
-"""
 import os
 import logging
 from typing import Optional
 from huggingface_hub import HfApi
 from pathlib import Path
 from app.core.cache import cache_config
-from app.utils.logging import LogFormatter
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +22,7 @@ API = HfApi(token=HF_TOKEN)
 QUEUE_REPO = f"{HF_ORGANIZATION}/requests"
 AGGREGATED_REPO = f"{HF_ORGANIZATION}/contents"
 VOTES_REPO = f"{HF_ORGANIZATION}/votes"
-MAINTAINERS_HIGHLIGHT_REPO = f"{HF_ORGANIZATION}/maintainers-highlight"
+OFFICIAL_PROVIDERS_REPO = f"{HF_ORGANIZATION}/official-providers"
 
 # File paths from cache config
 VOTES_PATH = cache_config.votes_file

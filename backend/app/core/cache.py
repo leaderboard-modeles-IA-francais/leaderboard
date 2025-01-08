@@ -3,7 +3,7 @@ import shutil
 from pathlib import Path
 from datetime import timedelta
 import logging
-from app.utils.logging import LogFormatter
+from app.core.formatting import LogFormatter
 from app.config.base import (
     CACHE_ROOT,
     DATASETS_CACHE,
@@ -58,16 +58,16 @@ class CacheConfig:
     def _setup_environment(self):
         """Configure HuggingFace environment variables"""
         logger.info(LogFormatter.subsection("ENVIRONMENT SETUP"))
-        
+
         env_vars = {
             "HF_HOME": str(self.cache_root),
-            "TRANSFORMERS_CACHE": str(self.models_cache),
             "HF_DATASETS_CACHE": str(self.datasets_cache)
         }
-        
+
         for var, value in env_vars.items():
             os.environ[var] = value
             logger.info(LogFormatter.info(f"Set {var}={value}"))
+
         
     def get_cache_path(self, cache_type: str) -> Path:
         """Returns the path for a specific cache type"""

@@ -411,7 +411,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                   placeholder="organization/model-name"
                   value={formData.modelName}
                   onChange={handleChange}
-                  helperText="Example: meta-llama/Llama-2-7b-hf"
+                  helperText="Example: meta-llama/Llama-3.2-1B"
                   InputProps={{
                     endAdornment: (
                       <InfoIconWithTooltip tooltip={HELP_TEXTS.modelName} />

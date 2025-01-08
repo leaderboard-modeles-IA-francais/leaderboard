@@ -47,7 +47,7 @@ const createInitialCounts = () => {
   return {
     modelTypes,
     precisions,
-    maintainersHighlight: 0,
+    officialProviders: 0,
     mixtureOfExperts: 0,
     flagged: 0,
     merged: 0,
@@ -129,7 +129,7 @@ const modelMatchesFilters = (model, filters) => {
       const filterValue = typeof filter === "object" ? filter.value : filter;
 
       // Maintainer's Highlight keeps positive logic
-      if (filterValue === "is_highlighted_by_maintainer") {
+      if (filterValue === "is_official_provider") {
         return model.features[filterValue];
       }
 
@@ -187,8 +187,8 @@ const calculateModelCounts = (models) => {
 
   models.forEach((model) => {
     const isOfficial =
-      model.features?.is_highlighted_by_maintainer ||
-      model.metadata?.is_highlighted_by_maintainer;
+      model.features?.is_official_provider ||
+      model.metadata?.is_official_provider;
     const countsToUpdate = [normalCounts];
 
     if (isOfficial) {
@@ -214,10 +214,10 @@ const calculateModelCounts = (models) => {
 
       // Boolean filters
       if (
-        model.features?.is_highlighted_by_maintainer ||
-        model.metadata?.is_highlighted_by_maintainer
+        model.features?.is_official_provider ||
+        model.metadata?.is_official_provider
       )
-        counts.maintainersHighlight++;
+        counts.officialProviders++;
       if (model.features?.is_moe || model.metadata?.is_moe)
         counts.mixtureOfExperts++;
       if (model.features?.is_flagged || model.metadata?.is_flagged)

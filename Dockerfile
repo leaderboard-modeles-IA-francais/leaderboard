@@ -49,7 +49,6 @@ WORKDIR /app
 
 # Environment variables
 ENV HF_HOME=/app/.cache \
-    TRANSFORMERS_CACHE=/app/.cache \
     HF_DATASETS_CACHE=/app/.cache \
     INTERNAL_API_PORT=7861 \
     PORT=7860 \

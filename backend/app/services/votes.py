@@ -4,16 +4,15 @@ import json
 import logging
 import asyncio
 from pathlib import Path
-import os
 import aiohttp
 from huggingface_hub import HfApi
 import datasets
 
 from app.services.hf_service import HuggingFaceService
-from app.config import HF_TOKEN, API
+from app.config import HF_TOKEN
 from app.config.hf_config import HF_ORGANIZATION
 from app.core.cache import cache_config
-from app.utils.logging import LogFormatter
+from app.core.formatting import LogFormatter
 
 logger = logging.getLogger(__name__)
 

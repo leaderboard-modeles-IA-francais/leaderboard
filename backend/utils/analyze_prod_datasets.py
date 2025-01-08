@@ -132,7 +132,7 @@ def main():
                 "description": "User votes"
             },
             {
-                "id": f"{HF_ORGANIZATION}/maintainers-highlight",
+                "id": f"{HF_ORGANIZATION}/official-providers",
                 "description": "Highlighted models"
             }
         ]

@@ -781,18 +781,18 @@ const LeaderboardFilters = ({
                           <FilterTag
                             label={filter.label}
                             checked={
-                              filter.value === "is_highlighted_by_maintainer"
+                              filter.value === "is_official_provider"
                                 ? isOfficialProviderActive
                                 : selectedBooleanFilters.includes(filter.value)
                             }
                             onChange={
-                              filter.value === "is_highlighted_by_maintainer"
+                              filter.value === "is_official_provider"
                                 ? handleOfficialProviderToggle
                                 : () => handleBooleanFilterToggle(filter.value)
                             }
                             count={
-                              filter.value === "is_highlighted_by_maintainer"
-                                ? currentCounts.maintainersHighlight
+                              filter.value === "is_official_provider"
+                                ? currentCounts.officialProviders
                                 : 0
                             }
                             showCheckbox={true}
@@ -815,7 +815,7 @@ const LeaderboardFilters = ({
                                 borderRadius: "50%",
                                 backgroundColor: (
                                   filter.value ===
-                                  "is_highlighted_by_maintainer"
+                                  "is_official_provider"
                                     ? isOfficialProviderActive
                                     : selectedBooleanFilters.includes(
                                         filter.value
@@ -826,7 +826,7 @@ const LeaderboardFilters = ({
                               }}
                             />
                             {(
-                              filter.value === "is_highlighted_by_maintainer"
+                              filter.value === "is_official_provider"
                                 ? isOfficialProviderActive
                                 : selectedBooleanFilters.includes(filter.value)
                             )

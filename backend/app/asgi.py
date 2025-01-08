@@ -12,7 +12,7 @@ import sys
 
 from app.api.router import router
 from app.core.fastapi_cache import setup_cache
-from app.utils.logging import LogFormatter
+from app.core.formatting import LogFormatter
 from app.config import hf_config
 
 # Configure logging before anything else
@@ -99,7 +99,7 @@ async def startup_event():
     logger.info(LogFormatter.info(f"  - Queue: {hf_config.QUEUE_REPO}"))
     logger.info(LogFormatter.info(f"  - Aggregated: {hf_config.AGGREGATED_REPO}"))
     logger.info(LogFormatter.info(f"  - Votes: {hf_config.VOTES_REPO}"))
-    logger.info(LogFormatter.info(f"  - Maintainers Highlight: {hf_config.MAINTAINERS_HIGHLIGHT_REPO}"))
+    logger.info(LogFormatter.info(f"  - Official Providers: {hf_config.OFFICIAL_PROVIDERS_REPO}"))
     
     # Setup cache
     setup_cache()

@@ -25,7 +25,7 @@ from app.services.hf_service import HuggingFaceService
 from app.utils.model_validation import ModelValidator
 from app.services.votes import VoteService
 from app.core.cache import cache_config
-from app.utils.logging import LogFormatter
+from app.core.formatting import LogFormatter
 
 # Disable datasets progress bars globally
 disable_progress_bar()
@@ -409,6 +409,14 @@ class ModelService(HuggingFaceService):
             logger.info(LogFormatter.subsection("CHECKING EXISTING SUBMISSIONS"))
             existing_models = await self.get_models()
             
+            # Call the official provider status check
+            is_valid, error_message = await self.validator.check_official_provider_status(
+                model_data["model_id"],
+                existing_models
+            )
+            if not is_valid:
+                raise ValueError(error_message)
+
             # Check in all statuses (pending, evaluating, finished)
             for status, models in existing_models.items():
                 for model in models:

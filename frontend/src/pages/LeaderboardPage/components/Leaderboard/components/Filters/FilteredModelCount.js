@@ -19,7 +19,7 @@ const useModelCount = ({ totalCount, filteredCount, data, table, loading }) => {
       };
     }
     const displayCount = isOfficialProviderActive
-      ? officialOnlyCounts.maintainersHighlight
+      ? officialOnlyCounts.officialProviders
       : totalCount;
 
     // Calculate total number of pinned models
@@ -46,8 +46,8 @@ const useModelCount = ({ totalCount, filteredCount, data, table, loading }) => {
         // Filter by official providers
         if (filterConfig.isOfficialProviderActive) {
           if (
-            !model.features?.is_highlighted_by_maintainer &&
-            !model.metadata?.is_highlighted_by_maintainer
+            !model.features?.is_official_provider &&
+            !model.metadata?.is_official_provider
           ) {
             return false;
           }
@@ -100,7 +100,7 @@ const useModelCount = ({ totalCount, filteredCount, data, table, loading }) => {
                 typeof filter === "object" ? filter.value : filter;
 
               // Maintainer's Highlight keeps positive logic
-              if (filterValue === "is_highlighted_by_maintainer") {
+              if (filterValue === "is_official_provider") {
                 return model.features[filterValue];
               }
 
@@ -134,7 +134,7 @@ const useModelCount = ({ totalCount, filteredCount, data, table, loading }) => {
     data,
     state.filters,
     isOfficialProviderActive,
-    officialOnlyCounts.maintainersHighlight,
+    officialOnlyCounts.officialProviders,
   ]);
 };
 

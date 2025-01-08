@@ -59,14 +59,14 @@ const FILTERS = {
       hide: true,
     },
     {
-      value: "is_highlighted_by_maintainer",
+      value: "is_official_provider",
       label: "Only Official Providers",
       hide: false,
     },
   ],
   HIGHLIGHT_OPTIONS: [
     {
-      value: "is_highlighted_by_maintainer",
+      value: "is_official_provider",
       label: "Only Official Providers",
     },
   ],
@@ -237,7 +237,7 @@ const COLUMNS = {
       defaultVisible: false,
       label: "Hub Availability",
     },
-    "features.is_highlighted_by_maintainer": {
+    "features.is_official_provider": {
       group: "additional_info",
       size: COLUMN_SIZES.OFFICIAL_PROVIDER,
       defaultVisible: false,

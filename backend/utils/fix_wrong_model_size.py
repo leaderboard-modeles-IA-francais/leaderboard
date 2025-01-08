@@ -13,7 +13,7 @@ from datetime import datetime
 from tqdm.auto import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
-from app.config.hf_config import HF_TOKEN, QUEUE_REPO, API, EVAL_REQUESTS_PATH
+from app.config.hf_config import HF_TOKEN, API
 
 from app.utils.model_validation import ModelValidator
 
@@ -59,7 +59,7 @@ def write_json(repo_path, file, content):
 
 
 def main():
-    requests_path = "/Users/lozowski/Developer/requests"
+    requests_path = "/requests"
     start_date = "2024-12-09"
     end_date = "2025-01-07"
   

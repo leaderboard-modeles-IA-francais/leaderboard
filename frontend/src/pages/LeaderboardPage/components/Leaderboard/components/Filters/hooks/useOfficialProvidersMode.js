@@ -23,7 +23,7 @@ export const useOfficialProvidersMode = () => {
 
     const filters = searchParams.get("filters");
     const isHighlighted =
-      filters?.includes("is_highlighted_by_maintainer") || false;
+      filters?.includes("is_official_provider") || false;
 
     // On initial load
     if (isInitialLoadRef.current) {
@@ -33,7 +33,7 @@ export const useOfficialProvidersMode = () => {
       if (isHighlighted && filters) {
         const initialNormalFilters = filters
           .split(",")
-          .filter((f) => f !== "is_highlighted_by_maintainer" && f !== "")
+          .filter((f) => f !== "is_official_provider" && f !== "")
           .filter(Boolean);
         if (initialNormalFilters.length > 0) {
           normalFiltersRef.current = initialNormalFilters.join(",");
@@ -70,7 +70,7 @@ export const useOfficialProvidersMode = () => {
       const currentFiltersStr = searchParams.get("filters");
       const currentFilters =
         currentFiltersStr?.split(",").filter(Boolean) || [];
-      const highlightFilter = "is_highlighted_by_maintainer";
+      const highlightFilter = "is_official_provider";
       const newSearchParams = new URLSearchParams(searchParams);
 
       if (currentFilters.includes(highlightFilter)) {

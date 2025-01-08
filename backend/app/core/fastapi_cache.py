@@ -4,7 +4,7 @@ from fastapi_cache.decorator import cache
 from datetime import timedelta
 from app.config import CACHE_TTL
 import logging
-from app.utils.logging import LogFormatter
+from app.core.formatting import LogFormatter
 
 logger = logging.getLogger(__name__)
 

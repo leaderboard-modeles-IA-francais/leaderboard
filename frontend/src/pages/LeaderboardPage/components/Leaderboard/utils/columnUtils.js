@@ -1003,18 +1003,18 @@ export const createColumns = (
       ],
     },
     {
-      accessorKey: "features.is_highlighted_by_maintainer",
+      accessorKey: "features.is_official_provider",
       header: createHeaderCell(
         "Official Providers",
         "Models that are officially provided and maintained by their original creators or organizations"
       ),
       cell: ({ row }) => (
         <BooleanValue
-          value={row.original.features.is_highlighted_by_maintainer}
+          value={row.original.features.is_official_provider}
         />
       ),
       size: TABLE_DEFAULTS.COLUMNS.COLUMN_SIZES[
-        "features.is_highlighted_by_maintainer"
+        "features.is_official_provider"
       ],
       enableSorting: true,
     },
@@ -1061,7 +1061,7 @@ export const createColumns = (
           "metadata.base_model": 10,
           "model.has_chat_template": 11,
           "features.is_not_available_on_hub": 12,
-          "features.is_highlighted_by_maintainer": 13,
+          "features.is_official_provider": 13,
           "features.is_moe": 14,
           "features.is_flagged": 15,
         };

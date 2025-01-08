@@ -4,7 +4,7 @@ import logging
 from app.services.models import ModelService
 from app.api.dependencies import get_model_service
 from app.core.fastapi_cache import cached
-from app.utils.logging import LogFormatter
+from app.core.formatting import LogFormatter
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["models"])

@@ -5,7 +5,7 @@ import datasets
 from fastapi import HTTPException
 import logging
 from app.config.base import HF_ORGANIZATION
-from app.utils.logging import LogFormatter
+from app.core.formatting import LogFormatter
 
 logger = logging.getLogger(__name__)
 
@@ -143,7 +143,7 @@ class LeaderboardService:
                 "is_merged": data.get("Merged", False),
                 "is_moe": data.get("MoE", False),
                 "is_flagged": data.get("Flagged", False),
-                "is_highlighted_by_maintainer": data.get("Official Providers", False)
+                "is_official_provider": data.get("Official Providers", False)
             }
 
             metadata = {

@@ -2,7 +2,7 @@ from typing import Optional
 from huggingface_hub import HfApi
 from app.config import HF_TOKEN, API
 from app.core.cache import cache_config
-from app.utils.logging import LogFormatter
+from app.core.formatting import LogFormatter
 import logging
 
 logger = logging.getLogger(__name__)

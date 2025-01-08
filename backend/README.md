@@ -70,7 +70,7 @@ The application uses several datasets on the HuggingFace Hub:
 - **Format**: Main dataset containing all scores and metrics
 - **Updates**: Automatic after model evaluations
 
-### 4. Maintainers Highlight Dataset (`{HF_ORGANIZATION}/maintainers-highlight`)
+### 4. Official Providers Dataset (`{HF_ORGANIZATION}/official-providers`)
 
 - **Operations**:
   - 📥 Read-only access for highlighted models
@@ -203,7 +203,7 @@ Swagger documentation available at http://localhost:7860/docs
         is_merged: boolean,
         is_moe: boolean,
         is_flagged: boolean,
-        is_highlighted_by_maintainer: boolean
+        is_official_provider: boolean
       },
       metadata: {
         upload_date: string,

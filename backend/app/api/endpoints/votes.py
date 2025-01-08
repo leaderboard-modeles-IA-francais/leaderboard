@@ -3,7 +3,7 @@ from typing import Dict, Any, List
 from app.services.votes import VoteService
 from app.core.fastapi_cache import cached, build_cache_key, invalidate_cache_key
 import logging
-from app.utils.logging import LogFormatter
+from app.core.formatting import LogFormatter
 
 logger = logging.getLogger(__name__)
 router = APIRouter()

@@ -206,7 +206,7 @@ const QuickFilters = ({ totalCount = 0, loading = false }) => {
               label={officialProvidersPreset.label}
               checked={isOfficialProviderActive}
               onChange={handleOfficialProviderToggle}
-              count={currentCounts.maintainersHighlight}
+              count={currentCounts.officialProviders}
               totalCount={totalCount}
               showCheckbox={true}
               variant="secondary"

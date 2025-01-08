@@ -45,7 +45,7 @@ export const QUICK_FILTER_PRESETS = [
     shortDescription: 'Officially provided models',
     description: 'Models that are officially provided and maintained by official creators or organizations.',
     filters: {
-      selectedBooleanFilters: ['is_highlighted_by_maintainer']
+      selectedBooleanFilters: ['is_official_provider']
     }
   }
 ]; 
