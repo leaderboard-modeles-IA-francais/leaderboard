@@ -8,7 +8,7 @@ from app.core.cache import cache_config
 logger = logging.getLogger(__name__)
 
 # Organization or user who owns the datasets
-HF_ORGANIZATION = "open-llm-leaderboard"
+HF_ORGANIZATION = "fr-gouv-coordination-ia"
 
 # Get HF token directly from environment
 HF_TOKEN = os.environ.get("HF_TOKEN")
@@ -23,6 +23,7 @@ QUEUE_REPO = f"{HF_ORGANIZATION}/requests"
 AGGREGATED_REPO = f"{HF_ORGANIZATION}/contents"
 VOTES_REPO = f"{HF_ORGANIZATION}/votes"
 OFFICIAL_PROVIDERS_REPO = f"{HF_ORGANIZATION}/official-providers"
+RESULTS_REPO = f"{HF_ORGANIZATION}/results"
 
 # File paths from cache config
 VOTES_PATH = cache_config.votes_file

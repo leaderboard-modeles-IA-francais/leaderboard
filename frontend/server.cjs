@@ -30,7 +30,7 @@ app.use(
 
 // Serve static files from the build directory
 app.use(
-  express.static(path.join(__dirname, "build"), {
+  express.static(path.join(__dirname, "dist"), {
     // Don't cache HTML files
     setHeaders: (res, path) => {
       if (path.endsWith(".html")) {

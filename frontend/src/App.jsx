@@ -13,7 +13,8 @@ import LeaderboardPage from "./pages/LeaderboardPage/LeaderboardPage";
 import AddModelPage from "./pages/AddModelPage/AddModelPage";
 import QuotePage from "./pages/QuotePage/QuotePage";
 import VoteModelPage from "./pages/VoteModelPage/VoteModelPage";
-import Footer from "./components/Footer/Footer";
+import { Header } from "@codegouvfr/react-dsfr/Header";
+import { Footer } from "@codegouvfr/react-dsfr/Footer";
 import getTheme from "./config/theme";
 import { useThemeMode } from "./hooks/useThemeMode";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -94,6 +95,16 @@ function App() {
                   color: "text.primary",
                 }}
               >
+                <Header
+                  brandTop={<>INTITULE<br />OFFICIEL</>}
+                  homeLinkProps={{
+                    href: '/',
+                    title: 'Accueil - Nom de l’entité (ministère, secrétariat d‘état, gouvernement)'
+                  }}
+                  id="fr-header-simple-header-with-service-title-and-tagline"
+                  serviceTagline="baseline - précisions sur l'organisation"
+                  serviceTitle="Nom du site / service"
+                />
                 <Navigation onToggleTheme={toggleTheme} mode={mode} />
                 <Box
                   sx={{
@@ -112,7 +123,31 @@ function App() {
                     <Route path="/vote" element={<VoteModelPage />} />
                   </Routes>
                 </Box>
-                <Footer />
+                <Footer
+                  accessibility="fully compliant"
+                  contentDescription="
+                    Ce message est à remplacer par les informations de votre site.
+
+                    Comme exemple de contenu, vous pouvez indiquer les informations 
+                    suivantes : Le site officiel d’information administrative pour les entreprises.
+                    Retrouvez toutes les informations et démarches administratives nécessaires à la création, 
+                    à la gestion et au développement de votre entreprise.
+                    "
+                  partnersLogos={{
+                    sub: [
+                      {
+                        alt: '[À MODIFIER - texte alternatif de l’image]',
+                        href: '#',
+                        imgUrl: 'static/media/placeholder.16x9.3d46f94c.png'
+                      },
+                      {
+                        alt: '[À MODIFIER - texte alternatif de l’image]',
+                        href: '#',
+                        imgUrl: 'static/media/placeholder.16x9.3d46f94c.png'
+                      }
+                    ]
+                  }}
+                />
               </Box>
             </LeaderboardProvider>
           </Router>

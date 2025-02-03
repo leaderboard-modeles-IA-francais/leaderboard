@@ -21,8 +21,8 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { alpha } from "@mui/material/styles";
 import InfoIconWithTooltip from "../../../../components/shared/InfoIconWithTooltip";
-import { MODEL_TYPES } from "../../../../pages/LeaderboardPage/components/Leaderboard/constants/modelTypes";
-import { SUBMISSION_PRECISIONS } from "../../../../pages/LeaderboardPage/components/Leaderboard/constants/defaults";
+import { MODEL_TYPES } from "../../../LeaderboardPage/components/Leaderboard/constants/modelTypes";
+import { SUBMISSION_PRECISIONS } from "../../../LeaderboardPage/components/Leaderboard/constants/defaults";
 import AuthContainer from "../../../../components/shared/AuthContainer";
 
 const WEIGHT_TYPES = [

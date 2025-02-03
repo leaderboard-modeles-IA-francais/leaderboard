@@ -20,7 +20,7 @@ HAS_HIGHER_RATE_LIMIT = []
 
 # HuggingFace configuration
 HF_TOKEN = os.environ.get("HF_TOKEN")
-HF_ORGANIZATION = "open-llm-leaderboard"
+HF_ORGANIZATION = "fr-gouv-coordination-ia"
 API = {
     "INFERENCE": "https://api-inference.huggingface.co/models",
     "HUB": "https://huggingface.co"
@@ -32,7 +32,4 @@ DATASETS_CACHE = CACHE_ROOT / "datasets"
 MODELS_CACHE = CACHE_ROOT / "models"
 VOTES_CACHE = CACHE_ROOT / "votes"
 EVAL_CACHE = CACHE_ROOT / "eval-queue"
-
-# Repository configuration
-QUEUE_REPO = f"{HF_ORGANIZATION}/requests"
-EVAL_REQUESTS_PATH = EVAL_CACHE / "eval_requests.jsonl"
+RESULTS_CACHE = CACHE_ROOT / "results"

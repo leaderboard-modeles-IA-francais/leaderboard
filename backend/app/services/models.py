@@ -16,11 +16,12 @@ from concurrent.futures import ThreadPoolExecutor
 import tempfile
 
 from app.config import (
-    QUEUE_REPO,
-    HF_TOKEN,
-    EVAL_REQUESTS_PATH
+    HF_TOKEN
 )
-from app.config.hf_config import HF_ORGANIZATION
+from app.config.hf_config import (
+    HF_ORGANIZATION,
+    QUEUE_REPO,
+)
 from app.services.hf_service import HuggingFaceService
 from app.utils.model_validation import ModelValidator
 from app.services.votes import VoteService
@@ -186,7 +187,9 @@ class ModelService(HuggingFaceService):
                     "wait_time": f"{wait_time.total_seconds():.1f}s",
                     "submission_time": content["submitted_time"],
                     "status": target_status,
-                    "precision": content.get("precision", "Unknown")
+                    "precision": content.get("precision", "Unknown"),
+                    "model_type": content["model_type"],
+                    "weight_type": content["weight_type"],
                 }
                 
                 progress.update()

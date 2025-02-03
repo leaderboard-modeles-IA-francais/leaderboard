@@ -3,8 +3,8 @@ import Leaderboard from "./components/Leaderboard/Leaderboard";
 import { Box } from "@mui/material";
 import PageHeader from "../../components/shared/PageHeader";
 import Logo from "../../components/Logo/Logo";
-import { useLeaderboardData } from "../../pages/LeaderboardPage/components/Leaderboard/hooks/useLeaderboardData";
-import { useLeaderboard } from "../../pages/LeaderboardPage/components/Leaderboard/context/LeaderboardContext";
+import { useLeaderboardData } from "./components/Leaderboard/hooks/useLeaderboardData";
+import { useLeaderboard } from "./components/Leaderboard/context/LeaderboardContext";
 
 function LeaderboardPage() {
   const { data, isLoading, error } = useLeaderboardData();

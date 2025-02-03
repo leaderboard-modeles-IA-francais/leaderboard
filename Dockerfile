@@ -2,10 +2,10 @@
 FROM node:18 as frontend-build
 WORKDIR /app
 COPY frontend/package*.json ./
-RUN npm install
+RUN yarn install
 COPY frontend/ ./
 
-RUN npm run build
+RUN yarn build
 
 # Build backend
 FROM python:3.12-slim
@@ -36,6 +36,7 @@ RUN apt-get update && apt-get install -y \
     && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
+RUN npm install --global yarn
 
 # Copy frontend server and build
 COPY --from=frontend-build /app/build ./frontend/build
@@ -44,7 +45,7 @@ COPY --from=frontend-build /app/server.js ./frontend/
 
 # Install frontend production dependencies
 WORKDIR /app/frontend
-RUN npm install --production
+RUN yarn install --production
 WORKDIR /app
 
 # Environment variables
@@ -59,4 +60,4 @@ USER user
 EXPOSE 7860
 
 # Start both servers with wait-for
-CMD ["sh", "-c", "uvicorn app.asgi:app --host 0.0.0.0 --port 7861 & while ! nc -z localhost 7861; do sleep 1; done && cd frontend && npm run serve"]
+CMD ["sh", "-c", "uvicorn app.asgi:app --host 0.0.0.0 --port 7861 & while ! nc -z localhost 7861; do sleep 1; done && cd frontend && node index.cjs"]

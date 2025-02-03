@@ -43,3 +43,6 @@ package-lock.json
 .env.*
 !.env.example
 
+
+logs/
+__pycache__/

@@ -40,7 +40,7 @@ export const COLUMN_TOOLTIPS = {
     },
   ]),
 
-  IFEVAL: createTooltipContent("Instruction-Following Evaluation (IFEval):", [
+  IFEVALFR: createTooltipContent("Instruction-Following Evaluation (IFEval):", [
     {
       label: "Purpose",
       description:
@@ -53,40 +53,7 @@ export const COLUMN_TOOLTIPS = {
     },
   ]),
 
-  BBH: createTooltipContent("Big Bench Hard (BBH):", [
-    {
-      label: "Overview",
-      description: "Collection of challenging for LLM tasks across domains, for example",
-      subItems: [
-        "Language understanding",
-        "Mathematical reasoning",
-        "Common sense and world knowledge",
-      ],
-    },
-    {
-      label: "Scoring: Accuracy",
-      description:
-        "Was the correct choice selected among the options.",
-    },
-  ]),
-
-  MATH: createTooltipContent(
-    "Mathematics Aptitude Test of Heuristics (MATH), level 5:",
-    [
-      {
-        label: "Content",
-        description: "High school level competitions mathematical problems",
-        subItems: ["Complex algebra", "Geometry problems", "Advanced calculus"],
-      },
-      {
-        label: "Scoring: Exact match",
-        description:
-          "Was the solution generated correct and in the expected format",
-      },
-    ]
-  ),
-
-  GPQA: createTooltipContent("Graduate-Level Google-Proof Q&A (GPQA):", [
+  GPQAFR: createTooltipContent("Graduate-Level Google-Proof Q&A (GPQA):", [
     {
       label: "Focus",
       description: "PhD-level knowledge multiple choice questions in science",
@@ -103,7 +70,7 @@ export const COLUMN_TOOLTIPS = {
     },
   ]),
 
-  MUSR: createTooltipContent("Multistep Soft Reasoning (MuSR):", [
+  BACFR: createTooltipContent("Multistep Soft Reasoning (MuSR):", [
     {
       label: "Scope",
       description: "Reasoning and understanding on/of long texts",
@@ -119,27 +86,6 @@ export const COLUMN_TOOLTIPS = {
         "Was the correct choice selected among the options.",
     },
   ]),
-
-  MMLU_PRO: createTooltipContent(
-    "Massive Multitask Language Understanding - Professional (MMLU-Pro):",
-    [
-      {
-        label: "Coverage",
-        description: "Expertly reviewed multichoice questions across domains, for example:",
-        subItems: [
-          "Medicine and healthcare",
-          "Law and ethics",
-          "Engineering",
-          "Mathematics",
-        ],
-      },
-      {
-        label: "Scoring: Accuracy",
-        description:
-          "Was the correct choice selected among the options.",
-      },
-    ]
-  ),
 
   ARCHITECTURE: createTooltipContent("Model Architecture Information:", [
     {

@@ -751,57 +751,30 @@ export const createColumns = (
 
   const evaluationColumns = [
     {
-      accessorKey: "evaluations.ifeval.normalized_score",
-      header: createHeaderCell("IFEval", COLUMN_TOOLTIPS.IFEVAL),
+      accessorKey: "evaluations.ifeval_fr.normalized_score",
+      header: createHeaderCell("IFEval FR", COLUMN_TOOLTIPS.IFEVALFR),
       cell: ({ row, getValue }) =>
-        createScoreCell(getValue, row, "evaluations.ifeval.normalized_score"),
+        createScoreCell(getValue, row, "evaluations.ifeval_fr.normalized_score"),
       size: TABLE_DEFAULTS.COLUMNS.COLUMN_SIZES[
-        "evaluations.ifeval.normalized_score"
+        "evaluations.ifeval_fr.normalized_score"
       ],
     },
     {
-      accessorKey: "evaluations.bbh.normalized_score",
-      header: createHeaderCell("BBH", COLUMN_TOOLTIPS.BBH),
+      accessorKey: "evaluations.gpqa_fr.normalized_score",
+      header: createHeaderCell("GPQA FR", COLUMN_TOOLTIPS.GPQAFR),
       cell: ({ row, getValue }) =>
-        createScoreCell(getValue, row, "evaluations.bbh.normalized_score"),
+        createScoreCell(getValue, row, "evaluations.gpqa_fr.normalized_score"),
       size: TABLE_DEFAULTS.COLUMNS.COLUMN_SIZES[
-        "evaluations.bbh.normalized_score"
+        "evaluations.gpqa_fr.normalized_score"
       ],
     },
     {
-      accessorKey: "evaluations.math.normalized_score",
-      header: createHeaderCell("MATH", COLUMN_TOOLTIPS.MATH),
+      accessorKey: "evaluations.bac_fr.normalized_score",
+      header: createHeaderCell("BAC FR", COLUMN_TOOLTIPS.BACFR),
       cell: ({ row, getValue }) =>
-        createScoreCell(getValue, row, "evaluations.math.normalized_score"),
+        createScoreCell(getValue, row, "evaluations.bac_fr.normalized_score"),
       size: TABLE_DEFAULTS.COLUMNS.COLUMN_SIZES[
-        "evaluations.math.normalized_score"
-      ],
-    },
-    {
-      accessorKey: "evaluations.gpqa.normalized_score",
-      header: createHeaderCell("GPQA", COLUMN_TOOLTIPS.GPQA),
-      cell: ({ row, getValue }) =>
-        createScoreCell(getValue, row, "evaluations.gpqa.normalized_score"),
-      size: TABLE_DEFAULTS.COLUMNS.COLUMN_SIZES[
-        "evaluations.gpqa.normalized_score"
-      ],
-    },
-    {
-      accessorKey: "evaluations.musr.normalized_score",
-      header: createHeaderCell("MUSR", COLUMN_TOOLTIPS.MUSR),
-      cell: ({ row, getValue }) =>
-        createScoreCell(getValue, row, "evaluations.musr.normalized_score"),
-      size: TABLE_DEFAULTS.COLUMNS.COLUMN_SIZES[
-        "evaluations.musr.normalized_score"
-      ],
-    },
-    {
-      accessorKey: "evaluations.mmlu_pro.normalized_score",
-      header: createHeaderCell("MMLU-PRO", COLUMN_TOOLTIPS.MMLU_PRO),
-      cell: ({ row, getValue }) =>
-        createScoreCell(getValue, row, "evaluations.mmlu_pro.normalized_score"),
-      size: TABLE_DEFAULTS.COLUMNS.COLUMN_SIZES[
-        "evaluations.mmlu_pro.normalized_score"
+        "evaluations.bac_fr.normalized_score"
       ],
     },
   ];

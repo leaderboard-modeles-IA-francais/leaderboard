@@ -125,41 +125,23 @@ const COLUMNS = {
     },
   },
   EVALUATION: {
-    "evaluations.ifeval.normalized_score": {
+    "evaluations.ifeval_fr.normalized_score": {
       group: "evaluation",
       size: COLUMN_SIZES.BENCHMARK,
       defaultVisible: true,
-      label: "IFEval",
+      label: "IFEval FR",
     },
-    "evaluations.bbh.normalized_score": {
+    "evaluations.gpqa_fr.normalized_score": {
       group: "evaluation",
       size: COLUMN_SIZES.BENCHMARK,
       defaultVisible: true,
-      label: "BBH",
+      label: "GPQA FR",
     },
-    "evaluations.math.normalized_score": {
+    "evaluations.bac_fr.normalized_score": {
       group: "evaluation",
       size: COLUMN_SIZES.BENCHMARK,
       defaultVisible: true,
-      label: "MATH",
-    },
-    "evaluations.gpqa.normalized_score": {
-      group: "evaluation",
-      size: COLUMN_SIZES.BENCHMARK,
-      defaultVisible: true,
-      label: "GPQA",
-    },
-    "evaluations.musr.normalized_score": {
-      group: "evaluation",
-      size: COLUMN_SIZES.BENCHMARK,
-      defaultVisible: true,
-      label: "MUSR",
-    },
-    "evaluations.mmlu_pro.normalized_score": {
-      group: "evaluation",
-      size: COLUMN_SIZES.BENCHMARK,
-      defaultVisible: true,
-      label: "MMLU-PRO",
+      label: "BAC FR",
     },
   },
   MODEL_INFO: {
