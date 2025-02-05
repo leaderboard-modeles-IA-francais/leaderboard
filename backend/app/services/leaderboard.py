@@ -272,6 +272,7 @@ class LeaderboardService:
         try:
             logger.info(LogFormatter.section("FETCHING LEADERBOARD DATA"))
             logger.info(LogFormatter.info(f"Loading dataset from {HF_ORGANIZATION}/contents"))
+            print("GETTING FROM %s" % HF_ORGANIZATION)
 
             # TODO: cache
             snapshot_download(

@@ -105,7 +105,7 @@ function App() {
                   ]}
                   id="fr-header-simple-header-with-service-title-and-tagline"
                   serviceTagline="Pour une classification des grands modèles de langages sur des problèmes francophones"
-                  serviceTitle="classeur:IA"
+                  serviceTitle="Leaderboard Français des GML"
                   navigation={<Navigation />}
                 />
                 <Box

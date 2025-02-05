@@ -20,7 +20,8 @@ HAS_HIGHER_RATE_LIMIT = []
 
 # HuggingFace configuration
 HF_TOKEN = os.environ.get("HF_TOKEN")
-HF_ORGANIZATION = "fr-gouv-coordination-ia"
+# HF_ORGANIZATION = "fr-gouv-coordination-ia"
+HF_ORGANIZATION = "rtetley"
 API = {
     "INFERENCE": "https://api-inference.huggingface.co/models",
     "HUB": "https://huggingface.co"

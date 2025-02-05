@@ -8,7 +8,8 @@ from app.core.cache import cache_config
 logger = logging.getLogger(__name__)
 
 # Organization or user who owns the datasets
-HF_ORGANIZATION = "fr-gouv-coordination-ia"
+# HF_ORGANIZATION = "fr-gouv-coordination-ia"
+HF_ORGANIZATION = "rtetley"
 
 # Get HF token directly from environment
 HF_TOKEN = os.environ.get("HF_TOKEN")
