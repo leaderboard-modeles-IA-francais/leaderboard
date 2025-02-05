@@ -19,7 +19,7 @@ app.use(compression());
 app.use(
   "/api",
   createProxyMiddleware({
-    target: `http://127.0.0.1:${apiPort}`,
+    target: `http://127.0.0.1:${apiPort}/api`,
     changeOrigin: true,
     onError: (err, req, res) => {
       console.error("Proxy Error:", err);
