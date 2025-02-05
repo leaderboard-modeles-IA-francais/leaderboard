@@ -39,9 +39,9 @@ RUN apt-get update && apt-get install -y \
 RUN npm install --global yarn
 
 # Copy frontend server and build
-COPY --from=frontend-build /app/build ./frontend/build
+COPY --from=frontend-build /app/dist ./frontend/dist
 COPY --from=frontend-build /app/package*.json ./frontend/
-COPY --from=frontend-build /app/server.js ./frontend/
+COPY --from=frontend-build /app/server.cjs ./frontend/
 
 # Install frontend production dependencies
 WORKDIR /app/frontend
@@ -60,4 +60,4 @@ USER user
 EXPOSE 7860
 
 # Start both servers with wait-for
-CMD ["sh", "-c", "uvicorn app.asgi:app --host 0.0.0.0 --port 7861 & while ! nc -z localhost 7861; do sleep 1; done && cd frontend && node index.cjs"]
+CMD ["sh", "-c", "uvicorn app.asgi:app --host 0.0.0.0 --port 7861 & while ! nc -z localhost 7861; do sleep 1; done && cd frontend && node server.cjs"]
