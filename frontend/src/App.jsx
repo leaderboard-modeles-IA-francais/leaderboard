@@ -94,7 +94,7 @@ function App() {
                 }}
               >
                 <Header
-                  brandTop={<>INTITULE<br />OFFICIEL</>}
+                  brandTop={<>République <br/> française</>}
                   homeLinkProps={{
                     href: '/',
                     title: 'Accueil - Nom de l’entité (ministère, secrétariat d‘état, gouvernement)'
@@ -104,8 +104,8 @@ function App() {
                     headerFooterDisplayItem
                   ]}
                   id="fr-header-simple-header-with-service-title-and-tagline"
-                  serviceTagline="baseline - précisions sur l'organisation"
-                  serviceTitle="Nom du site / service"
+                  serviceTagline="Pour une classification des grands modèles de langages sur des problèmes francophones"
+                  serviceTitle="classeur:IA"
                   navigation={<Navigation />}
                 />
                 <Box
@@ -128,24 +128,36 @@ function App() {
                 <Footer
                   accessibility="fully compliant"
                   contentDescription="
-                    Ce message est à remplacer par les informations de votre site.
+                    L'évaluation des systèmes d'IA est un enjeu stratégique sur lequel la France s'est historiquement démarquée.
 
-                    Comme exemple de contenu, vous pouvez indiquer les informations 
-                    suivantes : Le site officiel d’information administrative pour les entreprises.
-                    Retrouvez toutes les informations et démarches administratives nécessaires à la création, 
-                    à la gestion et au développement de votre entreprise.
+                    Ce classement, ou leaderboard, s'inspire directement de l'Open LLM Leaderboard et permet de comparer différents modèles d'IA génératifs à l'aide de jeux de données spécifiquement adaptés aux environnements et à la culture francophones.
                     "
                   partnersLogos={{
                     sub: [
                       {
-                        alt: '[À MODIFIER - texte alternatif de l’image]',
+                        alt: 'Logo Inria',
                         href: '#',
-                        imgUrl: 'static/media/placeholder.16x9.3d46f94c.png'
+                        imgUrl: '/inr_logo_rouge.png'
                       },
                       {
-                        alt: '[À MODIFIER - texte alternatif de l’image]',
+                        alt: 'Logo CNRS',
                         href: '#',
-                        imgUrl: 'static/media/placeholder.16x9.3d46f94c.png'
+                        imgUrl: '/LOGO_CNRS_BLEU.png'
+                      },
+                      {
+                        alt: 'Logo LNE',
+                        href: '#',
+                        imgUrl: '/logo-lne.svgz'
+                      },
+                      {
+                        alt: 'Logo DGE',
+                        href: '#',
+                        imgUrl: '/logo_DGE.png'
+                      },
+                      {
+                        alt: 'Logo huggingface',
+                        href: '#',
+                        imgUrl: '/hf-logo-with-title.svg'
                       }
                     ]
                   }}

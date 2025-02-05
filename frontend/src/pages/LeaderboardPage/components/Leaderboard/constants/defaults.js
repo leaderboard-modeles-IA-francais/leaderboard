@@ -74,8 +74,8 @@ const FILTERS = {
 
 // Column size constants
 const COLUMN_SIZES = {
-  RANK: 65,
-  TYPE_ICON: 65,
+  RANK: 100,
+  TYPE_ICON: 100,
   MODEL: 400,
   AVERAGE_SCORE: 150,
   BENCHMARK: 110,

@@ -55,7 +55,7 @@ const FilterTag = ({
         ) : null
       }
       label={
-        <span>
+        <span style={{padding: "6px"}}>
           {mainLabel}
           {countLabel && (
             <>

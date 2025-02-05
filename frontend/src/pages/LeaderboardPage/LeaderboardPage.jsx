@@ -27,20 +27,20 @@ function LeaderboardPage() {
         flexDirection: "column",
       }}
     >
-      <Box
+      {/* <Box
         sx={{ display: "flex", justifyContent: "center", pt: 6, mb: -4, pb: 0 }}
       >
         <Logo height="80px" />
-      </Box>
+      </Box> */}
       <PageHeader
-        title="Open LLM Leaderboard"
-        subtitle={
-          <>
-            Comparing Large Language Models in an{" "}
-            <span style={{ fontWeight: 600 }}>open</span> and{" "}
-            <span style={{ fontWeight: 600 }}>reproducible</span> way
-          </>
-        }
+        title="Leaderboard"
+        // subtitle={
+        //   <>
+        //     Comparer les grands modèles de langages {" "}
+        //     <span style={{ fontWeight: 600 }}>ouverts</span> sur des problèmes{" "}
+        //     <span style={{ fontWeight: 600 }}>francophones</span>
+        //   </>
+        // }
       />
       <Leaderboard />
     </Box>
