@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import { Box, CssBaseline } from "@mui/material";
+// import Navigation from "./components/Navigation/Navigation";
 import Navigation from "./components/Navigation/Navigation";
 import LeaderboardPage from "./pages/LeaderboardPage/LeaderboardPage";
 import AddModelPage from "./pages/AddModelPage/AddModelPage";
@@ -15,11 +16,10 @@ import QuotePage from "./pages/QuotePage/QuotePage";
 import VoteModelPage from "./pages/VoteModelPage/VoteModelPage";
 import { Header } from "@codegouvfr/react-dsfr/Header";
 import { Footer } from "@codegouvfr/react-dsfr/Footer";
-import getTheme from "./config/theme";
-import { useThemeMode } from "./hooks/useThemeMode";
+import MuiDsfrThemeProvider from "@codegouvfr/react-dsfr/mui";
+import { headerFooterDisplayItem } from "@codegouvfr/react-dsfr/Display";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LeaderboardProvider from "./pages/LeaderboardPage/components/Leaderboard/context/LeaderboardContext";
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -67,8 +67,6 @@ function UrlHandler() {
 }
 
 function App() {
-  const { mode, toggleTheme } = useThemeMode();
-  const theme = getTheme(mode);
 
   return (
     <div
@@ -81,7 +79,7 @@ function App() {
       }}
     >
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
+        <MuiDsfrThemeProvider>
           <CssBaseline />
           <Router>
             <LeaderboardProvider>
@@ -101,11 +99,15 @@ function App() {
                     href: '/',
                     title: 'Accueil - Nom de l’entité (ministère, secrétariat d‘état, gouvernement)'
                   }}
+                  quickAccessItems={[
+                    // other quick access items...
+                    headerFooterDisplayItem
+                  ]}
                   id="fr-header-simple-header-with-service-title-and-tagline"
                   serviceTagline="baseline - précisions sur l'organisation"
                   serviceTitle="Nom du site / service"
+                  navigation={<Navigation />}
                 />
-                <Navigation onToggleTheme={toggleTheme} mode={mode} />
                 <Box
                   sx={{
                     flex: 1,
@@ -151,7 +153,7 @@ function App() {
               </Box>
             </LeaderboardProvider>
           </Router>
-        </ThemeProvider>
+        </MuiDsfrThemeProvider>
       </QueryClientProvider>
     </div>
   );
