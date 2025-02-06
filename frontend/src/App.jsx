@@ -121,8 +121,8 @@ function App() {
                   <Routes>
                     <Route path="/" element={<LeaderboardPage />} />
                     <Route path="/add" element={<AddModelPage />} />
-                    <Route path="/quote" element={<QuotePage />} />
-                    <Route path="/vote" element={<VoteModelPage />} />
+                    {/* <Route path="/quote" element={<QuotePage />} />
+                    <Route path="/vote" element={<VoteModelPage />} /> */}
                   </Routes>
                 </Box>
                 <Footer />

@@ -66,15 +66,15 @@ const Navigation = () => {
                 },
                 text: "Submit model",
             },
-            {
-                isActive: active === 2,
-                linkProps: {
-                    href: "/vote",
-                    target: '_self',
-                    onClick: handleNavigation(2, "/vote")
-                },
-                text: "Vote for next model",
-            },
+            // {
+            //     isActive: active === 2,
+            //     linkProps: {
+            //         href: "/vote",
+            //         target: '_self',
+            //         onClick: handleNavigation(2, "/vote")
+            //     },
+            //     text: "Vote for next model",
+            // },
         ]}
     />
     );
