@@ -235,27 +235,7 @@ const ModelTable = ({ models, emptyMessage, status }) => {
                           alignItems: "center",
                         }}
                       >
-                        <Link
-                          href={`https://huggingface.co/${model.name}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          sx={{
-                            textDecoration: "none",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 0.5,
-                            "& .MuiSvgIcon-root": {
-                              fontSize: "1rem",
-                              opacity: 0.6,
-                            },
-                          }}
-                        >
                           {model.name}
-                          <OpenInNewIcon />
-                        </Link>
                       </TableCell>
                       <TableCell
                         component="div"
