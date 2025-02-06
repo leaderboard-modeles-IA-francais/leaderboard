@@ -11,7 +11,8 @@ const footer = () => {
           Ce classement, ou leaderboard, s'inspire directement de l'Open LLM Leaderboard et permet de comparer différents modèles d'IA génératifs à l'aide de jeux de données spécifiquement adaptés aux environnements et à la culture francophones.
           "
         classes={{
-            logo: "logo_footer"
+            logo: "logo_footer",
+            contentLink: "content_link"
         }}
         license={""}
         linkList={undefined}

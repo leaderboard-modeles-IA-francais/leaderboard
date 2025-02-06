@@ -58,6 +58,10 @@ button:focus-visible {
     box-shadow: none !important;
 }
 
+.content_link {
+    display: none;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
