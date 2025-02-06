@@ -3,43 +3,43 @@ import {addFooterTranslations, Footer} from "@codegouvfr/react-dsfr/Footer";
 // import { Box, Typography, Link } from "@mui/material";
 
 const footer = () => {
-    <Footer
-                  accessibility="fully compliant"
-                  contentDescription="
-                    L'évaluation des systèmes d'IA est un enjeu stratégique sur lequel la France s'est historiquement démarquée.
+    return <Footer
+        accessibility="fully compliant"
+        contentDescription="
+          L'évaluation des systèmes d'IA est un enjeu stratégique sur lequel la France s'est historiquement démarquée.
 
-                    Ce classement, ou leaderboard, s'inspire directement de l'Open LLM Leaderboard et permet de comparer différents modèles d'IA génératifs à l'aide de jeux de données spécifiquement adaptés aux environnements et à la culture francophones.
-                    "
-                  partnersLogos={{
-                    sub: [
-                      {
-                        alt: 'Logo Inria',
-                        href: '#',
-                        imgUrl: '/inr_logo_rouge.png'
-                      },
-                      {
-                        alt: 'Logo CNRS',
-                        href: '#',
-                        imgUrl: '/LOGO_CNRS_BLEU.png'
-                      },
-                      {
-                        alt: 'Logo LNE',
-                        href: '#',
-                        imgUrl: '/logo-lne.svgz'
-                      },
-                      {
-                        alt: 'Logo DGE',
-                        href: '#',
-                        imgUrl: '/logo_DGE.png'
-                      },
-                      {
-                        alt: 'Logo huggingface',
-                        href: '#',
-                        imgUrl: '/hf-logo-with-title.svg'
-                      }
-                    ]
-                  }}
-                />
+          Ce classement, ou leaderboard, s'inspire directement de l'Open LLM Leaderboard et permet de comparer différents modèles d'IA génératifs à l'aide de jeux de données spécifiquement adaptés aux environnements et à la culture francophones.
+          "
+        partnersLogos={{
+          sub: [
+            {
+              alt: 'Logo Inria',
+              href: '#',
+              imgUrl: '/inr_logo_rouge.png'
+            },
+            {
+              alt: 'Logo CNRS',
+              href: '#',
+              imgUrl: '/LOGO_CNRS_BLEU.png'
+            },
+            {
+              alt: 'Logo LNE',
+              href: '#',
+              imgUrl: '/logo-lne.svgz'
+            },
+            {
+              alt: 'Logo DGE',
+              href: '#',
+              imgUrl: '/logo_DGE.png'
+            },
+            {
+              alt: 'Logo huggingface',
+              href: '#',
+              imgUrl: '/hf-logo-with-title.svg'
+            }
+          ]
+        }}
+    />
 }
 
 addFooterTranslations({
