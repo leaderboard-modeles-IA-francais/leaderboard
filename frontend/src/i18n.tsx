@@ -1,4 +1,5 @@
 import { createI18nApi, declareComponentKeys } from "i18nifty";
+export {declareComponentKeys};
 
 //List the languages you with to support
 export const languages = ["en", "fr"] as const;
@@ -12,7 +13,7 @@ export type Language = typeof languages[number];
 export type LocalizedString = Parameters<typeof resolveLocalizedString>[0];
 
 export const {
-	useTranslation, 
+	useTranslation,
 	resolveLocalizedString, 
 	useLang, 
 	$lang,
@@ -21,6 +22,8 @@ export const {
 	getTranslation,
 } = createI18nApi<
     | import ("pages/LeaderboardPage/LeaderboardPage").I18n
+    | import ("components/Header/Header").I18n
+    | import ("components/Navigation/Navigation").I18n
 >()(
     { 
       languages, 
@@ -38,6 +41,13 @@ export const {
                     </>
                 )
             },
+            "header": {
+                "tagline": "Reference table for large language models in french",
+                "service": "LLM leaderboard for the french language"
+            },
+            "Navigation": {
+                "submit": "Submit"
+            }
         },
 	/* spell-checker: disable */
 	"fr": {
@@ -51,6 +61,13 @@ export const {
                     </>
                 )
             },
+            "header": {
+                "tagline": "Tableau de référence pour les grands modèles de langages en français",
+                "service": "Leaderboard des GML pour le français"
+            },
+            "Navigation": {
+                "submit": "Soumettre"
+            }
         }
 	/* spell-checker: enable */
     }

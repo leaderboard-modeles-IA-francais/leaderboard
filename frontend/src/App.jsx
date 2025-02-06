@@ -12,7 +12,7 @@ import LeaderboardPage from "./pages/LeaderboardPage/LeaderboardPage";
 import AddModelPage from "./pages/AddModelPage/AddModelPage";
 import QuotePage from "./pages/QuotePage/QuotePage";
 import VoteModelPage from "./pages/VoteModelPage/VoteModelPage";
-import { Header } from "@codegouvfr/react-dsfr/Header";
+import Header from "./components/Header/Header";
 import { Badge } from "@codegouvfr/react-dsfr/Badge";
 import Footer from "./components/Footer/Footer";
 import MuiDsfrThemeProvider from "@codegouvfr/react-dsfr/mui";
@@ -93,22 +93,7 @@ function App() {
                   color: "text.primary",
                 }}
               >
-                <Header
-                  brandTop={<>République <br/> française</>}
-                  homeLinkProps={{
-                    href: '/',
-                    title: 'Accueil - Nom de l’entité (ministère, secrétariat d‘état, gouvernement)'
-                  }}
-                  quickAccessItems={[
-                    // other quick access items...
-                    headerFooterDisplayItem,
-                    <LanguageSelect />
-                  ]}
-                  id="fr-header-simple-header-with-service-title-and-tagline"
-                  serviceTagline="Tableau de référence pour les grands modèles de langages en français"
-                  serviceTitle={<>Leaderboard des GML pour le français{' '}<Badge as="span" noIcon severity="success">Beta</Badge></>}
-                  navigation={<Navigation />}
-                />
+                <Header />
                 <Box
                   sx={{
                     flex: 1,

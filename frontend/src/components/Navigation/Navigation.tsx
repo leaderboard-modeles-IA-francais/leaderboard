@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {MainNavigation} from "@codegouvfr/react-dsfr/MainNavigation";
+import { useTranslation, declareComponentKeys } from "i18n";
 
 const Navigation = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
   const [searchParams] = useSearchParams();
+  const {t} = useTranslation({Navigation});
 
   // Function to sync URL with parent HF page
-  const syncUrlWithParent = (queryString, hash) => {
+  const syncUrlWithParent = (queryString: any, hash:any) => {
     // Check if we're in an HF Space iframe
     const isHFSpace = window.location !== window.parent.location;
     if (isHFSpace) {
@@ -29,7 +31,7 @@ const Navigation = () => {
     }
   };
 
-  const handleNavigation = (index, path) => (e) => {
+  const handleNavigation = (index:any, path:any) => (e:any) => {
     e.preventDefault();
     const searchString = searchParams.toString();
     const queryString = searchString ? `?${searchString}` : "";
@@ -64,7 +66,7 @@ const Navigation = () => {
                     target: '_self',
                     onClick: handleNavigation(1, "/add")
                 },
-                text: "Submit model",
+                text: t("submit"),
             },
             // {
             //     isActive: active === 2,
@@ -203,5 +205,10 @@ const Navigation = () => {
 //     </AppBar>
 //   );
 };
+
+const { i18n } = declareComponentKeys<
+| "submit"
+>()({ Navigation });
+export type I18n = typeof i18n;
 
 export default Navigation;
