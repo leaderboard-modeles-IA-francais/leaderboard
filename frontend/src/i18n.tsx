@@ -42,8 +42,8 @@ export const {
                 )
             },
             "header": {
-                "tagline": "Reference table for large language models in french",
-                "service": "LLM leaderboard for the french language"
+                "tagline": "Benchmark for large language models in French",
+                "service": "LLM leaderboard for the French language"
             },
             "Navigation": {
                 "submit": "Submit",
@@ -63,8 +63,8 @@ export const {
                 )
             },
             "header": {
-                "tagline": "Tableau de référence pour les grands modèles de langages en français",
-                "service": "Leaderboard des GML pour le français"
+                "tagline": "Tableau de référence pour les grands modèles de langages pour la langue française",
+                "service": "Leaderboard des modèles de langage pour le français"
             },
             "Navigation": {
                 "submit": "Soumettre",
