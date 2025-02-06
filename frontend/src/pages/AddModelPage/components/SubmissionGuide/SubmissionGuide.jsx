@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Box, Paper, Typography, Button, Stack, Collapse } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useResolveLocalizedString } from "i18n";
 
 const DocLink = ({ href, children }) => (
   <Button
@@ -15,6 +16,7 @@ const DocLink = ({ href, children }) => (
       color: "primary.main",
       fontSize: "0.875rem",
       p: 0,
+      width: "fit-content",
       minWidth: "auto",
       justifyContent: "flex-start",
       "&:hover": {
@@ -50,109 +52,162 @@ const StepNumber = ({ number }) => (
   </Box>
 );
 
-const TUTORIAL_STEPS = [
-  {
-    title: "Model Information",
-    content: (
-      <Stack spacing={2}>
-        <Typography variant="body2" color="text.secondary">
-          Your model should be <strong>public</strong> on the Hub and follow the{" "}
-          <strong>username/model-id</strong> format (e.g.
-          mistralai/Mistral-7B-v0.1). Specify the <strong>revision</strong>{" "}
-          (commit hash or branch) and <strong>model type</strong>.
-        </Typography>
-        <DocLink href="https://huggingface.co/docs/hub/models-uploading">
-          Model uploading guide
-        </DocLink>
-      </Stack>
-    ),
-  },
-  {
-    title: "Technical Details",
-    content: (
-      <Stack spacing={2}>
-        <Typography variant="body2" color="text.secondary">
-          Make sure your model can be <strong>loaded locally</strong> before
-          submitting:
-        </Typography>
-        <Box
-          sx={{
-            p: 2,
-            bgcolor: (theme) =>
-              theme.palette.mode === "dark" ? "grey.50" : "grey.900",
-            borderRadius: 1,
-            "& pre": {
-              m: 0,
-              p: 0,
-              fontFamily: "monospace",
-              fontSize: "0.875rem",
-              color: (theme) =>
-                theme.palette.mode === "dark" ? "grey.900" : "grey.50",
-            },
-          }}
-        >
-          <pre>
-            {`from transformers import AutoConfig, AutoModel, AutoTokenizer
-
-config = AutoConfig.from_pretrained("your-username/your-model", revision="main")
-model = AutoModel.from_pretrained("your-username/your-model", revision="main")
-tokenizer = AutoTokenizer.from_pretrained("your-username/your-model", revision="main")`}
-          </pre>
-        </Box>
-        <DocLink href="https://huggingface.co/docs/transformers/installation">
-          Transformers documentation
-        </DocLink>
-      </Stack>
-    ),
-  },
-  {
-    title: "License Requirements",
-    content: (
-      <Stack spacing={2}>
-        <Typography variant="body2" color="text.secondary">
-          A <strong>license tag</strong> is required.{" "}
-          <strong>Open licenses</strong> (Apache, MIT, etc) are strongly
-          recommended.
-        </Typography>
-        <DocLink href="https://huggingface.co/docs/hub/repositories-licenses">
-          About model licenses
-        </DocLink>
-      </Stack>
-    ),
-  },
-  {
-    title: "Model Card Requirements",
-    content: (
-      <Stack spacing={2}>
-        <Typography variant="body2" color="text.secondary">
-          Your model card must include: <strong>architecture</strong>,{" "}
-          <strong>training details</strong>,{" "}
-          <strong>dataset information</strong>, intended use, limitations, and{" "}
-          <strong>performance metrics</strong>.
-        </Typography>
-        <DocLink href="https://huggingface.co/docs/hub/model-cards">
-          Model cards guide
-        </DocLink>
-      </Stack>
-    ),
-  },
-  {
-    title: "Final Checklist",
-    content: (
-      <Stack spacing={2}>
-        <Typography variant="body2" color="text.secondary">
-          Ensure your model is <strong>public</strong>, uses{" "}
-          <strong>safetensors</strong> format, has a{" "}
-          <strong>license tag</strong>, and <strong>loads correctly</strong>{" "}
-          with the provided code.
-        </Typography>
-        <DocLink href="https://huggingface.co/docs/hub/repositories-getting-started">
-          Sharing best practices
-        </DocLink>
-      </Stack>
-    ),
-  },
-];
+const LOCALIZED_STEPS = {
+    STEP1: {
+        TITLE: {
+            "en": "Model Information",
+            "fr": "Informations sur le modele"
+        },
+        T1: {
+            "en": "Your model should be",
+            "fr": "Votre modele doit etre"
+        },
+        T2: {
+            "en": "on the Hub and follow the",
+            "fr": "sur le Hub et suivre le format"
+        },
+        T3: {
+            "en": "format (e.g. mistralai/Mistral-7B-v0.1). Specify the",
+            "fr": "(e.g. mistralai/Mistral-7B-v0.1). Specifiez la"
+        },
+        STRONG1: {
+            "en": "revision",
+            "fr": "revision"
+        },
+        T4: {
+            "en": "(commit hash or branch) and",
+            "fr": "(hash de commit ou branche) et le"
+        },
+        STRONG2: {
+            "en": "model type",
+            "fr": "type de modele"
+        },
+        DOCLINK: {
+            "en": "Model uploading guide",
+            "fr": "Guide pour le televersement de modele"
+        }
+    },
+    STEP2: {
+        TITLE: {
+            "en": "Technical Details",
+            "fr": "Details Techniques"
+        },
+        T1: {
+            "en": "Make sure tour model can be",
+            "fr": "Assurez vous que votre modele puisse etre"
+        },
+        STRONG1: {
+            "en": "loaded locally",
+            "fr": "charge localement"
+        },
+        T2: {
+            "en": "before submitting:",
+            "fr": "avant de soumettre"
+        },
+        DOCLINK: {
+            "en": "Transformers documentation",
+            "fr": "Documentation Transformers"
+        }
+    },
+    STEP3: {
+        TITLE: {
+            "en": "Licence Requirements",
+            "fr": "Critere de Licence"
+        },
+        T1: {
+            "en": "A",
+            "fr": "Une"
+        },
+        STRONG1: {
+            "en": "licence tag",
+            "fr": "balise de licence"
+        },
+        T2: {
+            "en": "is required.",
+            "fr": "est requise."
+        },
+        STRONG2: {
+            "en": "Open licences",
+            "fr": "Les licences ouvertes"
+        },
+        T3: {
+            "en": "(Apache, MIT, etc) are strongly recommended.",
+            "fr": "(Apache, MIT, etc) sont fortement recommandes."
+        },
+        DOCLINK: {
+            "en": "About model licences",
+            "fr": "A propos des licences de modeles"
+        }
+    },
+    STEP4: {
+        TITLE: {
+            "en": "Model Card Requirements",
+            "fr": "Criteres sur la Carte du Modele"
+        },
+        T1: {
+            "en": "Your model card must include: ",
+            "fr": "La carte de votre modele doit inclure: "
+        },
+        STRONG1: {
+            "en": "training details",
+            "fr": "details d'entrainement"
+        },
+        STRONG2: {
+            "en": "dataset information",
+            "fr": "information sur le jeux de donnees"
+        },
+        T2: {
+            "en": "intended use, limitations, and",
+            "fr": "usage prevu, limites, et"
+        },
+        STRONG3: {
+            "en": "performance metrics",
+            "fr": "metriques de performance"
+        },
+        DOCLINK: {
+            "en": "Model cards guide",
+            "fr": "Guide sur les cartes de modeles"
+        }
+    },
+    STEP5: {
+        TITLE: {
+            "en": "Final Checkist",
+            "fr": "Checklist finale"
+        },
+        T1: {
+            "en": "Ensure your model is ",
+            "fr": "Verifiez que votre modele est "
+        },
+        T2: {
+            "en": "uses ",
+            "fr": "utilise le format "
+        },
+        T3: {
+            "en": "format, has a ",
+            "fr": "a une"
+        },
+        STRONG1: {
+            "en": "licence tag",
+            "fr": "balise de licence"
+        },
+        T4: {
+            "en": "and ",
+            "fr": "et "
+        },
+        STRONG2: {
+            "en": "loads correctly",
+            "fr": "charge correctement"
+        },
+        T5: {
+            "en": "with the provided code",
+            "fr": "avec le code fourni"
+        },
+        DOCLINK: {
+            "en": "Sharing best practices",
+            "fr": "Partager les bonnes pratiques"
+        }
+    }
+}
 
 function SubmissionGuide() {
   const location = useLocation();
@@ -161,6 +216,7 @@ function SubmissionGuide() {
   // Initialize state directly with URL value
   const initialExpanded = !new URLSearchParams(location.search).get("guide");
   const [expanded, setExpanded] = useState(initialExpanded);
+  const {resolveLocalizedString} = useResolveLocalizedString();
 
   // Sync expanded state with URL changes after initial render
   useEffect(() => {
@@ -181,6 +237,108 @@ function SubmissionGuide() {
     }
     navigate({ search: params.toString() }, { replace: true });
   };
+
+  const TUTORIAL_STEPS = [
+    {
+      title: resolveLocalizedString(LOCALIZED_STEPS.STEP1.TITLE),
+      content: (
+        <Stack spacing={2}>
+          <Typography variant="body2" color="text.secondary">
+            {resolveLocalizedString(LOCALIZED_STEPS.STEP1.T1)} <strong>public</strong> {resolveLocalizedString(LOCALIZED_STEPS.STEP1.T2)} {" "}
+            <strong>username/model-id</strong> {resolveLocalizedString(LOCALIZED_STEPS.STEP1.T3)} <strong>{resolveLocalizedString(LOCALIZED_STEPS.STEP1.STRONG1)}</strong>{" "}
+            {resolveLocalizedString(LOCALIZED_STEPS.STEP1.T4)} <strong>{resolveLocalizedString(LOCALIZED_STEPS.STEP1.STRONG2)}</strong>.
+          </Typography>
+          <DocLink href="https://huggingface.co/docs/hub/models-uploading">
+            {resolveLocalizedString(LOCALIZED_STEPS.STEP1.DOCLINK)}
+          </DocLink>
+        </Stack>
+      ),
+    },
+    {
+      title: "Technical Details",
+      content: (
+        <Stack spacing={2}>
+          <Typography variant="body2" color="text.secondary">
+            {resolveLocalizedString(LOCALIZED_STEPS.STEP2.T1)} <strong>{resolveLocalizedString(LOCALIZED_STEPS.STEP2.STRONG1)}</strong> {resolveLocalizedString(LOCALIZED_STEPS.STEP2.T2)}
+          </Typography>
+          <Box
+            sx={{
+              p: 2,
+              bgcolor: (theme) =>
+                theme.palette.mode === "dark" ? "grey.50" : "grey.900",
+              borderRadius: 1,
+              "& pre": {
+                m: 0,
+                p: 0,
+                fontFamily: "monospace",
+                fontSize: "0.875rem",
+                color: (theme) =>
+                  theme.palette.mode === "dark" ? "grey.900" : "grey.50",
+              },
+            }}
+          >
+            <pre>
+              {`from transformers import AutoConfig, AutoModel, AutoTokenizer
+  
+  config = AutoConfig.from_pretrained("your-username/your-model", revision="main")
+  model = AutoModel.from_pretrained("your-username/your-model", revision="main")
+  tokenizer = AutoTokenizer.from_pretrained("your-username/your-model", revision="main")`}
+            </pre>
+          </Box>
+          <DocLink href="https://huggingface.co/docs/transformers/installation">
+            {resolveLocalizedString(LOCALIZED_STEPS.STEP2.DOCLINK)}
+          </DocLink>
+        </Stack>
+      ),
+    },
+    {
+      title: resolveLocalizedString(LOCALIZED_STEPS.STEP3.TITLE),
+      content: (
+        <Stack spacing={2}>
+          <Typography variant="body2" color="text.secondary">
+            {resolveLocalizedString(LOCALIZED_STEPS.STEP3.T1)}<strong>{resolveLocalizedString(LOCALIZED_STEPS.STEP3.STRONG1)}</strong> {resolveLocalizedString(LOCALIZED_STEPS.STEP3.T2)}{" "}
+            <strong>{resolveLocalizedString(LOCALIZED_STEPS.STEP3.STRONG2)}</strong> {resolveLocalizedString(LOCALIZED_STEPS.STEP3.T3)}
+          </Typography>
+          <DocLink href="https://huggingface.co/docs/hub/repositories-licenses">
+            {resolveLocalizedString(LOCALIZED_STEPS.STEP3.DOCLINK)}
+          </DocLink>
+        </Stack>
+      ),
+    },
+    {
+      title: resolveLocalizedString(LOCALIZED_STEPS.STEP4.TITLE),
+      content: (
+        <Stack spacing={2}>
+          <Typography variant="body2" color="text.secondary">
+            {resolveLocalizedString(LOCALIZED_STEPS.STEP4.T1)}<strong>architecture</strong>,{" "}
+            <strong>{resolveLocalizedString(LOCALIZED_STEPS.STEP4.STRONG1)}</strong>,{" "}
+            <strong>{resolveLocalizedString(LOCALIZED_STEPS.STEP4.STRONG2)}</strong>, {resolveLocalizedString(LOCALIZED_STEPS.STEP4.T2)}{" "}
+            <strong>{resolveLocalizedString(LOCALIZED_STEPS.STEP4.STRONG3)}</strong>.
+          </Typography>
+          <DocLink href="https://huggingface.co/docs/hub/model-cards">
+            {resolveLocalizedString(LOCALIZED_STEPS.STEP4.DOCLINK)}
+          </DocLink>
+        </Stack>
+      ),
+    },
+    {
+      title: resolveLocalizedString(LOCALIZED_STEPS.STEP5.TITLE),
+      content: (
+        <Stack spacing={2}>
+          <Typography variant="body2" color="text.secondary">
+            {resolveLocalizedString(LOCALIZED_STEPS.STEP5.T1)}<strong>public</strong>, {resolveLocalizedString(LOCALIZED_STEPS.STEP5.T2)}{" "}
+            <strong>safetensors</strong> {resolveLocalizedString(LOCALIZED_STEPS.STEP5.T3)}{" "}
+            <strong>{resolveLocalizedString(LOCALIZED_STEPS.STEP5.STRONG1)}</strong>, {resolveLocalizedString(LOCALIZED_STEPS.STEP5.T4)} <strong>{resolveLocalizedString(LOCALIZED_STEPS.STEP5.STRONG2)}</strong>{" "}
+            {resolveLocalizedString(LOCALIZED_STEPS.STEP5.T5)}.
+          </Typography>
+          <DocLink href="https://huggingface.co/docs/hub/repositories-getting-started">
+            {resolveLocalizedString(LOCALIZED_STEPS.STEP5.DOCLINK)}
+          </DocLink>
+        </Stack>
+      ),
+    },
+  ];
+
 
   return (
     <Paper
