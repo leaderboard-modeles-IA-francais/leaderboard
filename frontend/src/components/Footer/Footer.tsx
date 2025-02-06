@@ -1,16 +1,20 @@
 import {addFooterTranslations, Footer} from "@codegouvfr/react-dsfr/Footer";
-
 // import { Box, Typography, Link } from "@mui/material";
 
 const footer = () => {
     return <Footer
+        style={{"boxShadow": "none"}}
         accessibility="fully compliant"
         contentDescription="
           L'évaluation des systèmes d'IA est un enjeu stratégique sur lequel la France s'est historiquement démarquée.
 
           Ce classement, ou leaderboard, s'inspire directement de l'Open LLM Leaderboard et permet de comparer différents modèles d'IA génératifs à l'aide de jeux de données spécifiquement adaptés aux environnements et à la culture francophones.
           "
+        classes={{
+            logo: "logo_footer"
+        }}
         license={""}
+        linkList={undefined}
         partnersLogos={{
           sub: [
             {
