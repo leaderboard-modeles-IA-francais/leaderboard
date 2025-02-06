@@ -56,11 +56,11 @@ const LOCALIZED_STEPS = {
     STEP1: {
         TITLE: {
             "en": "Model Information",
-            "fr": "Informations sur le modele"
+            "fr": "Informations sur le modèle"
         },
         T1: {
             "en": "Your model should be",
-            "fr": "Votre modele doit etre"
+            "fr": "Votre modèle doit être"
         },
         T2: {
             "en": "on the Hub and follow the",
@@ -68,11 +68,11 @@ const LOCALIZED_STEPS = {
         },
         T3: {
             "en": "format (e.g. mistralai/Mistral-7B-v0.1). Specify the",
-            "fr": "(e.g. mistralai/Mistral-7B-v0.1). Specifiez la"
+            "fr": "(e.g. mistralai/Mistral-7B-v0.1). Specifiez-la"
         },
         STRONG1: {
             "en": "revision",
-            "fr": "revision"
+            "fr": "révision"
         },
         T4: {
             "en": "(commit hash or branch) and",
@@ -84,7 +84,7 @@ const LOCALIZED_STEPS = {
         },
         DOCLINK: {
             "en": "Model uploading guide",
-            "fr": "Guide pour le televersement de modele"
+            "fr": "Guide pour le téléversement du modèle"
         }
     },
     STEP2: {
@@ -94,7 +94,7 @@ const LOCALIZED_STEPS = {
         },
         T1: {
             "en": "Make sure tour model can be",
-            "fr": "Assurez vous que votre modele puisse etre"
+            "fr": "Assurez-vous que votre modèle puisse être"
         },
         STRONG1: {
             "en": "loaded locally",
@@ -111,15 +111,15 @@ const LOCALIZED_STEPS = {
     },
     STEP3: {
         TITLE: {
-            "en": "Licence Requirements",
-            "fr": "Critere de Licence"
+            "en": "License Requirements",
+            "fr": "Critères de Licence"
         },
         T1: {
             "en": "A",
             "fr": "Une"
         },
         STRONG1: {
-            "en": "licence tag",
+            "en": "license tag",
             "fr": "balise de licence"
         },
         T2: {
@@ -127,7 +127,7 @@ const LOCALIZED_STEPS = {
             "fr": "est requise."
         },
         STRONG2: {
-            "en": "Open licences",
+            "en": "Open licenses",
             "fr": "Les licences ouvertes"
         },
         T3: {
@@ -135,18 +135,18 @@ const LOCALIZED_STEPS = {
             "fr": "(Apache, MIT, etc) sont fortement recommandes."
         },
         DOCLINK: {
-            "en": "About model licences",
+            "en": "About model licenses",
             "fr": "A propos des licences de modeles"
         }
     },
     STEP4: {
         TITLE: {
             "en": "Model Card Requirements",
-            "fr": "Criteres sur la Carte du Modele"
+            "fr": "Critères sur la carte du Modèle"
         },
         T1: {
             "en": "Your model card must include: ",
-            "fr": "La carte de votre modele doit inclure: "
+            "fr": "La carte de votre modèle doit inclure: "
         },
         STRONG1: {
             "en": "training details",
@@ -158,25 +158,25 @@ const LOCALIZED_STEPS = {
         },
         T2: {
             "en": "intended use, limitations, and",
-            "fr": "usage prevu, limites, et"
+            "fr": "usage prévu, limites, et"
         },
         STRONG3: {
             "en": "performance metrics",
-            "fr": "metriques de performance"
+            "fr": "métriques de performance"
         },
         DOCLINK: {
             "en": "Model cards guide",
-            "fr": "Guide sur les cartes de modeles"
+            "fr": "Guide sur les cartes de modèles"
         }
     },
     STEP5: {
         TITLE: {
-            "en": "Final Checkist",
+            "en": "Final Checklist",
             "fr": "Checklist finale"
         },
         T1: {
             "en": "Ensure your model is ",
-            "fr": "Verifiez que votre modele est "
+            "fr": "Vérifiez que votre modele est "
         },
         T2: {
             "en": "uses ",
@@ -187,7 +187,7 @@ const LOCALIZED_STEPS = {
             "fr": "a une"
         },
         STRONG1: {
-            "en": "licence tag",
+            "en": "license tag",
             "fr": "balise de licence"
         },
         T4: {
