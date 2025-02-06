@@ -438,7 +438,7 @@ class LeaderboardService:
             transformed_data = {
                 "id": unique_id,
                 "model": {
-                    "name": "(modèle non révélé)", # data.full_model,
+                    "name": "(anonyme)", # data.full_model,
                     "sha": "", # FIXME data.get("Model sha"),
                     "precision": data.precision.name,
                     "type": model_type.to_str(),

@@ -25,7 +25,7 @@ async def get_models_status(
         for status, models in result.items():
             if status == "finished":
                 for i, model in enumerate(models):
-                    model["name"] = "(modèle non révélé)"
+                    model["name"] = "(anonyme)"
                     model["revision"] = "(...)"
         
         stats = {
