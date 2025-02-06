@@ -1,6 +1,6 @@
 ---
-title: Open LLM Leaderboard
-emoji: 🏆
+title: Leaderboard LLM FR
+emoji: 🏆🇫🇷
 colorFrom: blue
 colorTo: red
 sdk: docker
@@ -10,10 +10,10 @@ license: apache-2.0
 duplicated_from: open-llm-leaderboard/open_llm_leaderboard
 tags:
 - leaderboard
-short_description: Track, rank and evaluate open LLMs and chatbots
+short_description: Track, rank and evaluate open LLMs and chatbots in French
 ---
 
-# Open LLM Leaderboard
+# Leaderboard LLM FR
 
 Modern React interface for comparing Large Language Models (LLMs) in an open and reproducible way.
 

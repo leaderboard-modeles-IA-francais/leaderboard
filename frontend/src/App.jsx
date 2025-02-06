@@ -104,8 +104,8 @@ function App() {
                     headerFooterDisplayItem
                   ]}
                   id="fr-header-simple-header-with-service-title-and-tagline"
-                  serviceTagline="Pour une classification des grands modèles de langages sur des problèmes francophones"
-                  serviceTitle="Leaderboard Français des GML"
+                  serviceTagline="Tableau de référence pour les grands modèles de langages en français"
+                  serviceTitle="Leaderboard des GML pour le français"
                   navigation={<Navigation />}
                 />
                 <Box
