@@ -73,7 +73,7 @@ const Navigation = () => {
                 linkProps: {
                     href: "/about",
                     target: '_self',
-                    onClick: handleNavigation(1, "/about")
+                    onClick: handleNavigation(2, "/about")
                 },
                 text: t("about"),
             },
