@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import Leaderboard from "./components/Leaderboard/Leaderboard";
 import { Box } from "@mui/material";
 import PageHeader from "../../components/shared/PageHeader";
-import Logo from "../../components/Logo/Logo";
 import { useLeaderboardData } from "./components/Leaderboard/hooks/useLeaderboardData";
 import { useLeaderboard } from "./components/Leaderboard/context/LeaderboardContext";
+import { declareComponentKeys } from "i18nifty";
 
 function LeaderboardPage() {
   const { data, isLoading, error } = useLeaderboardData();
@@ -34,6 +34,7 @@ function LeaderboardPage() {
       </Box> */}
       <PageHeader
         title="Leaderboard"
+        subtitle={""}
         // subtitle={
         //   <>
         //     Comparer les grands modèles de langages {" "}
@@ -46,5 +47,12 @@ function LeaderboardPage() {
     </Box>
   );
 }
+
+const { i18n } = declareComponentKeys<
+| { K: "greating"; P: { who: string; } }
+| "how are you"
+| { K: "learn more"; P: { href: string; }; R: JSX.Element }
+>()({ LeaderboardPage });
+export type I18n = typeof i18n;
 
 export default LeaderboardPage;

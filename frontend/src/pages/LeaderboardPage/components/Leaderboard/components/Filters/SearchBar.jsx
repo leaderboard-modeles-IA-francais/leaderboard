@@ -185,7 +185,7 @@ const SearchBar = ({
         <InputBase
           value={localValue}
           onChange={handleLocalChange}
-          placeholder='Search by model name • try "meta @architecture:llama @license:mit"'
+          placeholder='Recherce par nom de modèle • essayez "meta @architecture:llama @license:mit"'
           sx={{
             flex: 1,
             fontSize: "1rem",
@@ -286,7 +286,7 @@ const SearchBar = ({
                 display: { xs: "none", md: "block" },
               }}
             >
-              Advanced Filters
+              Filtres avancés
             </Typography>
           </Box>
           <InfoIconWithTooltip
@@ -316,8 +316,7 @@ const SearchBar = ({
                 lineHeight: 1.5,
               }}
             >
-              Supports strict search and regex • Use semicolons for multiple
-              terms
+              Supporte la recherche stricte et les expressions régulières • Utilisez des points virgules pour plusieurs termes
             </Typography>
           </Box>
         )}

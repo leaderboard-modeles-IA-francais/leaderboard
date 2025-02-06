@@ -6,19 +6,18 @@ import {
   useSearchParams,
   useLocation,
 } from "react-router-dom";
-import { ThemeProvider } from "@mui/material/styles";
 import { Box, CssBaseline } from "@mui/material";
-// import Navigation from "./components/Navigation/Navigation";
 import Navigation from "./components/Navigation/Navigation";
 import LeaderboardPage from "./pages/LeaderboardPage/LeaderboardPage";
 import AddModelPage from "./pages/AddModelPage/AddModelPage";
 import QuotePage from "./pages/QuotePage/QuotePage";
 import VoteModelPage from "./pages/VoteModelPage/VoteModelPage";
 import { Header } from "@codegouvfr/react-dsfr/Header";
-import { Footer } from "@codegouvfr/react-dsfr/Footer";
+import Footer from "./components/Footer/Footer";
 import MuiDsfrThemeProvider from "@codegouvfr/react-dsfr/mui";
 import { headerFooterDisplayItem } from "@codegouvfr/react-dsfr/Display";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { LanguageSelect } from "./components/LanguageSelect/LanguageSelect";
 import LeaderboardProvider from "./pages/LeaderboardPage/components/Leaderboard/context/LeaderboardContext";
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -101,7 +100,8 @@ function App() {
                   }}
                   quickAccessItems={[
                     // other quick access items...
-                    headerFooterDisplayItem
+                    headerFooterDisplayItem,
+                    <LanguageSelect />
                   ]}
                   id="fr-header-simple-header-with-service-title-and-tagline"
                   serviceTagline="Tableau de référence pour les grands modèles de langages en français"
@@ -125,43 +125,7 @@ function App() {
                     <Route path="/vote" element={<VoteModelPage />} />
                   </Routes>
                 </Box>
-                <Footer
-                  accessibility="fully compliant"
-                  contentDescription="
-                    L'évaluation des systèmes d'IA est un enjeu stratégique sur lequel la France s'est historiquement démarquée.
-
-                    Ce classement, ou leaderboard, s'inspire directement de l'Open LLM Leaderboard et permet de comparer différents modèles d'IA génératifs à l'aide de jeux de données spécifiquement adaptés aux environnements et à la culture francophones.
-                    "
-                  partnersLogos={{
-                    sub: [
-                      {
-                        alt: 'Logo Inria',
-                        href: '#',
-                        imgUrl: '/inr_logo_rouge.png'
-                      },
-                      {
-                        alt: 'Logo CNRS',
-                        href: '#',
-                        imgUrl: '/LOGO_CNRS_BLEU.png'
-                      },
-                      {
-                        alt: 'Logo LNE',
-                        href: '#',
-                        imgUrl: '/logo-lne.svgz'
-                      },
-                      {
-                        alt: 'Logo DGE',
-                        href: '#',
-                        imgUrl: '/logo_DGE.png'
-                      },
-                      {
-                        alt: 'Logo huggingface',
-                        href: '#',
-                        imgUrl: '/hf-logo-with-title.svg'
-                      }
-                    ]
-                  }}
-                />
+                <Footer />
               </Box>
             </LeaderboardProvider>
           </Router>

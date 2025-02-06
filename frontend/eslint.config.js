@@ -24,6 +24,10 @@ export default [
       'react-refresh': reactRefresh,
     },
     rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { varsIgnorePattern: "^i18n$" },
+      ],
       ...js.configs.recommended.rules,
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
