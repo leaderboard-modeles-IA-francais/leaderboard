@@ -18,6 +18,7 @@ import {
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { alpha } from "@mui/material/styles";
 import InfoIconWithTooltip from "../../../../../components/shared/InfoIconWithTooltip";
+import { useResolveLocalizedString } from "i18n";
 
 const DatabaseIcon = () => (
   <svg
@@ -279,45 +280,48 @@ const getDetailsUrl = (modelName) => {
   return `https://huggingface.co/datasets/open-llm-leaderboard/${formattedName}-details`;
 };
 
-const HeaderLabel = ({ label, tooltip, className, isSorted }) => (
-  <Tooltip
-    title={label}
-    arrow
-    placement="top"
-    enterDelay={1000}
-    componentsProps={getTooltipStyle}
-  >
-    <Typography
-      className={className}
-      sx={{
-        fontWeight: 600,
-        color: isSorted ? "primary.main" : "grey.700",
-        flex: 1,
-        transition: "max-width 0.2s ease",
-        maxWidth: "100%",
-        ...(label === "Rank" || label === "Type"
-          ? {
-              overflow: "visible",
-              whiteSpace: "normal",
-              textOverflow: "clip",
-              textAlign: "center",
-            }
-          : {
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }),
-        "@media (hover: hover)": {
-          ".MuiTableCell-root:hover &": {
-            maxWidth: tooltip ? "calc(100% - 48px)" : "100%",
-          },
-        },
-      }}
-    >
-      {label}
-    </Typography>
-  </Tooltip>
-);
+const HeaderLabel = ({ label, tooltip, className, isSorted }) => {
+
+    const { resolveLocalisedString } = useResolveLocalizedString();
+
+    return (<Tooltip
+        title={label}
+        arrow
+        placement="top"
+        enterDelay={1000}
+        componentsProps={getTooltipStyle}
+      >
+        <Typography
+          className={className}
+          sx={{
+            fontWeight: 600,
+            color: isSorted ? "primary.main" : "grey.700",
+            flex: 1,
+            transition: "max-width 0.2s ease",
+            maxWidth: "100%",
+            ...(label === "Rank" || label === "Type"
+              ? {
+                  overflow: "visible",
+                  whiteSpace: "normal",
+                  textOverflow: "clip",
+                  textAlign: "center",
+                }
+              : {
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }),
+            "@media (hover: hover)": {
+              ".MuiTableCell-root:hover &": {
+                maxWidth: tooltip ? "calc(100% - 48px)" : "100%",
+              },
+            },
+          }}
+        >
+          {label}
+        </Typography>
+      </Tooltip>);
+};
 
 const InfoIcon = ({ tooltip }) => (
   <Box

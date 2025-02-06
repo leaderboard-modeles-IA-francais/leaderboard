@@ -1,4 +1,5 @@
 import { MODEL_TYPE_ORDER } from "./modelTypes";
+import { LocalizedString, resolveLocalizedString } from "i18n";
 
 // Time constants (in milliseconds)
 const TIME = {
@@ -96,6 +97,21 @@ const COLUMN_SIZES = {
   CHAT_TEMPLATE: 140,
 };
 
+const RANK : LocalizedString = {
+    "en": "Rank",
+    "fr": "Rang"
+}
+
+const MODEL : LocalizedString = {
+    "en": "Model",
+    "fr": "Modèle"
+}
+
+const SCORE : LocalizedString = {
+    "en": "Average Score",
+    "fr": "Score moyen"
+}
+
 // Column definitions with organized structure
 const COLUMNS = {
   FIXED: {
@@ -103,7 +119,7 @@ const COLUMNS = {
       group: "fixed",
       size: COLUMN_SIZES.RANK,
       defaultVisible: true,
-      label: "Rank",
+      label: RANK,
     },
     "model.type_icon": {
       group: "fixed",
@@ -115,13 +131,13 @@ const COLUMNS = {
       group: "fixed",
       size: COLUMN_SIZES.MODEL,
       defaultVisible: true,
-      label: "Model",
+      label: MODEL,
     },
     "model.average_score": {
       group: "fixed",
       size: COLUMN_SIZES.AVERAGE_SCORE,
       defaultVisible: true,
-      label: "Average Score",
+      label: SCORE,
     },
   },
   EVALUATION: {

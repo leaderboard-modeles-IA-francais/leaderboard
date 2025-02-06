@@ -68,6 +68,15 @@ const Navigation = () => {
                 },
                 text: t("submit"),
             },
+            {
+                isActive: active === 2,
+                linkProps: {
+                    href: "/about",
+                    target: '_self',
+                    onClick: handleNavigation(1, "/about")
+                },
+                text: t("about"),
+            },
             // {
             //     isActive: active === 2,
             //     linkProps: {
@@ -208,6 +217,7 @@ const Navigation = () => {
 
 const { i18n } = declareComponentKeys<
 | "submit"
+| "about"
 >()({ Navigation });
 export type I18n = typeof i18n;
 

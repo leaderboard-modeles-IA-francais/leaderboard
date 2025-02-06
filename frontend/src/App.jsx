@@ -20,6 +20,7 @@ import { headerFooterDisplayItem } from "@codegouvfr/react-dsfr/Display";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LanguageSelect } from "./components/LanguageSelect/LanguageSelect";
 import LeaderboardProvider from "./pages/LeaderboardPage/components/Leaderboard/context/LeaderboardContext";
+import AboutPage from "pages/AboutPage/AboutPage";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -107,6 +108,7 @@ function App() {
                   <Routes>
                     <Route path="/" element={<LeaderboardPage />} />
                     <Route path="/add" element={<AddModelPage />} />
+                    <Route path="/about" element={<AboutPage />} />
                     {/* <Route path="/quote" element={<QuotePage />} />
                     <Route path="/vote" element={<VoteModelPage />} /> */}
                   </Routes>

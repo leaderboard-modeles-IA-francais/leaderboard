@@ -46,7 +46,8 @@ export const {
                 "service": "LLM leaderboard for the french language"
             },
             "Navigation": {
-                "submit": "Submit"
+                "submit": "Submit",
+                "about": "About"
             }
         },
 	/* spell-checker: disable */
@@ -66,7 +67,8 @@ export const {
                 "service": "Leaderboard des GML pour le français"
             },
             "Navigation": {
-                "submit": "Soumettre"
+                "submit": "Soumettre",
+                "about": "A propos"
             }
         }
 	/* spell-checker: enable */
