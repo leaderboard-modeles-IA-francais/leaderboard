@@ -395,7 +395,7 @@ const Leaderboard = () => {
           alignItems: "center",
         }}
       >
-        <Box
+        {/* <Box
           sx={{
             width: {
               xs: "100%",
@@ -421,7 +421,7 @@ const Leaderboard = () => {
               />
             )}
           </Box>
-        </Box>
+        </Box> */}
 
         <Box
           sx={{
