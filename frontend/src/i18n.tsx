@@ -63,7 +63,7 @@ export const {
                 )
             },
             "header": {
-                "tagline": "Tableau de référence pour les grands modèles de langages pour la langue française",
+                "tagline": "Comparaison de modèles d'IA génératifs sur des jeux de données adaptés à la langue française",
                 "service": "Leaderboard des modèles de langage pour le français"
             },
             "Navigation": {
