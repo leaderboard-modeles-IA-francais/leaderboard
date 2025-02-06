@@ -80,7 +80,7 @@ const LOCALIZED_STEPS = {
         },
         STRONG2: {
             "en": "model type",
-            "fr": "type de modele"
+            "fr": "type de modèle"
         },
         DOCLINK: {
             "en": "Model uploading guide",
@@ -115,8 +115,8 @@ const LOCALIZED_STEPS = {
             "fr": "Critères de Licence"
         },
         T1: {
-            "en": "A",
-            "fr": "Une"
+            "en": "A ",
+            "fr": "Une "
         },
         STRONG1: {
             "en": "license tag",
@@ -136,13 +136,13 @@ const LOCALIZED_STEPS = {
         },
         DOCLINK: {
             "en": "About model licenses",
-            "fr": "A propos des licences de modeles"
+            "fr": "A propos des licences de modèles"
         }
     },
     STEP4: {
         TITLE: {
             "en": "Model Card Requirements",
-            "fr": "Critères sur la carte du Modèle"
+            "fr": "Critères sur la carte du modèle"
         },
         T1: {
             "en": "Your model card must include: ",
@@ -176,7 +176,7 @@ const LOCALIZED_STEPS = {
         },
         T1: {
             "en": "Ensure your model is ",
-            "fr": "Vérifiez que votre modele est "
+            "fr": "Vérifiez que votre modèle est "
         },
         T2: {
             "en": "uses ",
