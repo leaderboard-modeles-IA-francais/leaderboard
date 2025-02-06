@@ -1,4 +1,5 @@
 import { createI18nApi, declareComponentKeys } from "i18nifty";
+import { Typography } from "@mui/material";
 export {declareComponentKeys};
 
 //List the languages you with to support
@@ -21,9 +22,10 @@ export const {
 	/** For use outside of React */
 	getTranslation,
 } = createI18nApi<
-    | import ("pages/LeaderboardPage/LeaderboardPage").I18n
+    | import ("pages/AddModelPage/AddModelPage").I18n
     | import ("components/Header/Header").I18n
     | import ("components/Navigation/Navigation").I18n
+    | import ("components/shared/AuthContainer").I18n
 >()(
     { 
       languages, 
@@ -31,16 +33,6 @@ export const {
     },
     {
         "en": {
-            "LeaderboardPage": {
-                "greating": ({ who })=> `Hello ${who}`,
-                "how are you": "How are you feeling today?",
-                "learn more": ({ href }) => (
-                    <>
-                        Learn more about 
-                        <a href={href}>this website</a>.
-                    </>
-                )
-            },
             "header": {
                 "tagline": "Benchmark for large language models in French",
                 "service": "LLM leaderboard for the French language"
@@ -48,20 +40,25 @@ export const {
             "Navigation": {
                 "submit": "Submit",
                 "about": "About"
+            },
+            "AddModelPage": {
+                "title": "Submit a model for evaluation",
+                "subtitle": "Add your model to the LLM leaderboard for the French language."
+            },
+            "AuthContainer": {
+                "login": "Login to submit a model",
+                "need": "You need to be logged in with your Hugging Face account to submit a model",
+                "logout": "Logout",
+                "button": "Sign in with Hugging Face",
+                "loggedin": ({user}) => (
+                    <Typography variant="body1">
+                        Connected as <strong>{user}</strong>
+                    </Typography>
+                )
             }
         },
 	/* spell-checker: disable */
 	"fr": {
-            "LeaderboardPage": {
-                "greating": ({ who })=> `Bonjour ${who}`,
-                "how are you": "Comment vous sentez vous au jour d'hui?",
-                "learn more": ({ href }) => (
-                    <>
-                        En savoir plus à propos de  
-                        <a href={href}>ce site web</a>.
-                    </>
-                )
-            },
             "header": {
                 "tagline": "Comparaison de modèles d'IA génératifs sur des jeux de données adaptés à la langue française",
                 "service": "Leaderboard des modèles de langage pour le français"
@@ -69,6 +66,21 @@ export const {
             "Navigation": {
                 "submit": "Soumettre",
                 "about": "A propos"
+            },
+            "AddModelPage": {
+                "title": "Soumettre un modele a l'evaluation",
+                "subtitle": "Ajoutez votre modele au leaderboard des modeles de langage pour le francais"
+            },
+            "AuthContainer": {
+                "login": "Se connecter pour soumettre un modele",
+                "need": "Il vous faut vous connecter avec votre compte Hugging Face pour soumettre un modele",
+                "logout": "Se deconnecter",
+                "button": "Se connecter avec Hugging Face",
+                "loggedin": ({user}) => (
+                    <Typography variant="body1">
+                        Connecte en tant que <strong>{user}</strong>
+                    </Typography>
+                )
             }
         }
 	/* spell-checker: enable */

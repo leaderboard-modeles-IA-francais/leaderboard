@@ -52,6 +52,10 @@ const StepNumber = ({ number }) => (
   </Box>
 );
 
+const TITLE = {
+    "en": "Submission guide",
+    "fr": "Guide de soumission"
+}
 const LOCALIZED_STEPS = {
     STEP1: {
         TITLE: {
@@ -375,7 +379,7 @@ function SubmissionGuide() {
           variant="h6"
           sx={{ fontWeight: 600, color: "text.primary" }}
         >
-          Submission Guide
+          {resolveLocalizedString(TITLE)}
         </Typography>
         <ExpandMoreIcon
           sx={{
