@@ -5,6 +5,7 @@ from app.services.models import ModelService
 from app.api.dependencies import get_model_service
 from app.core.fastapi_cache import cached
 from app.core.formatting import LogFormatter
+import json
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["models"])
@@ -18,6 +19,15 @@ async def get_models_status(
     try:
         logger.info(LogFormatter.info("Fetching status for all models"))
         result = await model_service.get_models()
+
+        # TODO remove is model anonymisation is no longer wanted
+        result = json.loads(json.dumps(result)) # Thread-safe deep copy
+        for status, models in result.items():
+            if status == "finished":
+                for i, model in enumerate(models):
+                    model["name"] = "(modèle non révélé)"
+                    model["revision"] = "(...)"
+        
         stats = {
             status: len(models) for status, models in result.items()
         }
