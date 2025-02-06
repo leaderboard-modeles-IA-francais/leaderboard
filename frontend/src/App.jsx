@@ -13,6 +13,7 @@ import AddModelPage from "./pages/AddModelPage/AddModelPage";
 import QuotePage from "./pages/QuotePage/QuotePage";
 import VoteModelPage from "./pages/VoteModelPage/VoteModelPage";
 import { Header } from "@codegouvfr/react-dsfr/Header";
+import { Badge } from "@codegouvfr/react-dsfr/Badge";
 import Footer from "./components/Footer/Footer";
 import MuiDsfrThemeProvider from "@codegouvfr/react-dsfr/mui";
 import { headerFooterDisplayItem } from "@codegouvfr/react-dsfr/Display";
@@ -105,7 +106,7 @@ function App() {
                   ]}
                   id="fr-header-simple-header-with-service-title-and-tagline"
                   serviceTagline="Tableau de référence pour les grands modèles de langages en français"
-                  serviceTitle="Leaderboard des GML pour le français"
+                  serviceTitle={<>Leaderboard des GML pour le français{' '}<Badge as="span" noIcon severity="success">Beta</Badge></>}
                   navigation={<Navigation />}
                 />
                 <Box
