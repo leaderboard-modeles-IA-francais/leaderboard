@@ -17,6 +17,7 @@ import dateutil
 import numpy as np
 from huggingface_hub import snapshot_download
 from app.services.models import ModelService
+import time
 
 from app.config import (
     RESULTS_CACHE,
@@ -228,8 +229,12 @@ class EvalResult:
         )
 
 class LeaderboardService:
+
     def __init__(self):
         self.model_service = ModelService()
+        self.cached_raw_data = None
+        self.last_cache_update = 0
+        self.cache_ttl = cache_config.cache_ttl.total_seconds()
         pass
 
     async def get_raw_eval_results(self, results_path: str, requests_path: str) -> list[EvalResult]:
@@ -269,13 +274,24 @@ class LeaderboardService:
 
         
     async def fetch_raw_data(self) -> List[EvalResult]:
+
+        # Check if cache needs refresh
+        current_time = time.time()
+        cache_age = current_time - self.last_cache_update
+        if not self.cached_raw_data:
+            return await self._refresh_raw_data()
+        elif cache_age > self.cache_ttl:
+            return await self._refresh_raw_data()
+        else:
+            return self.cached_raw_data
+
+    async def _refresh_raw_data(self) -> List[EvalResult]:
         """Fetch raw leaderboard data from HuggingFace dataset"""
         try:
             logger.info(LogFormatter.section("FETCHING LEADERBOARD DATA"))
             logger.info(LogFormatter.info(f"Loading dataset from {HF_ORGANIZATION}/contents"))
             print("GETTING FROM %s" % HF_ORGANIZATION)
 
-            # TODO: cache
             snapshot_download(
                 repo_id=RESULTS_REPO,
                 local_dir=RESULTS_CACHE,
