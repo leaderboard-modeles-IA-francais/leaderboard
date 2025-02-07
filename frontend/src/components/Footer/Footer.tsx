@@ -1,18 +1,38 @@
-import {addFooterTranslations, Footer} from "@codegouvfr/react-dsfr/Footer";
+import {addFooterTranslations, Footer,} from "@codegouvfr/react-dsfr/Footer";
+import {CallOut} from "@codegouvfr/react-dsfr/CallOut";
+import {Highlight} from "@codegouvfr/react-dsfr/Highlight";
+import { Alert } from "@codegouvfr/react-dsfr/Alert";
 // import { Box, Typography, Link } from "@mui/material";
 
 const footer = () => {
+
+    // const callout = <Alert 
+    //     severity="warning"
+    //     description="
+    //         Ce leaderboard compare les modèles de language adaptés à la langue française, sur des jeux de données en français, adaptés aux spécificités culturelles de la francophonie. C'est d'abord un projet de recherche collaboratif, et nous espérons recevoir de nombreuses contributions pour l'améliorer au fil du temps!
+    //         Le leaderboard n'est que dans sa toute première version, et sera amené à évoluer régulièrement, avec de nouveaux jeux de données, de nouvelles métriques, et, on l'espère, beaucoup de nouveaux modèles ouverts soumis par la communauté! Dans sa version initiale, nous avons couvert un panel de modèles ouverts, entrainés sur du français, de différentes tailles et origines.
+    //         Note: Les données d'évaluation ont été pour l'instant gardées confidentielles, pour préserver l'intégrité et la validité des résultats, et éviter les manipulations du classement.
+    //     "
+    //     small
+    // />
+    const callout = <Highlight 
+                    size="sm"
+                    classes={{
+                        root: 'fr-highlight--orange-terre-battue'
+                    }}>
+                        Ce leaderboard compare les modèles de language adaptés à la langue française, sur des jeux de données en français, adaptés aux spécificités culturelles de la francophonie. C'est d'abord un projet de recherche collaboratif, et nous espérons recevoir de nombreuses contributions pour l'améliorer au fil du temps!
+                        Le leaderboard n'est que dans sa toute première version, et sera amené à évoluer régulièrement, avec de nouveaux jeux de données, de nouvelles métriques, et, on l'espère, beaucoup de nouveaux modèles ouverts soumis par la communauté! Dans sa version initiale, nous avons couvert un panel de modèles ouverts, entrainés sur du français, de différentes tailles et origines.
+                        Note: Les données d'évaluation ont été pour l'instant gardées confidentielles, pour préserver l'intégrité et la validité des résultats, et éviter les manipulations du classement.
+                    </Highlight>
+
     return <Footer
         style={{"boxShadow": "none"}}
         accessibility="fully compliant"
-        contentDescription="
-          L'évaluation des systèmes d'IA est un enjeu stratégique sur lequel la France s'est historiquement démarquée.
-
-          Ce classement, ou leaderboard, s'inspire directement de l'Open LLM Leaderboard et permet de comparer différents modèles d'IA génératifs à l'aide de jeux de données spécifiquement adaptés aux environnements et à la culture francophones.
-          "
+        contentDescription={callout}
         classes={{
             logo: "logo_footer",
-            contentLink: "content_link"
+            contentLink: "content_link",
+            content: "foot_content"
         }}
         license={""}
         linkList={undefined}
