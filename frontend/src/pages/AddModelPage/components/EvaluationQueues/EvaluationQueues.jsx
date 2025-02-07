@@ -25,65 +25,95 @@ import AutorenewIcon from "@mui/icons-material/Autorenew";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { useResolveLocalizedString } from "i18n";
+import { resolveLocalizedString, useResolveLocalizedString } from "i18n";
 
 // Function to format wait time
 const formatWaitTime = (waitTimeStr) => {
   const seconds = parseFloat(waitTimeStr.replace("s", ""));
 
   if (seconds < 60) {
-    return "just now";
+    return {
+        "en": "just now",
+        "fr": "a l'instant"
+    };
   }
 
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) {
-    return `${minutes}m ago`;
+    return {
+        "en": `${minutes}m ago`,
+        "fr": `il y a ${minutes}m`
+    };
   }
 
   const hours = Math.floor(minutes / 60);
   if (hours < 24) {
-    return `${hours}h ago`;
+    return {
+        "en": `${hours}h ago`,
+        "fr": `il y a ${hours}h`
+    };
   }
 
   const days = Math.floor(hours / 24);
-  return `${days}d ago`;
+  return {
+    "en": `${days}d ago`,
+    "fr": `il y a${days}j`
+  };
 };
 
 // Column definitions with their properties
 const columns = [
   {
     id: "model",
-    label: "Model",
+    label: {
+        "en": "Model",
+        "fr": "Modele"
+    },
     width: "35%",
     align: "left",
   },
   {
     id: "submitter",
-    label: "Submitted by",
+    label: {
+        "en": "Submitted by",
+        "fr": "Soumis par",
+    },
     width: "15%",
     align: "left",
   },
   {
     id: "wait_time",
-    label: "Submitted",
+    label: {
+        "en": "Submitted",
+        "fr": "Soumis"
+    },
     width: "12%",
     align: "center",
   },
   {
     id: "precision",
-    label: "Precision",
+    label: {
+        "en": "Precision",
+        "fr": "Precision"
+    },
     width: "13%",
     align: "center",
   },
   {
     id: "revision",
-    label: "Revision",
+    label: {
+        "en":"Revision",
+        "fr": "Revision"
+    },
     width: "12%",
     align: "center",
   },
   {
     id: "status",
-    label: "Status",
+    label: {
+        "en": "Status",
+        "fr": "Statut"
+    },
     width: "13%",
     align: "center",
   },
@@ -245,7 +275,7 @@ const ModelTable = ({ models, emptyMessage, status }) => {
                   padding: "12px 16px",
                 }}
               >
-                {column.label}
+                {resolveLocalizedString(column.label)}
               </TableCell>
             ))}
           </TableRow>
@@ -342,7 +372,7 @@ const ModelTable = ({ models, emptyMessage, status }) => {
                             }}
                           >
                             <AccessTimeIcon sx={{ fontSize: "0.9rem" }} />
-                            {waitTime}
+                            {resolveLocalizedString(waitTime)}
                           </Typography>
                         </Tooltip>
                       </TableCell>
