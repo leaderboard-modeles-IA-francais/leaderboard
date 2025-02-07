@@ -367,11 +367,11 @@ class LeaderboardService:
         """Transform raw data into the format expected by the frontend"""
         try:
             # Extract model name for logging
-            model_name = None # data.full_model
+            model_name = data.full_model
             logger.debug(LogFormatter.info(f"Transforming data for model: {model_name}"))
             
             # Create unique ID combining model name, precision, sha and chat template status
-            unique_id = None # f"{data.full_model}_{data.precision}" # FIXME missing _{data.get('Model sha', 'Unknown')}_{str(data.get('Chat Template', False))}"
+            unique_id = f"{data.full_model}_{data.precision}" # FIXME missing _{data.get('Model sha', 'Unknown')}_{str(data.get('Chat Template', False))}"
 
             evaluations = {
                 "ifeval_fr": {
@@ -438,7 +438,7 @@ class LeaderboardService:
             transformed_data = {
                 "id": unique_id,
                 "model": {
-                    "name": "(modèle non révélé)", # data.full_model,
+                    "name": data.full_model,
                     "sha": "", # FIXME data.get("Model sha"),
                     "precision": data.precision.name,
                     "type": model_type.to_str(),
