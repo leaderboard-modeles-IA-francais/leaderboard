@@ -70,20 +70,15 @@ export const COLUMN_TOOLTIPS = {
     },
   ]),
 
-  BACFR: createTooltipContent("Multistep Soft Reasoning (MuSR):", [
+  BACFR: createTooltipContent("French Baccalauréat (BAC FR):", [
     {
       label: "Scope",
-      description: "Reasoning and understanding on/of long texts",
-      subItems: [
-        "Language understanding",
-        "Reasoning capabilities",
-        "Long context reasoning",
-      ],
+      description: "more than 700 question from the baccalauréat exam (end of high school national French exam), including the followong subjects : maths, computer science and physics-chemestry. The extracted questions are multiple choice, code completation or exact solution answer (with a tolerence degree).",
     },
     {
       label: "Scoring: Accuracy",
       description:
-        "Was the correct choice selected among the options.",
+        "(Prefix quasi-exact match) Was the solution generated correct and in the expected format.",
     },
   ]),
 
