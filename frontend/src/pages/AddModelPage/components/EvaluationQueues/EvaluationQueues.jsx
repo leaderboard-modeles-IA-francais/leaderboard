@@ -25,6 +25,7 @@ import AutorenewIcon from "@mui/icons-material/Autorenew";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import { useResolveLocalizedString } from "i18n";
 
 // Function to format wait time
 const formatWaitTime = (waitTimeStr) => {
@@ -88,19 +89,82 @@ const columns = [
   },
 ];
 
+const COMPLETED = {
+    STATUS: {
+        "en": "Evaluated",
+        "fr": "Termine"
+    },
+    CHIP: {
+        "en": "Completed",
+        "fr": "Termine"
+    },
+    EMPTY_MESSAGE: {
+        "en": "No models evaluated",
+        "fr": "Aucun modele n'a ete evalue"
+    },
+    TITLE: {
+        "en": "Recently evaluated models",
+        "fr": "Modeles evalues recemment"
+    }
+}
+
+const EVALUATING = {
+    STATUS: {
+        "en": "Evaluating",
+        "fr": "En cours d'evaluation"
+    },
+    CHIP: {
+        "en": "Evaluating",
+        "fr": "En cours d'evaluation"
+    },
+    EMPTY_MESSAGE: {
+        "en": "No models being evaluated",
+        "fr": "Aucun modele en cours d'evaluation"
+    },
+    TITLE: {
+        "en": "Models being evaluated",
+        "fr": "Modeles en cours d'evaluation"
+    }
+}
+
+const PENDING = {
+    STATUS: {
+        "en": "In Queue",
+        "fr": "En attente"
+    },
+    CHIP: {
+        "en": "Pending",
+        "fr": "En attente"
+    },
+    EMPTY_MESSAGE: {
+        "en": "No models in queue",
+        "fr": "Aucun modele en attente"
+    },
+    TITLE: {
+        "en": "Models in queue",
+        "fr": "Modeles en attente"
+    }
+
+}
+
 const StatusChip = ({ status }) => {
-  const statusConfig = {
-    finished: {
-      icon: <CheckCircleIcon />,
-      label: "Completed",
-      color: "success",
-    },
-    evaluating: {
-      icon: <AutorenewIcon />,
-      label: "Evaluating",
-      color: "warning",
-    },
-    pending: { icon: <PendingIcon />, label: "Pending", color: "info" },
+    const {resolveLocalizedString} = useResolveLocalizedString();
+    const statusConfig = {
+        finished: {
+            icon: <CheckCircleIcon />,
+            label: resolveLocalizedString(COMPLETED.CHIP),
+            color: "success",
+        },
+        evaluating: {
+            icon: <AutorenewIcon />,
+            label: resolveLocalizedString(EVALUATING.CHIP),
+            color: "warning",
+        },
+        pending: { 
+            icon: <PendingIcon />, 
+            label: resolveLocalizedString(PENDING.CHIP),
+            color: "info" 
+        },
   };
 
   const config = statusConfig[status] || statusConfig.pending;
@@ -340,6 +404,21 @@ const ModelTable = ({ models, emptyMessage, status }) => {
   );
 };
 
+const QUEUE_STATUS = {
+    EVALUATED: {
+        "en": "Evaluated",
+        "fr": "Evalues"
+    },
+    EVALUATING: {
+        "en": "Evaluating",
+        "fr": "En cours d'evaluation"
+    },
+    PENDING: {
+        "en": "In Queue",
+        "fr": "En Attente"
+    },
+}
+
 const QueueAccordion = ({
   title,
   models,
@@ -443,6 +522,7 @@ const EvaluationQueues = ({ defaultExpanded = true }) => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const {resolveLocalizedString} = useResolveLocalizedString();
 
   useEffect(() => {
     const fetchModels = async () => {
@@ -576,7 +656,7 @@ const EvaluationQueues = ({ defaultExpanded = true }) => {
               }}
             >
               <Chip
-                label={`${models.pending.length} In Queue`}
+                label={`${models.pending.length} ${resolveLocalizedString(PENDING.STATUS)}`}
                 size="small"
                 color="info"
                 variant="outlined"
@@ -595,7 +675,7 @@ const EvaluationQueues = ({ defaultExpanded = true }) => {
                 }}
               />
               <Chip
-                label={`${models.evaluating.length} Evaluating`}
+                label={`${models.evaluating.length} ${resolveLocalizedString(EVALUATING.STATUS)}`}
                 size="small"
                 color="warning"
                 variant="outlined"
@@ -614,7 +694,7 @@ const EvaluationQueues = ({ defaultExpanded = true }) => {
                 }}
               />
               <Chip
-                label={`${models.finished.length} Evaluated`}
+                label={`${models.finished.length} ${resolveLocalizedString(COMPLETED.STATUS)}`}
                 size="small"
                 color="success"
                 variant="outlined"
@@ -660,30 +740,30 @@ const EvaluationQueues = ({ defaultExpanded = true }) => {
         ) : (
           <>
             <QueueAccordion
-              title="Models in queue"
+              title={resolveLocalizedString(PENDING.TITLE)}
               models={models.pending}
               status="pending"
-              emptyMessage="No models in queue"
+              emptyMessage={resolveLocalizedString(PENDING.EMPTY_MESSAGE)}
               expanded={expandedQueues.has("pending")}
               onChange={handleQueueAccordionChange("pending")}
               loading={loading}
             />
 
             <QueueAccordion
-              title="Models being evaluated"
+              title={resolveLocalizedString(EVALUATING.TITLE)}
               models={models.evaluating}
               status="evaluating"
-              emptyMessage="No models currently being evaluated"
+              emptyMessage={resolveLocalizedString(EVALUATING.EMPTY_MESSAGE)}
               expanded={expandedQueues.has("evaluating")}
               onChange={handleQueueAccordionChange("evaluating")}
               loading={loading}
             />
 
             <QueueAccordion
-              title="Recently evaluated models"
+              title={resolveLocalizedString(COMPLETED.TITLE)}
               models={models.finished}
               status="finished"
-              emptyMessage="No models have been evaluated recently"
+              emptyMessage={resolveLocalizedString(COMPLETED.EMPTY_MESSAGE)}
               expanded={expandedQueues.has("finished")}
               onChange={handleQueueAccordionChange("finished")}
               loading={loading}
