@@ -576,7 +576,70 @@ export const createColumns = (
                 flex: 1,
               }}
             >
+              <Link
+                href={`https://huggingface.co/${modelName}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`View ${modelName} on Hugging Face Hub`}
+                title={TABLE_TOOLTIPS.HUB_LINK(modelName)}
+                sx={{
+                  textDecoration: "none",
+                  color: "info.main",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                  "&:hover": {
+                    textDecoration: "underline",
+                    color: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? theme.palette.info.light
+                        : theme.palette.info.dark,
+                    "& svg": {
+                      opacity: 0.8,
+                    },
+                  },
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  flex: 1,
+                  minWidth: 0,
+                  fontWeight: row.original.static_rank <= 3 ? 600 : "inherit",
+                }}
+              >
                 <HighlightedText text={modelName} searchValue={textSearch} />
+                <OpenInNewIcon
+                  sx={{
+                    fontSize: "0.75rem",
+                    opacity: 0.6,
+                    transition: "opacity 0.2s ease-in-out",
+                    ml: 0.5,
+                    flexShrink: 0,
+                  }}
+                />
+              </Link>
+              <Link
+                href={getDetailsUrl(modelName)}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`View detailed evaluation results for ${modelName}`}
+                title={TABLE_TOOLTIPS.EVAL_RESULTS(modelName)}
+                sx={{
+                  textDecoration: "none",
+                  "&:hover": {
+                    textDecoration: "underline",
+                    "& svg": {
+                      color: "text.primary",
+                    },
+                  },
+                  display: "flex",
+                  alignItems: "center",
+                  color: "text.secondary",
+                  flexShrink: 0,
+                  mr: 0,
+                }}
+              >
+                <DatabaseIcon />
+              </Link>
             </Box>
           </Box>
         );
