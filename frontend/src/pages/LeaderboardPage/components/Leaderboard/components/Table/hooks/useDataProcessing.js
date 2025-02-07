@@ -23,7 +23,7 @@ const INT = {
     },
     MODEL: {
         "en": "Model",
-        "fr": "Modele"
+        "fr": "Modèle"
     },
     AVG: {
         "en": "Average",

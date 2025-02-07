@@ -125,38 +125,38 @@ const HELP_TEXTS = {
 const INTERNATIONALISATION = {
     SUBMITTED: {
         "en": "Model submitted successfully !",
-        "fr": "Modele soumis avec succes !"
+        "fr": "Modèle soumis avec succes !"
     },
     SUBMITTED_MESSAGE: {
         T1: {
             "en": "Your model",
-            "fr": "Votre modele"
+            "fr": "Votre modèle"
         },
         T2: {
             "en": "has been added to the evaluation queue with the following parameters: ",
-            "fr": "a ete ajoute a la queue d'evaluation avec les parametres suivants: "
+            "fr": "a été ajoute à la queue d'évaluation avec les paramètres suivants: "
         }
     },
     PARAMETERS: {
         MODEL: {
             "en": "Model:",
-            "fr": "Modele:"
+            "fr": "Modèle:"
         },
         REVISION: {
             "en": "Revision:",
-            "fr": "Revision:"
+            "fr": "Révision:"
         },
         PRECISION: {
             "en": "Precision:",
-            "fr": "Precision:"
+            "fr": "Précision:"
         },
         WEIGHTS: {
             "en": "Weight type:",
-            "fr": "Ponderation:"
+            "fr": "Pondération:"
         },
         BASE: {
             "en": "Base model:",
-            "fr": "Modele de base:"
+            "fr": "Modèle de base:"
         },
         TEMPLATE: {
             "en": "Chat template:",
@@ -164,27 +164,27 @@ const INTERNATIONALISATION = {
         },
         UPVOTE: {
             "en": "An automatic upvote has been added to your model to help with prioritization.",
-            "fr": "Un upvote automatique a ete rajoute a votre modele pour aider a la priorization."
+            "fr": "Un upvote automatique a ete rajoute a votre modèle pour aider a la priorization."
         },
         OTHER: {
             "en": "Submit another model",
-            "fr": "Soumettre un autre modele"
+            "fr": "Soumettre un autre modèle"
         }
     },
     FORM: {
         TITLE: {
             "en": "Model Submission Form",
-            "fr": "Formulaire pour soumettre un modele"
+            "fr": "Formulaire pour soumettre un modèle"
         },
         MODEL_INFO: {
             TITLE: {
                 "en": "Model Information",
-                "fr": "Informations sur le Modele"
+                "fr": "Informations sur le modèle"
             },
             NAME: {
                 LABEL: {
                     "en": "Model Name",
-                    "fr": "Nom du modele"
+                    "fr": "Nom du modèle"
                 },
                 PLACEHOLDER: {
                     "en": "organization/model-name",
@@ -194,7 +194,7 @@ const INTERNATIONALISATION = {
             REVISION: {
                 LABEL: {
                     "en": "Revision commit",
-                    "fr": "Commit de la revision"
+                    "fr": "Commit de la révision"
                 },
                 HELPER_TEXT: {
                     "en": "Default: main",
@@ -205,12 +205,12 @@ const INTERNATIONALISATION = {
         MODEL_CONFIG: {
             TITLE: {
                 "en": "Model Configuration",
-                "fr": "Configuration du Modele"
+                "fr": "Configuration du modèle"
             },
             TYPE: {
                 LABEL: {
                     "en": "Model Type",
-                    "fr": "Type de Modele"
+                    "fr": "Type de modèle"
                 },
             },
             TEMPLATE: {
@@ -222,13 +222,13 @@ const INTERNATIONALISATION = {
             PRECISION: {
                 LABEL: {
                     "en": "Precision",
-                    "fr": "Precision"
+                    "fr": "Précision"
                 }
             },
             WEIGHTS: {
                 LABEL: {
                     "en": "Weights Type",
-                    "fr": "Ponderation"
+                    "fr": "Pondération"
                 } 
             }
         },
