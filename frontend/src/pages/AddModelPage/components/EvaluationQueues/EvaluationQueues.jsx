@@ -67,7 +67,7 @@ const columns = [
     id: "model",
     label: {
         "en": "Model",
-        "fr": "Modele"
+        "fr": "Modèle"
     },
     width: "35%",
     align: "left",
@@ -126,34 +126,34 @@ const COMPLETED = {
     },
     CHIP: {
         "en": "Completed",
-        "fr": "Termine"
+        "fr": "Terminé"
     },
     EMPTY_MESSAGE: {
         "en": "No models evaluated",
-        "fr": "Aucun modele n'a ete evalue"
+        "fr": "Aucun modèle n'a ete evalue"
     },
     TITLE: {
         "en": "Recently evaluated models",
-        "fr": "Modeles evalues recemment"
+        "fr": "Modèles évalues récemment"
     }
 }
 
 const EVALUATING = {
     STATUS: {
         "en": "Evaluating",
-        "fr": "En cours d'evaluation"
+        "fr": "En cours d'évaluation"
     },
     CHIP: {
         "en": "Evaluating",
-        "fr": "En cours d'evaluation"
+        "fr": "En cours d'évaluation"
     },
     EMPTY_MESSAGE: {
         "en": "No models being evaluated",
-        "fr": "Aucun modele en cours d'evaluation"
+        "fr": "Aucun modèle en cours d'évaluation"
     },
     TITLE: {
         "en": "Models being evaluated",
-        "fr": "Modeles en cours d'evaluation"
+        "fr": "Modèles en cours d'évaluation"
     }
 }
 
@@ -168,11 +168,11 @@ const PENDING = {
     },
     EMPTY_MESSAGE: {
         "en": "No models in queue",
-        "fr": "Aucun modele en attente"
+        "fr": "Aucun modèle en attente"
     },
     TITLE: {
         "en": "Models in queue",
-        "fr": "Modeles en attente"
+        "fr": "Modèles en attente"
     }
 
 }

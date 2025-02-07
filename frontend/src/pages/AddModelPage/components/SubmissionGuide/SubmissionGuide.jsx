@@ -72,7 +72,7 @@ const LOCALIZED_STEPS = {
         },
         T3: {
             "en": "format (e.g. mistralai/Mistral-7B-v0.1). Specify the",
-            "fr": "(e.g. mistralai/Mistral-7B-v0.1). Specifiez-la"
+            "fr": "(e.g. mistralai/Mistral-7B-v0.1). Spécifiez la"
         },
         STRONG1: {
             "en": "revision",
@@ -102,7 +102,7 @@ const LOCALIZED_STEPS = {
         },
         STRONG1: {
             "en": "loaded locally",
-            "fr": "charge localement"
+            "fr": "chargé localement"
         },
         T2: {
             "en": "before submitting:",
@@ -136,7 +136,7 @@ const LOCALIZED_STEPS = {
         },
         T3: {
             "en": "(Apache, MIT, etc) are strongly recommended.",
-            "fr": "(Apache, MIT, etc) sont fortement recommandes."
+            "fr": "(Apache, MIT, etc) sont fortement recommandées."
         },
         DOCLINK: {
             "en": "About model licenses",
@@ -154,7 +154,7 @@ const LOCALIZED_STEPS = {
         },
         STRONG1: {
             "en": "training details",
-            "fr": "details d'entrainement"
+            "fr": "détails d'entrainement"
         },
         STRONG2: {
             "en": "dataset information",
@@ -200,7 +200,7 @@ const LOCALIZED_STEPS = {
         },
         STRONG2: {
             "en": "loads correctly",
-            "fr": "charge correctement"
+            "fr": "chargé correctement"
         },
         T5: {
             "en": "with the provided code",
@@ -208,7 +208,7 @@ const LOCALIZED_STEPS = {
         },
         DOCLINK: {
             "en": "Sharing best practices",
-            "fr": "Partager les bonnes pratiques"
+            "fr": "Bonnes pratiques de partage"
         }
     }
 }
