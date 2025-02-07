@@ -370,7 +370,7 @@ const createHeaderCell = (label, tooltip) => (header) =>
   );
 
 const createModelHeader =
-  (totalModels, officialProvidersCount = 0, isOfficialProviderActive = false) =>
+  (localizedModelString, totalModels, officialProvidersCount = 0, isOfficialProviderActive = false) =>
   ({ table }) => {
     return (
       <Box
@@ -397,7 +397,7 @@ const createModelHeader =
               whiteSpace: "nowrap",
             }}
           >
-            Model
+            {localizedModelString}
           </Typography>
         </Box>
       </Box>
@@ -445,6 +445,7 @@ const BooleanValue = ({ value }) => {
 };
 
 export const createColumns = (
+  headerNames,
   getColorForValue,
   scoreDisplay = "normalized",
   columnVisibility = {},
@@ -453,11 +454,13 @@ export const createColumns = (
   searchValue = "",
   rankingMode = "static",
   onTogglePin,
-  hasPinnedRows = false
+  hasPinnedRows = false,
 ) => {
   // Ajuster les tailles des colonnes en fonction de la présence de lignes épinglées
   const getColumnSize = (defaultSize) =>
     hasPinnedRows ? "auto" : `${defaultSize}px`;
+
+    console.log(headerNames)
 
   const baseColumns = [
     {
@@ -500,7 +503,7 @@ export const createColumns = (
     },
     {
       accessorKey: "rank",
-      header: createHeaderCell("Rank"),
+      header: headerNames ? createHeaderCell(headerNames.rank) : "",
       cell: ({ row }) => {
         const rank =
           rankingMode === "static"
@@ -550,7 +553,7 @@ export const createColumns = (
     },
     {
       accessorKey: "id",
-      header: createModelHeader(totalModels),
+      header: createModelHeader(headerNames.model, totalModels),
       cell: ({ row }) => {
         const textSearch = extractTextSearch(searchValue);
         const modelName = row.original.model.name;
@@ -582,7 +585,7 @@ export const createColumns = (
     },
     {
       accessorKey: "model.average_score",
-      header: createHeaderCell("Average", COLUMN_TOOLTIPS.AVERAGE),
+      header: createHeaderCell(headerNames.avg, COLUMN_TOOLTIPS.AVERAGE),
       cell: ({ row, getValue }) =>
         createScoreCell(getValue, row, "model.average_score"),
       size: TABLE_DEFAULTS.COLUMNS.COLUMN_SIZES["model.average_score"],

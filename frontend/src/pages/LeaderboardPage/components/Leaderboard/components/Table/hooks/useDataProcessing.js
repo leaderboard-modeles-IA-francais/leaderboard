@@ -13,6 +13,23 @@ import {
   useFilteredData,
   useColumnVisibility,
 } from "../../../hooks/useDataUtils";
+import { useResolveLocalizedString, useLang } from "i18n";
+import header from "components/Header/Header";
+
+const INT = {
+    RANK: {
+        "en": "Rank",
+        "fr": "Rang"
+    },
+    MODEL: {
+        "en": "Model",
+        "fr": "Modele"
+    },
+    AVG: {
+        "en": "Average",
+        "fr": "Moyenne"
+    },
+}
 
 export const useDataProcessing = (
   data,
@@ -36,6 +53,8 @@ export const useDataProcessing = (
   const getColorForValue = useColorGenerator(minAverage, maxAverage);
   const processedData = useProcessedData(data, averageMode, visibleColumns);
   const columnVisibility = useColumnVisibility(visibleColumns);
+  const {resolveLocalizedString} = useResolveLocalizedString();
+  const {lang, setLang} = useLang();
 
   // Memoize filters
   const filterConfig = useMemo(
@@ -76,8 +95,16 @@ export const useDataProcessing = (
 
   // Memoize columns creation
   const columns = useMemo(
-    () =>
-      createColumns(
+    () => {
+
+      const headerNames = {
+        rank: resolveLocalizedString(INT.RANK),
+        model: resolveLocalizedString(INT.MODEL),
+        avg: resolveLocalizedString(INT.AVG),
+      }
+
+      return createColumns(
+        headerNames,
         getColorForValue,
         scoreDisplay,
         columnVisibility,
@@ -85,8 +112,9 @@ export const useDataProcessing = (
         averageMode,
         searchValue,
         rankingMode,
-        onTogglePin
-      ),
+        onTogglePin,
+      );
+    },
     [
       getColorForValue,
       scoreDisplay,
@@ -96,6 +124,7 @@ export const useDataProcessing = (
       searchValue,
       rankingMode,
       onTogglePin,
+      lang
     ]
   );
 
