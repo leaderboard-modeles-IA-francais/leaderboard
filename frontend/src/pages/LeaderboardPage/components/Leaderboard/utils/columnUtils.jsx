@@ -607,38 +607,6 @@ export const createColumns = (
                 }}
               >
                 <HighlightedText text={modelName} searchValue={textSearch} />
-                <OpenInNewIcon
-                  sx={{
-                    fontSize: "0.75rem",
-                    opacity: 0.6,
-                    transition: "opacity 0.2s ease-in-out",
-                    ml: 0.5,
-                    flexShrink: 0,
-                  }}
-                />
-              </Link>
-              <Link
-                href={getDetailsUrl(modelName)}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`View detailed evaluation results for ${modelName}`}
-                title={TABLE_TOOLTIPS.EVAL_RESULTS(modelName)}
-                sx={{
-                  textDecoration: "none",
-                  "&:hover": {
-                    textDecoration: "underline",
-                    "& svg": {
-                      color: "text.primary",
-                    },
-                  },
-                  display: "flex",
-                  alignItems: "center",
-                  color: "text.secondary",
-                  flexShrink: 0,
-                  mr: 0,
-                }}
-              >
-                <DatabaseIcon />
               </Link>
             </Box>
           </Box>
