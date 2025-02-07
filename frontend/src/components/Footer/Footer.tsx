@@ -20,28 +20,43 @@ const footer = () => {
           sub: [
             {
               alt: 'Logo Inria',
-              href: '#',
-              imgUrl: '/inr_logo_rouge.png'
+              imgUrl: '/inr_logo_rouge.png',
+              linkProps: {
+                href: "https://inria.fr/fr",
+                title: "Lien vers le site Inria"
+              }
             },
             {
               alt: 'Logo CNRS',
-              href: '#',
-              imgUrl: '/LOGO_CNRS_BLEU.png'
+              imgUrl: '/LOGO_CNRS_BLEU.png',
+              linkProps: {
+                href: "https://www.cnrs.fr/fr",
+                title: "Lien vers le site CNRS"
+              }
             },
             {
               alt: 'Logo LNE',
-              href: '#',
-              imgUrl: '/logo-lne.svgz'
+              imgUrl: '/logo-lne.svgz',
+              linkProps: {
+                href: "https://www.lne.fr/fr",
+                title: "Lien vers le site LNE"
+              }
             },
             {
               alt: 'Logo DGE',
-              href: '#',
-              imgUrl: '/logo_DGE.png'
+              imgUrl: '/logo_DGE.png',
+              linkProps: {
+                href: "https://www.entreprises.gouv.fr/",
+                title: "Lien vers le site DGE"
+              }
             },
             {
               alt: 'Logo huggingface',
-              href: '#',
-              imgUrl: '/hf-logo-with-title.svg'
+              imgUrl: '/hf-logo-with-title.svg',
+              linkProps: {
+                href: "https://huggingface.co/",
+                title: "Lien vers le site huggingface"
+              }
             }
           ]
         }}
