@@ -560,8 +560,6 @@ class ModelService(HuggingFaceService):
             logger.error(LogFormatter.error("Failed to record vote", e))
             # Don't raise here as the main submission was successful
 
-        await self._refresh_models_cache()
-
         return {
             "status": "success",
             "message": "The model was submitted successfully, and the vote has been recorded"
