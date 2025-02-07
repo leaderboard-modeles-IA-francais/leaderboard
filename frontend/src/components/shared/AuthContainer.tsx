@@ -110,7 +110,6 @@ function AuthContainer({ actionText = "DO_ACTION" }) {
         <Stack direction="row" spacing={1} alignItems="center">
           <Typography variant="body1">
             {t("loggedin", {user: (user !== null ? user!['username'] : "inconnu")})}
-            Connected as <strong>{user!['username']}</strong>
           </Typography>
           <Chip
             label={`Ready to ${actionText}`}
