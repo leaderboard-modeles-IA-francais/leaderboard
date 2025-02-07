@@ -332,12 +332,12 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
               variant="h5"
               sx={{ fontWeight: 600, color: "success.800" }}
             >
-              {useResolveLocalizedString(INTERNATIONALISATION.SUBMITTED)}
+              {resolveLocalizedString(INTERNATIONALISATION.SUBMITTED)}
             </Typography>
           </Stack>
 
           <Typography variant="body1">
-            {resolveLocalizedString(SUBMITTED_MESSAGE.T1)} <strong>{submittedData.modelName}</strong> {resolveLocalizedString(SUBMITTED_MESSAGE.T2)}
+            {resolveLocalizedString(INTERNATIONALISATION.SUBMITTED_MESSAGE.T1)} <strong>{submittedData.modelName}</strong> {resolveLocalizedString(INTERNATIONALISATION.SUBMITTED_MESSAGE.T2)}
           </Typography>
 
           <Paper
