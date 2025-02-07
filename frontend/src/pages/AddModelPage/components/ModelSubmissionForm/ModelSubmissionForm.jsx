@@ -24,6 +24,7 @@ import InfoIconWithTooltip from "../../../../components/shared/InfoIconWithToolt
 import { MODEL_TYPES } from "../../../LeaderboardPage/components/Leaderboard/constants/modelTypes";
 import { SUBMISSION_PRECISIONS } from "../../../LeaderboardPage/components/Leaderboard/constants/defaults";
 import AuthContainer from "../../../../components/shared/AuthContainer";
+import { useResolveLocalizedString } from "i18n";
 
 const WEIGHT_TYPES = [
   { value: "Original", label: "Original" },
@@ -121,6 +122,127 @@ const HELP_TEXTS = {
   ),
 };
 
+const INTERNATIONALISATION = {
+    SUBMITTED: {
+        "en": "Model submitted successfully !",
+        "fr": "Modele soumis avec succes !"
+    },
+    SUBMITTED_MESSAGE: {
+        T1: {
+            "en": "Your model",
+            "fr": "Votre modele"
+        },
+        T2: {
+            "en": "has been added to the evaluation queue with the following parameters: ",
+            "fr": "a ete ajoute a la queue d'evaluation avec les parametres suivants: "
+        }
+    },
+    PARAMETERS: {
+        MODEL: {
+            "en": "Model:",
+            "fr": "Modele:"
+        },
+        REVISION: {
+            "en": "Revision:",
+            "fr": "Revision:"
+        },
+        PRECISION: {
+            "en": "Precision:",
+            "fr": "Precision:"
+        },
+        WEIGHTS: {
+            "en": "Weight type:",
+            "fr": "Ponderation:"
+        },
+        BASE: {
+            "en": "Base model:",
+            "fr": "Modele de base:"
+        },
+        TEMPLATE: {
+            "en": "Chat template:",
+            "fr": "Template de chat:"
+        },
+        UPVOTE: {
+            "en": "An automatic upvote has been added to your model to help with prioritization.",
+            "fr": "Un upvote automatique a ete rajoute a votre modele pour aider a la priorization."
+        },
+        OTHER: {
+            "en": "Submit another model",
+            "fr": "Soumettre un autre modele"
+        }
+    },
+    FORM: {
+        TITLE: {
+            "en": "Model Submission Form",
+            "fr": "Formulaire pour soumettre un modele"
+        },
+        MODEL_INFO: {
+            TITLE: {
+                "en": "Model Information",
+                "fr": "Informations sur le Modele"
+            },
+            NAME: {
+                LABEL: {
+                    "en": "Model Name",
+                    "fr": "Nom du modele"
+                },
+                PLACEHOLDER: {
+                    "en": "organization/model-name",
+                    "fr": "organisation/nom-de-modele"
+                }
+            },
+            REVISION: {
+                LABEL: {
+                    "en": "Revision commit",
+                    "fr": "Commit de la revision"
+                },
+                HELPER_TEXT: {
+                    "en": "Default: main",
+                    "fr": "Defaut: main"
+                }
+            }
+        },
+        MODEL_CONFIG: {
+            TITLE: {
+                "en": "Model Configuration",
+                "fr": "Configuration du Modele"
+            },
+            TYPE: {
+                LABEL: {
+                    "en": "Model Type",
+                    "fr": "Type de Modele"
+                },
+            },
+            TEMPLATE: {
+                LABEL: {
+                    "en": "Use chat template",
+                    "fr": "Utiliser un template de chat"
+                }
+            },
+            PRECISION: {
+                LABEL: {
+                    "en": "Precision",
+                    "fr": "Precision"
+                }
+            },
+            WEIGHTS: {
+                LABEL: {
+                    "en": "Weights Type",
+                    "fr": "Ponderation"
+                } 
+            }
+        },
+        REQUIRED: {
+            "en": "All fields marked with * are required",
+            "fr": "Tous les champs marques par une * sont requis"
+        },
+        BUTTON: {
+            "en": "Submit",
+            "fr": "Soumettre"
+        }
+    }
+}
+
 // Convert MODEL_TYPES to format expected by Select component
 const modelTypeOptions = Object.entries(MODEL_TYPES).map(
   ([value, { icon, label }]) => ({
@@ -152,6 +274,8 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
       [name]: event.target.type === "checkbox" ? checked : value,
     }));
   };
+
+  const {resolveLocalizedString} = useResolveLocalizedString();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -208,13 +332,12 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
               variant="h5"
               sx={{ fontWeight: 600, color: "success.800" }}
             >
-              Model submitted successfully!
+              {useResolveLocalizedString(INTERNATIONALISATION.SUBMITTED)}
             </Typography>
           </Stack>
 
           <Typography variant="body1">
-            Your model <strong>{submittedData.modelName}</strong> has been added
-            to the evaluation queue with the following parameters:
+            {resolveLocalizedString(SUBMITTED_MESSAGE.T1)} <strong>{submittedData.modelName}</strong> {resolveLocalizedString(SUBMITTED_MESSAGE.T2)}
           </Typography>
 
           <Paper
@@ -231,7 +354,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                   color="text.secondary"
                   sx={{ width: 120 }}
                 >
-                  Model:
+                  {resolveLocalizedString(INTERNATIONALISATION.PARAMETERS.MODEL)}
                 </Typography>
                 <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
                   {submittedData.modelName}
@@ -255,7 +378,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                   color="text.secondary"
                   sx={{ width: 120 }}
                 >
-                  Revision:
+                  {resolveLocalizedString(INTERNATIONALISATION.PARAMETERS.REVISION)}
                 </Typography>
                 <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
                   {submittedData.revision}
@@ -267,7 +390,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                   color="text.secondary"
                   sx={{ width: 120 }}
                 >
-                  Precision:
+                  {resolveLocalizedString(INTERNATIONALISATION.PARAMETERS.PRECISION)}
                 </Typography>
                 <Typography variant="body2">
                   {submittedData.precision}
@@ -279,7 +402,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                   color="text.secondary"
                   sx={{ width: 120 }}
                 >
-                  Weight type:
+                  {resolveLocalizedString(INTERNATIONALISATION.PARAMETERS.WEIGHTS)}
                 </Typography>
                 <Typography variant="body2">
                   {submittedData.weightsType}
@@ -292,7 +415,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                     color="text.secondary"
                     sx={{ width: 120 }}
                   >
-                    Base model:
+                    {resolveLocalizedString(INTERNATIONALISATION.PARAMETERS.BASE)}
                   </Typography>
                   <Typography variant="body2">
                     {submittedData.baseModel}
@@ -305,7 +428,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                   color="text.secondary"
                   sx={{ width: 120 }}
                 >
-                  Chat template:
+                  {resolveLocalizedString(INTERNATIONALISATION.PARAMETERS.TEMPLATE)}
                 </Typography>
                 <Typography variant="body2">
                   {submittedData.useChatTemplate ? "Yes" : "No"}
@@ -314,10 +437,10 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
             </Stack>
           </Paper>
 
+          {/* TODO: UNCOMMENT WHEN VOTES ARE BACK
           <Typography variant="body2" color="text.secondary">
-            An automatic upvote has been added to your model to help with
-            prioritization.
-          </Typography>
+            {resolveLocalizeString(INTERNATIONALISATION.PARAMETERS.UPVOTE)}
+          </Typography> */}
 
           <Stack direction="row" spacing={2}>
             <Button
@@ -338,7 +461,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                 });
               }}
             >
-              Submit another model
+              {resolveLocalizedString(INTERNATIONALISATION.PARAMETERS.OTHER)}
             </Button>
           </Stack>
         </Stack>
@@ -387,7 +510,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
               variant="h6"
               sx={{ fontWeight: 600, color: "text.primary" }}
             >
-              Model Submission Form
+              {resolveLocalizedString(INTERNATIONALISATION.FORM.TITLE)}
             </Typography>
           </Box>
 
@@ -397,7 +520,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
               {/* Model Information */}
               <Grid item xs={12}>
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <Typography variant="h6">Model Information</Typography>
+                  <Typography variant="h6">{resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_INFO.TITLE)}</Typography>
                   <InfoIconWithTooltip tooltip={HELP_TEXTS.modelName} />
                 </Stack>
               </Grid>
@@ -407,8 +530,8 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                   required
                   fullWidth
                   name="modelName"
-                  label="Model Name"
-                  placeholder="organization/model-name"
+                  label={resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_INFO.NAME.LABEL)}
+                  placeholder={resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_INFO.NAME.PLACEHOLDER)}
                   value={formData.modelName}
                   onChange={handleChange}
                   helperText="Example: meta-llama/Llama-3.2-1B"
@@ -424,10 +547,10 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                 <TextField
                   fullWidth
                   name="revision"
-                  label="Revision commit"
+                  label={resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_INFO.REVISION.LABEL)}
                   value={formData.revision}
                   onChange={handleChange}
-                  helperText="Default: main"
+                  helperText={resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_INFO.REVISION.HELPER_TEXT)}
                   InputProps={{
                     endAdornment: (
                       <InfoIconWithTooltip tooltip={HELP_TEXTS.revision} />
@@ -439,18 +562,18 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
               {/* Model Configuration */}
               <Grid item xs={12}>
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <Typography variant="h6">Model Configuration</Typography>
+                  <Typography variant="h6">{resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.TITLE)}</Typography>
                 </Stack>
               </Grid>
 
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
-                  <InputLabel>Model Type</InputLabel>
+                  <InputLabel>{resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.TYPE.LABEL)}</InputLabel>
                   <Select
                     name="modelType"
                     value={formData.modelType}
                     onChange={handleChange}
-                    label="Model Type"
+                    label={resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.TYPE.LABEL)}
                     endAdornment={
                       <InfoIconWithTooltip
                         tooltip={HELP_TEXTS.modelType}
@@ -482,7 +605,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                         onChange={handleChange}
                       />
                     }
-                    label="Use Chat Template"
+                    label={resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.TEMPLATE.LABEL)}
                   />
                   <InfoIconWithTooltip tooltip={HELP_TEXTS.chatTemplate} />
                 </Stack>
@@ -490,12 +613,12 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
 
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
-                  <InputLabel>Precision</InputLabel>
+                  <InputLabel>{resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.PRECISION.LABEL)}</InputLabel>
                   <Select
                     name="precision"
                     value={formData.precision}
                     onChange={handleChange}
-                    label="Precision"
+                    label={resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.PRECISION.LABEL)}
                     endAdornment={
                       <InfoIconWithTooltip
                         tooltip={HELP_TEXTS.precision}
@@ -514,12 +637,12 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
 
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
-                  <InputLabel>Weights Type</InputLabel>
+                  <InputLabel>{resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.WEIGHTS.LABEL)}</InputLabel>
                   <Select
                     name="weightsType"
                     value={formData.weightsType}
                     onChange={handleChange}
-                    label="Weights Type"
+                    label={resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.WEIGHTS.LABEL)}
                     endAdornment={
                       <InfoIconWithTooltip
                         tooltip={HELP_TEXTS.weightsType}
@@ -568,7 +691,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                   }}
                 >
                   <Typography variant="body2" color="text.secondary">
-                    All fields marked with * are required
+                    {resolveLocalizedString(INTERNATIONALISATION.FORM.REQUIRED)}
                   </Typography>
                   <Button
                     type="submit"
@@ -583,7 +706,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                     {submitting ? (
                       <CircularProgress size={24} color="inherit" />
                     ) : (
-                      "Submit"
+                      resolveLocalizedString(INTERNATIONALISATION.FORM.BUTTON)
                     )}
                   </Button>
                 </Box>
