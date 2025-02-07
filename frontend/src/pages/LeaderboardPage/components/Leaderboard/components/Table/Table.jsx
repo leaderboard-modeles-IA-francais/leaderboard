@@ -35,7 +35,7 @@ const NoResultsFound = () => (
       justifyContent: "center",
       py: 8,
       textAlign: "center",
-      height: "100%",
+      height: "500px",
       backgroundColor: "background.paper",
     }}
   >
@@ -483,7 +483,7 @@ const LeaderboardTable = ({
         />
         <Paper
           sx={{
-            height: "calc(100vh - 380px)",
+            height: "500px",
             minHeight: "500px",
             resize: "vertical",
             overflow: "hidden",
@@ -554,7 +554,7 @@ const LeaderboardTable = ({
       <Paper
         elevation={0}
         sx={{
-          height: "calc(100vh - 380px)",
+          height: "500px",
           minHeight: "500px",
           resize: "vertical",
           overflow: "hidden",
