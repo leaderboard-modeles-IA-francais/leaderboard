@@ -58,7 +58,7 @@ const TEXT = {
         },
         FOOTER: {
             "en": "GENCI engineers have already conducted evaluations on the French National Jean Zay supercluster, to ensure the robustness of the leaderboard, with researchers providing technical expertise at every step.",
-            "fr": "Les ingénieurs de GENCI ont déjà réalisé des évaluations sur le supercalculateur national Jean Zay, afin d’assurer la robustesse du leaderboard, avec le soutien technique de chercheurs et d’Hugging Face à chaque étape du processus."
+            "fr": "Les ingénieurs de GENCI ont déjà réalisé des évaluations sur le supercalculateur national Jean Zay, afin d’assurer la robustesse du leaderboard, avec le soutien technique de chercheurs d’Hugging Face à chaque étape du processus."
         }
     },
     APPROCHE: {
@@ -71,15 +71,15 @@ const TEXT = {
             "fr": "Cette première version du leaderboard marque le début d’un projet évolutif : de nouvelles versions verront le jour, enrichies avec de nouveaux benchmarks et méthodes d’évaluation."
         },
         P2: {
-            "en": "To ensure the robustness of the leaderboard, we first conducted internal evaluations on a selection of models. However, in the current leaderboard, these models remain anonymous. This is intentional—we want to maintain the spirit of the leaderboard: developers (you!) should submit your own models.",
-            "fr": "Pour garantir la solidité et la fiabilité de l’outil, nous avons dans un premier temps réalisé des évaluations internes sur une sélection de modèles. Toutefois, dans cette version initiale, ces modèles sont anonymisés. Ce choix est volontaire : nous souhaitons rester fidèles à l’esprit du leaderboard et encourager les développeurs (vous !) à soumettre leurs propres modèles."
+            "en": "To ensure the robustness of the leaderboard, we first conducted internal evaluations on a selection of models. However, we want to maintain the spirit of the leaderboard: developers (you!) should submit your own models.",
+            "fr": "Pour garantir la solidité et la fiabilité de l’outil, nous avons dans un premier temps réalisé des évaluations internes sur une sélection de modèles. Toutefois, nous souhaitons rester fidèles à l’esprit du leaderboard et encourager les développeurs (vous !) à soumettre leurs propres modèles."
         },
         P3: {
-            "en": "Once we reach a sufficient number of submissions, we will publish the first official ranking. Please bear with us—since evaluations are conducted using public computing resources (thanks to the incredible work of GENCI on the Jean Zay supercomputer), model evaluations might take some time.",
-            "fr": "Une fois qu’un nombre suffisant de modèles aura été soumis, nous publierons le premier classement officiel. Merci pour votre patience : les évaluations sont réalisées sur des ressources de calcul publiques (grâce au travail remarquable du GENCI sur le supercalculateur Jean Zay), ce qui peut nécessiter un certain délai pour traiter les soumissions."
+            "en": "Once we reach a sufficient number of submissions, we will add the results to the official ranking. Please bear with us—since evaluations are conducted using public computing resources (thanks to the incredible work of GENCI on the Jean Zay supercomputer), model evaluations might take some time.",
+            "fr": "Une fois qu’un nombre suffisant de modèles aura été soumis, nous ajouterons les résultats au classement officiel. Merci pour votre patience : les évaluations sont réalisées sur des ressources de calcul publiques (grâce au travail remarquable du GENCI sur le supercalculateur Jean Zay), ce qui peut nécessiter un certain délai pour traiter les soumissions."
         },
         P4: {
-            "en": "Finally, it is important to note that this is an OpenLLM leaderboard—we will only evaluate open-source models.",
+            "en": "Finally, it is important to note that this is an OpenLLM leaderboard —we will only evaluate open-source models.",
             "fr": "Enfin, il est important de préciser que ce leaderboard est un OpenLLM leaderboard : seuls les modèles open source seront évalués."
         },
     },
