@@ -20,9 +20,9 @@ const footer = () => {
                     classes={{
                         root: 'fr-highlight--orange-terre-battue'
                     }}>
-                        Ce leaderboard compare les modèles de language adaptés à la langue française, sur des jeux de données en français, adaptés aux spécificités culturelles de la francophonie. C'est d'abord un projet de recherche collaboratif, et nous espérons recevoir de nombreuses contributions pour l'améliorer au fil du temps!
-                        Le leaderboard n'est que dans sa toute première version, et sera amené à évoluer régulièrement, avec de nouveaux jeux de données, de nouvelles métriques, et, on l'espère, beaucoup de nouveaux modèles ouverts soumis par la communauté! Dans sa version initiale, nous avons couvert un panel de modèles ouverts, entrainés sur du français, de différentes tailles et origines.
-                        Note: Les données d'évaluation ont été pour l'instant gardées confidentielles, pour préserver l'intégrité et la validité des résultats, et éviter les manipulations du classement.
+                        Ce leaderboard compare les modèles de langage adaptés à la langue française, sur des jeux de données en français, adaptés aux spécificités culturelles de la francophonie. C'est d'abord un projet de recherche collaboratif, et nous espérons recevoir de nombreuses contributions pour l'améliorer au fil du temps !
+                        Le leaderboard n'est que dans sa toute première version, et sera amené à évoluer régulièrement, avec de nouveaux jeux de données, de nouvelles métriques, et, nous l'espérons, beaucoup de nouveaux modèles ouverts soumis par la communauté ! Dans sa version initiale, nous avons couvert un panel de modèles ouverts, entraînés sur du français, de différentes tailles et origines.
+                        Note : les données d'évaluation ont été pour l'instant gardées confidentielles, pour préserver l'intégrité et la validité des résultats, et éviter les manipulations du classement.
                     </Highlight>
 
     return <Footer
