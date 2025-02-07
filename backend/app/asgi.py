@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 import sys
+import sentry_sdk
 
 from app.api.router import router
 from app.core.fastapi_cache import setup_cache
@@ -62,6 +63,22 @@ LOGGING_CONFIG = {
 # Apply logging configuration
 logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger("app")
+
+sentry_sdk.init(
+    dsn="https://aeadf8ea37d94843a226d8616f173b30@o4508776892268544.ingest.de.sentry.io/4508776897314896",
+    # Add data like request headers and IP for users,
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=False,
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for tracing.
+    traces_sample_rate=1.0,
+    _experiments={
+        # Set continuous_profiling_auto_start to True
+        # to automatically start the profiler on when
+        # possible.
+        "continuous_profiling_auto_start": True,
+    },
+)
 
 # Create FastAPI application
 app = FastAPI(
