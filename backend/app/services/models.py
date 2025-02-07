@@ -412,18 +412,19 @@ class ModelService(HuggingFaceService):
             logger.info(LogFormatter.subsection("CHECKING EXISTING SUBMISSIONS"))
             existing_models = await self.get_models()
             
+            # Put back when model anonymization is gone:
             # Call the official provider status check
-            is_valid, error_message = await self.validator.check_official_provider_status(
-                model_data["model_id"],
-                existing_models
-            )
-            if not is_valid:
-                raise ValueError(error_message)
+            # is_valid, error_message = await self.validator.check_official_provider_status(
+            #    model_data["model_id"],
+            #    existing_models
+            #)
+            #if not is_valid:
+            #    raise ValueError(error_message)
 
-            # Check in all statuses (pending, evaluating, finished)
+            # Check in all statuses except finished (as long as models are anonymous)
             for status, models in existing_models.items():
                 for model in models:
-                    if model["name"] == model_data["model_id"] and model["revision"] == model_data["revision"]:
+                    if model["name"] == model_data["model_id"] and model["revision"] == model_data["revision"] and status.lower() != "finished":
                         error_msg = f"Model {model_data['model_id']} revision {model_data['revision']} is already in the system with status: {status}"
                         logger.error(LogFormatter.error("Submission rejected", error_msg))
                         raise ValueError(error_msg)
