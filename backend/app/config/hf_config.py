@@ -19,11 +19,11 @@ if not HF_TOKEN:
 API = HfApi(token=HF_TOKEN)
 
 # Repository configuration
-QUEUE_REPO = f"{HF_ORGANIZATION}/requests"
+QUEUE_REPO = f"{HF_ORGANIZATION}/requests-dev"
 AGGREGATED_REPO = f"{HF_ORGANIZATION}/contents"
 VOTES_REPO = f"{HF_ORGANIZATION}/votes"
 OFFICIAL_PROVIDERS_REPO = f"{HF_ORGANIZATION}/official-providers"
-RESULTS_REPO = f"{HF_ORGANIZATION}/results"
+RESULTS_REPO = f"{HF_ORGANIZATION}/results-dev"
 
 # File paths from cache config
 VOTES_PATH = cache_config.votes_file
