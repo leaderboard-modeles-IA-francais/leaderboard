@@ -196,7 +196,8 @@ class ModelValidator:
                     )
                 except ValueError as e:
                     return False, f"The tokenizer is not available in an official Transformers release: {e}", None
-                except Exception:
+                except Exception as e:
+                    logger.error("The tokenizer cannot be loaded", e)
                     return False, "The tokenizer cannot be loaded. Ensure the tokenizer class is part of a stable Transformers release and correctly configured.", None
             
             return True, None, config

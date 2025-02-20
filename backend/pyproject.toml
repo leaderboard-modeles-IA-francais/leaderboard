@@ -20,6 +20,8 @@ aiofiles = "^24.1.0"
 fastapi-cache2 = "^0.2.1"
 python-dotenv = "^1.0.1"
 sentry-sdk = {extras = ["fastapi"], version = "^2.20.0"}
+protobuf = "^5.29.3"
+sentencepiece = "^0.2.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.4"
