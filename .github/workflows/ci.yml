@@ -1,16 +1,20 @@
 name: Continuous integration
-on: [push, pull_request]
+on: [pull_request]
 jobs:
+  check-files-size:
+    runs-on: ubuntu-latest
+    permissions:
+        pull-requests: write
+    steps:
+        - name: Check out the repo
+          uses: actions/checkout@v4
+        - name: Check large files
+          uses: ppremk/lfs-warning@v3.2
+          with:
+            filesizelimit: 10485760 # this is 10MB so we can sync to HF Spaces
   docker-build:
     runs-on: ubuntu-latest
     steps:
         - name: Check out the repo
           uses: actions/checkout@v4
         - run: docker build .
-  check-files-size:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check large files
-        uses: ppremk/lfs-warning@v3.2
-        with:
-          filesizelimit: 10485760 # this is 10MB so we can sync to HF Spaces
