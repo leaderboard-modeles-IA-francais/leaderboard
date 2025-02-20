@@ -17,6 +17,9 @@ RUN useradd -m -u 1000 user
 # Install poetry
 RUN pip install poetry
 
+# Install PyTorch
+RUN pip install torch
+
 # Create and configure cache directory
 RUN mkdir -p /app/.cache && \
     chown -R user:user /app

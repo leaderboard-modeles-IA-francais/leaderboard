@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y \
 # Install poetry
 RUN pip install poetry
 
+# Install PyTorch
+RUN pip install torch
+
 # Copy Poetry configuration files
 COPY pyproject.toml poetry.lock* ./
 
