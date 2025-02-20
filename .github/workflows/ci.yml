@@ -1,4 +1,4 @@
-name: GitHub Actions Demo
+name: Continuous integration
 on: [push, pull_request]
 jobs:
   docker-build:
@@ -7,3 +7,10 @@ jobs:
         - name: Check out the repo
           uses: actions/checkout@v4
         - run: docker build .
+  check-files-size:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check large files
+        uses: ppremk/lfs-warning@v3.2
+        with:
+          filesizelimit: 10485760 # this is 10MB so we can sync to HF Spaces
