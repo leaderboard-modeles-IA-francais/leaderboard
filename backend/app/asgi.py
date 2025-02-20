@@ -2,7 +2,6 @@
 ASGI entry point for the Open LLM Leaderboard API.
 """
 import os
-from backend.app.config.base import SENTRY_DSN
 import uvicorn
 import logging
 import logging.config
@@ -15,6 +14,7 @@ import sentry_sdk
 from app.api.router import router
 from app.core.fastapi_cache import setup_cache
 from app.core.formatting import LogFormatter
+from app.config.base import SENTRY_DSN
 from app.config import hf_config
 
 # Configure logging before anything else
