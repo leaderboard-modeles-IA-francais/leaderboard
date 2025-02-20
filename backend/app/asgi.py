@@ -2,6 +2,7 @@
 ASGI entry point for the Open LLM Leaderboard API.
 """
 import os
+from backend.app.config.base import SENTRY_DSN
 import uvicorn
 import logging
 import logging.config
@@ -63,6 +64,23 @@ LOGGING_CONFIG = {
 # Apply logging configuration
 logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger("app")
+
+if SENTRY_DSN is not None:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        # Add data like request headers and IP for users,
+        # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+        send_default_pii=False,
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for tracing.
+        traces_sample_rate=1.0,
+        _experiments={
+            # Set continuous_profiling_auto_start to True
+            # to automatically start the profiler on when
+            # possible.
+            "continuous_profiling_auto_start": True,
+        },
+    )
 
 # Create FastAPI application
 app = FastAPI(

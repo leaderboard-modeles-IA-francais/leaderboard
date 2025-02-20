@@ -33,3 +33,6 @@ MODELS_CACHE = CACHE_ROOT / "models"
 VOTES_CACHE = CACHE_ROOT / "votes"
 EVAL_CACHE = CACHE_ROOT / "eval-queue"
 RESULTS_CACHE = CACHE_ROOT / "results"
+
+# Monitoring
+SENTRY_DSN = os.environ.get("SENTRY_DSN")
