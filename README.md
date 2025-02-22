@@ -1,5 +1,5 @@
 ---
-title: (DEV) Leaderboard LLM FR
+title: Leaderboard LLM FR
 emoji: 🏆🇫🇷
 colorFrom: blue
 colorTo: red
