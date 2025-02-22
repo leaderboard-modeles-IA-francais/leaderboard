@@ -23,4 +23,8 @@ jobs:
           SPACE_NAME: ${{ vars.SPACE_NAME }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           DEV_TITLE_COMMIT: "0adbd649fa2138be8f754672b975a7acde1e98d5"
-        run: git cherry-pick $DEV_TITLE_COMMIT && git push https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_ORGANIZATION/$SPACE_NAME HEAD:main
+        run: |
+          git config user.name "CoordIA Bot"
+          git config user.email "(none)"
+          git cherry-pick $DEV_TITLE_COMMIT
+          git push https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_ORGANIZATION/$SPACE_NAME HEAD:main
