@@ -19,4 +19,4 @@ jobs:
           HF_ORGANIZATION: ${{ vars.HF_ORGANIZATION }}
           SPACE_NAME: ${{ vars.SPACE_NAME }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_ORGANIZATION/$SPACE_NAME HEAD:main
+        run: git push -f https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_ORGANIZATION/$SPACE_NAME HEAD:main
