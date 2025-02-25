@@ -13,6 +13,9 @@ services:
       - ENVIRONMENT=${ENVIRONMENT:-development}
       - HF_TOKEN=${HF_TOKEN}
       - HF_HOME=${HF_HOME:-/.cache}
+      - HF_ORGANIZATION=${HF_ORGANIZATION}
+      - REQUESTS_REPO=${REQUESTS_REPO}
+      - RESULTS_REPO=${RESULTS_REPO}
     command: uvicorn app.asgi:app --host 0.0.0.0 --port 8000 --reload
 
   frontend:
