@@ -242,18 +242,23 @@ class LeaderboardService:
         model_result_filepaths = []
 
         for root, _, files in os.walk(results_path):
-            # We should only have json files in model results
-            if len(files) == 0 or any([not f.endswith(".json") for f in files]):
-                continue
-
-            # Sort the files by date
-            try:
-                files.sort(key=lambda x: x.removesuffix(".json").removeprefix("results_")[:-7])
-            except dateutil.parser._parser.ParserError:
-                files = [files[-1]]
-
-            for file in files:
-                model_result_filepaths.append(os.path.join(root, file))
+            #FIXME We will remove this check when results we be homogeneous
+            folderName = "Inria_Results"
+            normalized_root = os.path.normpath(root)
+            path_components = normalized_root.split(os.sep)
+            if folderName in path_components:
+                # We should only have json files in model results
+                if len(files) == 0 or any([not f.endswith(".json") for f in files]):
+                    continue
+     
+                # Sort the files by date
+                try:
+                    files.sort(key=lambda x: x.removesuffix(".json").removeprefix("results_")[:-7])
+                except dateutil.parser._parser.ParserError:
+                    files = [files[-1]]
+     
+                for file in files:
+                    model_result_filepaths.append(os.path.join(root, file))
 
         eval_results = {}
         await self.model_service.initialize()
