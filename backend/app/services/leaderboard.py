@@ -235,7 +235,8 @@ class EvalResult:
     def update_with_request_file(self, existing_models):
         """Finds the relevant request file for the current model and updates info with it"""
         for status, models in existing_models.items():
-            if status == "finished":
+            #FIXME: for the moment we are just processing all the files in results
+            #if status == "finished":
                 for model in models:
                     if model["name"] == self.full_model and model["precision"] == self.precision.value.name: # FIXME and model["revision"] == model_data["revision"]:
                         self.model_type = ModelType.from_str(model["model_type"])
