@@ -85,17 +85,12 @@ class Precision(Enum):
 class Task:
     benchmark: str
     metric: str
-    normalized_metric: str
     col_name: str
 
 class Tasks(Enum):
-    # task_key in the json file, metric_key in the json file, name to display in the leaderboard
-    # task0 = Task("IFEVal-fr", "metric_name", "IFEVal-fr")
-    # task1 = Task("GPQA-fr", "metric_name", "GPQA-fr")
-    # task2 = Task("BAC-fr", "metric_name", "BAC-fr")
-    task0 = Task("community|gpqa-fr|0", "acc", "norm_acc", "GPQA-fr")  # On pourrait vouloir mettre "Connaissances"
-    task1 = Task("community|ifeval-fr|0", "norm_acc", "norm_acc", "IFEval-fr") # FIXME norm_acc should be acc # et "Suivi d'instructions"
-    task2 = Task("community|bac-fr|0", "bac-fr-qem", "bac-fr-qem", "bac-fr") # et "Suivi d'instructions"
+    task0 = Task("community|gpqa-fr|0", "acc", "GPQA-fr")  # On pourrait vouloir mettre "Connaissances"
+    task1 = Task("community|ifeval-fr|0", "prompt_level_strict_acc", "IFEval-fr") # FIXME norm_acc should be acc # et "Suivi d'instructions"
+    task2 = Task("community|bac-fr|0", "bac-fr-qem", "bac-fr") # et "Suivi d'instructions"
 
 def is_model_on_hub(model_name: str, revision: str, token: str = None, trust_remote_code=False, test_tokenizer=False) -> tuple[bool, str]:
     """Checks if the model model_name is on the hub, and whether it (and its tokenizer) can be loaded with AutoClasses."""
