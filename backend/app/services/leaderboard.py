@@ -203,7 +203,7 @@ class EvalResult:
                     display = False
                     continue
                 r2 = np.mean(accs)
-                results[task.benchmark] = (r1+r2)/2.0*50.0
+                results[task.benchmark] = (r1+r2)/2.0*100.0
                 normalized_results[task.benchmark] = results[task.benchmark]
 
             if(task.col_name == "bac-fr"):
