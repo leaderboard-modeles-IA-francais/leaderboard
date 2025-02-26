@@ -139,6 +139,7 @@ class EvalResult:
     num_params: int = 0
     date: str = ""  # submission date of request file
     still_on_hub: bool = False
+    display: bool = True
 
     @classmethod
     def init_from_json_file(self, json_filepath):
