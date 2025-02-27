@@ -85,17 +85,12 @@ class Precision(Enum):
 class Task:
     benchmark: str
     metric: str
-    normalized_metric: str
     col_name: str
 
 class Tasks(Enum):
-    # task_key in the json file, metric_key in the json file, name to display in the leaderboard
-    # task0 = Task("IFEVal-fr", "metric_name", "IFEVal-fr")
-    # task1 = Task("GPQA-fr", "metric_name", "GPQA-fr")
-    # task2 = Task("BAC-fr", "metric_name", "BAC-fr")
-    task0 = Task("community|gpqa-fr|0", "acc", "norm_acc", "GPQA-fr")  # On pourrait vouloir mettre "Connaissances"
-    task1 = Task("community|ifeval-fr|0", "norm_acc", "norm_acc", "IFEval-fr") # FIXME norm_acc should be acc # et "Suivi d'instructions"
-    task2 = Task("community|bac-fr|0", "bac-fr-qem", "bac-fr-qem", "bac-fr") # et "Suivi d'instructions"
+    task0 = Task("community|gpqa-fr|0", "acc", "GPQA-fr")  # On pourrait vouloir mettre "Connaissances"
+    task1 = Task("community|ifeval-fr|0", "prompt_level_strict_acc", "IFEval-fr") # FIXME norm_acc should be acc # et "Suivi d'instructions"
+    task2 = Task("community|bac-fr|0", "bac-fr-qem", "bac-fr") # et "Suivi d'instructions"
 
 def is_model_on_hub(model_name: str, revision: str, token: str = None, trust_remote_code=False, test_tokenizer=False) -> tuple[bool, str]:
     """Checks if the model model_name is on the hub, and whether it (and its tokenizer) can be loaded with AutoClasses."""
@@ -144,6 +139,7 @@ class EvalResult:
     num_params: int = 0
     date: str = ""  # submission date of request file
     still_on_hub: bool = False
+    display: bool = True
 
     @classmethod
     def init_from_json_file(self, json_filepath):
@@ -185,18 +181,42 @@ class EvalResult:
         for task in Tasks:
             task = task.value
 
-            # We average all scores of a given metric (not all metrics are present in all files)
-            accs = np.array([v.get(task.metric, None) for k, v in data["results"].items() if task.benchmark == k])
-            if accs.size == 0 or any([acc is None for acc in accs]):
-                continue
+            #FIXME postprocessing of metrics is done here ftm
+            display = True # Do not display models evaluation if something went wrong (missing task, 0 score, ...)
+            if(task.col_name == "GPQA-fr"):
+                accs = np.array([v.get("acc", None) for k, v in data["results"].items() if task.benchmark == k])
+                if accs.size == 0 or any([acc is None for acc in accs]):
+                    display = False
+                    continue
+                r = np.mean(accs)
+                results[task.benchmark] = r * 100.0
+                normalized_results[task.benchmark] = max(0., (r-0.25)/0.75)*100.0
 
-            mean_acc = np.mean(accs) * 100.0
-            results[task.benchmark] = mean_acc
+            if(task.col_name == "IFEval-fr"):
+                accs = np.array([v.get("prompt_level_strict_acc", None) for k, v in data["results"].items() if task.benchmark == k])
+                if accs.size == 0 or any([acc is None for acc in accs]):
+                    display = False
+                    continue
+                r1 = np.mean(accs)
+                accs = np.array([v.get("inst_level_strict_acc", None) for k, v in data["results"].items() if task.benchmark == k])
+                if accs.size == 0 or any([acc is None for acc in accs]):
+                    display = False
+                    continue
+                r2 = np.mean(accs)
+                results[task.benchmark] = (r1+r2)/2.0*100.0
+                normalized_results[task.benchmark] = results[task.benchmark]
 
-            r = data["results"][task.benchmark].get(task.normalized_metric, None)
-            if r is None:
-                continue
-            normalized_results[task.benchmark] = r * 100.0
+            if(task.col_name == "bac-fr"):
+                accs = np.array([v.get("bac-fr-qem", None) for k, v in data["results"].items() if task.benchmark == k])
+                if accs.size == 0 or any([acc is None for acc in accs]):
+                    #FIXME old metric name from Idris...
+                    accs = np.array([v.get("qem", None) for k, v in data["results"].items() if task.benchmark == k])
+                    if accs.size == 0 or any([acc is None for acc in accs]):
+                        display = False
+                        continue
+                r = np.mean(accs)
+                results[task.benchmark] = r*100.0
+                normalized_results[task.benchmark] = results[task.benchmark]
 
         return self(
             eval_name=result_key,
@@ -209,12 +229,14 @@ class EvalResult:
             revision=config.get("model_sha", ""),
             still_on_hub=still_on_hub,
             architecture=architecture,
+            display=display
         )
 
     def update_with_request_file(self, existing_models):
         """Finds the relevant request file for the current model and updates info with it"""
         for status, models in existing_models.items():
-            if status == "finished":
+            #FIXME: for the moment we are just processing all the files in results
+            #if status == "finished":
                 for model in models:
                     if model["name"] == self.full_model and model["precision"] == self.precision.value.name: # FIXME and model["revision"] == model_data["revision"]:
                         self.model_type = ModelType.from_str(model["model_type"])
@@ -242,18 +264,23 @@ class LeaderboardService:
         model_result_filepaths = []
 
         for root, _, files in os.walk(results_path):
-            # We should only have json files in model results
-            if len(files) == 0 or any([not f.endswith(".json") for f in files]):
-                continue
-
-            # Sort the files by date
-            try:
-                files.sort(key=lambda x: x.removesuffix(".json").removeprefix("results_")[:-7])
-            except dateutil.parser._parser.ParserError:
-                files = [files[-1]]
-
-            for file in files:
-                model_result_filepaths.append(os.path.join(root, file))
+            #FIXME We will remove this check when results we be homogeneous
+            #folderName = "Inria_Results"
+            #normalized_root = os.path.normpath(root)
+            #path_components = normalized_root.split(os.sep)
+            #if folderName in path_components:
+                # We should only have json files in model results
+                if len(files) == 0 or any([not f.endswith(".json") for f in files]):
+                    continue
+     
+                # Sort the files by date
+                try:
+                    files.sort(key=lambda x: x.removesuffix(".json").removeprefix("results_")[:-7])
+                except dateutil.parser._parser.ParserError:
+                    files = [files[-1]]
+     
+                for file in files:
+                    model_result_filepaths.append(os.path.join(root, file))
 
         eval_results = {}
         await self.model_service.initialize()
@@ -264,11 +291,12 @@ class LeaderboardService:
             eval_result.update_with_request_file(existing_models)
 
             # Store results of same eval together
-            eval_name = eval_result.eval_name
-            if eval_name in eval_results.keys():
-                eval_results[eval_name].results.update({k: v for k, v in eval_result.results.items() if v is not None})
-            else:
-                eval_results[eval_name] = eval_result
+            if(eval_result.display):
+                eval_name = eval_result.eval_name
+                if eval_name in eval_results.keys():
+                    eval_results[eval_name].results.update({k: v for k, v in eval_result.results.items() if v is not None})
+                else:
+                    eval_results[eval_name] = eval_result
 
         return eval_results.values()
 

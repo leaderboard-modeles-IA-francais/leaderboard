@@ -78,6 +78,20 @@ backend/
 
 ## Development
 
+The repositories from which to operate can be parametrized through environment variables:
+
+```bash
+export HF_ORGANIZATION="fr-gouv-coordination-ia"
+export REQUESTS_REPO="requests-dev"
+export RESULTS_REPO="results-dev"
+```
+
+The appropriate token to read and write from these repos should also be set appropriately:
+
+``` bash
+export HF_TOKEN="mytoken"
+```
+
 The application is containerized using Docker and can be run using:
 
 ```bash
