@@ -395,7 +395,7 @@ const Leaderboard = () => {
           alignItems: "center",
         }}
       >
-        {/* <Box
+        <Box
           sx={{
             width: {
               xs: "100%",
@@ -410,7 +410,7 @@ const Leaderboard = () => {
           ) : (
             memoizedSearchBar
           )}
-          <Box sx={{ mt: 1 }}>
+          {/* <Box sx={{ mt: 1 }}>
             {loadingStates.showFiltersSkeleton ? (
               <QuickFiltersSkeleton />
             ) : (
@@ -420,8 +420,8 @@ const Leaderboard = () => {
                 advancedFilters={memoizedLeaderboardFilters}
               />
             )}
-          </Box>
-        </Box> */}
+          </Box> */}
+        </Box>
 
         <Box
           sx={{
