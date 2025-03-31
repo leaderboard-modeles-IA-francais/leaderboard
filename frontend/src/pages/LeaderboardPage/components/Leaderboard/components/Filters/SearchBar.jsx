@@ -252,7 +252,8 @@ const SearchBar = ({
               </Typography>
             </Box>
           )}
-          <Box
+
+          {/* <Box
             onClick={onToggleFilters}
             sx={{
               display: "flex",
@@ -288,7 +289,8 @@ const SearchBar = ({
             >
               Filtres avancés
             </Typography>
-          </Box>
+          </Box> */}
+
           <InfoIconWithTooltip
             tooltip={UI_TOOLTIPS.SEARCH_BAR}
             iconProps={{
