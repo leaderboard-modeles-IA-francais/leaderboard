@@ -265,10 +265,10 @@ class LeaderboardService:
 
         for root, _, files in os.walk(results_path):
             #FIXME We will remove this check when results we be homogeneous
-            #folderName = "Inria_Results"
-            #normalized_root = os.path.normpath(root)
-            #path_components = normalized_root.split(os.sep)
-            #if folderName in path_components:
+            folderName = "clearML-musa"
+            normalized_root = os.path.normpath(root)
+            path_components = normalized_root.split(os.sep)
+            if folderName in path_components:
                 # We should only have json files in model results
                 if len(files) == 0 or any([not f.endswith(".json") for f in files]):
                     continue
