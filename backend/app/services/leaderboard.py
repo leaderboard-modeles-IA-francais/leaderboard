@@ -45,7 +45,8 @@ class ModelType(Enum):
     IFT = ModelDetails(name="instruction-tuned", symbol="⭕")
     RL = ModelDetails(name="RL-tuned", symbol="🟦")
     CHAT = ModelDetails(name="chatmodels")
-    Unknown = ModelDetails(name="", symbol="?")
+    M = ModelDetails(name="merged", symbol="<>")
+    Unknown = ModelDetails(name="unknown", symbol="?")
 
     def to_str(self):
         return f"{self.value.name}"
@@ -58,8 +59,10 @@ class ModelType(Enum):
             return ModelType.PT
         if "RL-tuned" in type or "🟦" in type:
             return ModelType.RL
-        if "instruction-tuned" in type or "⭕" in type or "chatmodels" in type :
+        if "instruction-tuned" in type or "⭕" in type or "chatmodels" in type or "chat" in type: 
             return ModelType.CHAT
+        if "merge" in type:
+            return ModelType.M
         return ModelType.Unknown
 
 
