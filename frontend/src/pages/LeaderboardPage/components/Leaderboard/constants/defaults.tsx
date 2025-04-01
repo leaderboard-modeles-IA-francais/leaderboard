@@ -18,12 +18,12 @@ const DISPLAY = {
     large: 60,
   },
   SCORE_DISPLAY_OPTIONS: [
-    { value: "normalized", label: "Normalized" },
-    { value: "raw", label: "Raw" },
+    { value: "normalized", label: {"en": "Normalized", "fr": "Normalisé"} },
+    { value: "raw", label: {"en": "Raw", "fr": "Bruts"} },
   ],
   RANKING_MODE_OPTIONS: [
-    { value: "static", label: "Static" },
-    { value: "dynamic", label: "Dynamic" },
+    { value: "static", label: {"en": "Static", "fr": "Statique"} },
+    { value: "dynamic", label: {"en": "Dynamic", "fr": "Dynamique"} },
   ],
 };
 
@@ -268,7 +268,7 @@ const ALL_COLUMNS = {
 const COLUMN_DEFINITIONS = {
   ALL_COLUMNS,
   COLUMN_GROUPS: {
-    "Evaluation Scores": Object.keys(COLUMNS.EVALUATION),
+    "eval_scores": {displayName: {"en": "Evaluation Scores", "fr": "Scores d'évaluation"}, items: Object.keys(COLUMNS.EVALUATION)},
     // "Model Information": Object.keys(COLUMNS.MODEL_INFO),
     // "Additional Information": Object.keys(COLUMNS.ADDITIONAL_INFO),
   },

@@ -314,7 +314,7 @@ const SearchBar = ({
           </Box> */}
 
           <InfoIconWithTooltip
-            tooltip={UI_TOOLTIPS.SEARCH_BAR}
+            tooltip={UI_TOOLTIPS.SEARCH_BAR()}
             iconProps={{
               sx: { fontSize: "1.2rem", display: { xs: "none", md: "block" } },
             }}
