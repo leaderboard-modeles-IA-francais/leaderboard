@@ -4,7 +4,8 @@ export const MODEL_TYPE_ORDER = [
   'fine-tuned',
   'chat',
   'merge',
-  'multimodal'
+  'multimodal',
+  'unknown'
 ];
 
 export const MODEL_TYPES = {
@@ -42,6 +43,12 @@ export const MODEL_TYPES = {
     icon: '🌸',
     label: 'Multimodal',
     description: 'Models capable of processing multiple types of input',
+    order: 5
+  },
+  'unknown': {
+    icon: '❓',
+    label: 'Unknown',
+    description: 'Unknown model type',
     order: 5
   }
 };
