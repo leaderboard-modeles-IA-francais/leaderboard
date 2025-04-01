@@ -18,7 +18,28 @@ import { useLeaderboard } from "../../context/LeaderboardContext";
 import InfoIconWithTooltip from "../../../../../../components/shared/InfoIconWithTooltip";
 import { UI_TOOLTIPS } from "../../constants/tooltips";
 
-export const SearchBarSkeleton = () => (
+import { resolveLocalizedString, useResolveLocalizedString } from "i18n";
+
+const STRINGS = {
+    LABEL: {
+        "en": "Supports strict search and regex • Use semicolons for multiple terms",
+        "fr": "Supporte la recherche stricte et les expressions régulières • Utiliser des point-virgules pour plusieurs termes",
+    },
+    LABEL_SEARCH: {
+        "en": "Showing models matching: ",
+        "fr": "Modèles correspondant à: ",
+    },
+    PLACEHOLDER: {
+        "en": 'Search by model name • try "meta @architecture:llama @license:mit"',
+        "fr": 'Recherche par nom de modèle • essayez "meta @architecture:llama @license:mit"',
+    },
+    RESET: {
+        "en": 'Reset',
+        "fr": 'Réinitialiser',
+    }
+}
+
+export const SearchBarSkeleton = ({label}) => (
   <Box>
     <Box
       sx={{
@@ -57,7 +78,7 @@ export const SearchBarSkeleton = () => (
           height: "18px",
         }}
       >
-        Supports strict search and regex • Use semicolons for multiple terms
+        {label}
       </Typography>
     </Box>
   </Box>
@@ -78,7 +99,7 @@ const SearchDescription = ({ searchValue }) => {
           fontSize: "0.85rem",
         }}
       >
-        Showing models matching:
+        {resolveLocalizedString(STRINGS.LABEL_SEARCH)}
       </Typography>
       {searchGroups.map(({ text, index }, i) => (
         <React.Fragment key={index}>
@@ -124,6 +145,7 @@ const SearchBar = ({
   const theme = useTheme();
   const { state, actions } = useLeaderboard();
   const [localValue, setLocalValue] = useState(state.filters.search);
+  const {resolveLocalizedString} = useResolveLocalizedString();
 
   useEffect(() => {
     setLocalValue(state.filters.search);
@@ -185,7 +207,7 @@ const SearchBar = ({
         <InputBase
           value={localValue}
           onChange={handleLocalChange}
-          placeholder='Recherce par nom de modèle • essayez "meta @architecture:llama @license:mit"'
+          placeholder={resolveLocalizedString(STRINGS.PLACEHOLDER)}
           sx={{
             flex: 1,
             fontSize: "1rem",
@@ -248,7 +270,7 @@ const SearchBar = ({
                   display: { xs: "none", md: "block" },
                 }}
               >
-                Reset
+                {resolveLocalizedString(STRINGS.RESET)}
               </Typography>
             </Box>
           )}
@@ -318,7 +340,7 @@ const SearchBar = ({
                 lineHeight: 1.5,
               }}
             >
-              Supporte la recherche stricte et les expressions régulières • Utilisez des points virgules pour plusieurs termes
+              {resolveLocalizedString(STRINGS.LABEL)}
             </Typography>
           </Box>
         )}
