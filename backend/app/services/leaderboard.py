@@ -265,7 +265,7 @@ class LeaderboardService:
 
         for root, _, files in os.walk(results_path):
             #FIXME We will remove this check when results we be homogeneous
-            folderName = "Inria_Results"
+            folderName = "clearML-musa"
             normalized_root = os.path.normpath(root)
             path_components = normalized_root.split(os.sep)
             if folderName in path_components:
