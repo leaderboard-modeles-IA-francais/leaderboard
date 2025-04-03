@@ -13,6 +13,7 @@ import {
 import { UI_TOOLTIPS } from "../../constants/tooltips";
 import DropdownButton from "../shared/DropdownButton";
 import InfoIconWithTooltip from "../../../../../../components/shared/InfoIconWithTooltip";
+import { useResolveLocalizedString } from "i18n";
 
 const TableOptions = ({
   rowSize,
@@ -43,15 +44,18 @@ const TableOptions = ({
     setSearchParams(newParams);
   };
 
+  const {resolveLocalizedString} = useResolveLocalizedString();
+
   return (
     <DropdownButton
-      label="table options"
+      label={resolveLocalizedString({"en": "table options", "fr": "options tableau"})}
       icon={TuneIcon}
       closeIcon={CloseIcon}
       hasChanges={hasChanges}
       loading={loading}
       defaultWidth={260}
-      tooltip={UI_TOOLTIPS.DISPLAY_OPTIONS}
+      tooltip={UI_TOOLTIPS.DISPLAY_OPTIONS()}
+      smallWidth
     >
       <Box
         sx={{
@@ -66,10 +70,10 @@ const TableOptions = ({
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
           <Typography variant="body2" sx={{ fontWeight: 600 }}>
-            Table Options
+            {resolveLocalizedString({"en": "Table Options", "fr": "Options"})}
           </Typography>
           <InfoIconWithTooltip
-            tooltip={UI_TOOLTIPS.DISPLAY_OPTIONS}
+            tooltip={UI_TOOLTIPS.DISPLAY_OPTIONS()}
             iconProps={{ sx: { fontSize: "1rem", ml: 0.5 } }}
           />
         </Box>
@@ -104,7 +108,7 @@ const TableOptions = ({
               display: { xs: "none", sm: "block" },
             }}
           >
-            Reset
+            {resolveLocalizedString({"en": "Reset", "fr": "Réinitialiser"})}
           </Typography>
         </Box>
       </Box>
@@ -120,10 +124,10 @@ const TableOptions = ({
               }}
             >
               <Typography variant="subtitle2">
-                {UI_TOOLTIPS.ROW_SIZE.title}
+                {resolveLocalizedString(UI_TOOLTIPS.ROW_SIZE.title)}
               </Typography>
               <InfoIconWithTooltip
-                tooltip={UI_TOOLTIPS.ROW_SIZE.description}
+                tooltip={resolveLocalizedString(UI_TOOLTIPS.ROW_SIZE.description)}
                 iconProps={{ sx: { fontSize: "1rem", ml: 0.5 } }}
               />
             </Box>
@@ -149,10 +153,10 @@ const TableOptions = ({
               }}
             >
               <Typography variant="subtitle2">
-                {UI_TOOLTIPS.SCORE_DISPLAY.title}
+                {resolveLocalizedString(UI_TOOLTIPS.SCORE_DISPLAY.title)}
               </Typography>
               <InfoIconWithTooltip
-                tooltip={UI_TOOLTIPS.SCORE_DISPLAY.description}
+                tooltip={resolveLocalizedString(UI_TOOLTIPS.SCORE_DISPLAY.description)}
                 iconProps={{ sx: { fontSize: "1rem", ml: 0.5 } }}
               />
             </Box>
@@ -160,7 +164,7 @@ const TableOptions = ({
               {SCORE_DISPLAY_OPTIONS.map(({ value, label }) => (
                 <FilterTag
                   key={value}
-                  label={label}
+                  label={resolveLocalizedString(label)}
                   checked={scoreDisplay === value}
                   onChange={() => onScoreDisplayChange(value)}
                   variant="tag"
@@ -178,10 +182,10 @@ const TableOptions = ({
               }}
             >
               <Typography variant="subtitle2">
-                {UI_TOOLTIPS.RANKING_MODE.title}
+                {resolveLocalizedString(UI_TOOLTIPS.RANKING_MODE.title)}
               </Typography>
               <InfoIconWithTooltip
-                tooltip={UI_TOOLTIPS.RANKING_MODE.description}
+                tooltip={resolveLocalizedString(UI_TOOLTIPS.RANKING_MODE.description)}
                 iconProps={{ sx: { fontSize: "1rem", ml: 0.5 } }}
               />
             </Box>
@@ -189,7 +193,7 @@ const TableOptions = ({
               {RANKING_MODE_OPTIONS.map(({ value, label }) => (
                 <FilterTag
                   key={value}
-                  label={label}
+                  label={resolveLocalizedString(label)}
                   checked={rankingMode === value}
                   onChange={() => onRankingModeChange(value)}
                   variant="tag"
@@ -207,22 +211,22 @@ const TableOptions = ({
               }}
             >
               <Typography variant="subtitle2">
-                {UI_TOOLTIPS.AVERAGE_SCORE.title}
+                {resolveLocalizedString(UI_TOOLTIPS.AVERAGE_SCORE.title)}
               </Typography>
               <InfoIconWithTooltip
-                tooltip={UI_TOOLTIPS.AVERAGE_SCORE.description}
+                tooltip={resolveLocalizedString(UI_TOOLTIPS.AVERAGE_SCORE.description)}
                 iconProps={{ sx: { fontSize: "1rem", ml: 0.5 } }}
               />
             </Box>
             <Box sx={{ display: "flex", gap: 1 }}>
               <FilterTag
-                label="All Scores"
+                label={resolveLocalizedString({"en": "All Scores", "fr": "Tous"})}
                 checked={averageMode === "all"}
                 onChange={() => onAverageModeChange("all")}
                 variant="tag"
               />
               <FilterTag
-                label="Visible Only"
+                label={resolveLocalizedString({"en": "Visible Only", "fr": "Visibles"})}
                 checked={averageMode === "visible"}
                 onChange={() => onAverageModeChange("visible")}
                 variant="tag"

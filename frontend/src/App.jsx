@@ -6,6 +6,7 @@ import {
   useSearchParams,
   useLocation,
 } from "react-router-dom";
+import { resolveLocalizedString, useResolveLocalizedString } from "i18n";
 import { Box, CssBaseline } from "@mui/material";
 import Navigation from "./components/Navigation/Navigation";
 import LeaderboardPage from "./pages/LeaderboardPage/LeaderboardPage";
@@ -69,6 +70,11 @@ function UrlHandler() {
 
 function App() {
 
+  const disclaimer = {
+    "fr": "Ce leaderboard compare les modèles de langage adaptés à la langue française, sur des jeux de données en français, adaptés aux spécificités culturelles de la francophonie. C'est d'abord un projet de recherche collaboratif, et nous espérons recevoir de nombreuses contributions pour l'améliorer au fil du temps ! Le leaderboard n'est que dans sa toute première version, et sera amené à évoluer régulièrement, avec de nouveaux jeux de données, de nouvelles métriques, et, nous l'espérons, beaucoup de nouveaux modèles ouverts soumis par la communauté ! Dans sa version initiale, nous avons couvert un panel de modèles ouverts, entraînés sur du français, de différentes tailles et origines. Note : les données d'évaluation ont été pour l'instant gardées confidentielles, pour préserver l'intégrité et la validité des résultats, et éviter les manipulations du classement.",
+    "en": "This leaderboard compares language models adapted to the French language, on French datasets, adapted to the cultural specificities of the French-speaking world. It is primarily a collaborative research project, and we hope to receive many contributions to improve it over time! The leaderboard is only in its very first version, and will evolve regularly, with new datasets, new metrics, and, we hope, many new open models submitted by the community! In its initial version, we covered a panel of open models, trained on French, of various sizes and origins. Note: The evaluation data has been kept confidential for the time being, to preserve the integrity and validity of the results, and avoid manipulation of the ranking."
+  }
+
   return (
     <div
       className="App"
@@ -113,7 +119,7 @@ function App() {
                     <Route path="/vote" element={<VoteModelPage />} /> */}
                   </Routes>
                 </Box>
-                <Footer />
+                <Footer disclaimer={disclaimer}/>
               </Box>
             </LeaderboardProvider>
           </Router>
