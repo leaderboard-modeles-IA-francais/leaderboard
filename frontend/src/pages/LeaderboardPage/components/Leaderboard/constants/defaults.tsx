@@ -193,8 +193,8 @@ const COLUMNS = {
     "metadata.params_billions": {
       group: "model_info",
       size: COLUMN_SIZES.PARAMS,
-      defaultVisible: false,
-      label: PARAMETERS,
+      defaultVisible: true,
+      label: {"en": "Parameters (B)", "fr": "Paramètres (M)"},
     },
     // "metadata.hub_license": {
     //   group: "model_info",
