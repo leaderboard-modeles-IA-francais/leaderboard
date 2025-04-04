@@ -286,8 +286,8 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
     modelType: "fine-tuned",
     isChatModel: false,
     useChatTemplate: false,
-    precision: "float16",
-    weightsType: "Original",
+    precision: "",
+    weightsType: "",
     baseModel: "",
   });
   const [error, setError] = useState(null);
@@ -618,7 +618,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <Stack
                   direction="row"
                   spacing={2}
@@ -637,9 +637,9 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                   />
                   <InfoIconWithTooltip tooltip={HELP_TEXTS.chatTemplate()} />
                 </Stack>
-              </Grid>
+              </Grid> */}
 
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel>{resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.PRECISION.LABEL)}</InputLabel>
                   <Select
@@ -661,9 +661,9 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                     ))}
                   </Select>
                 </FormControl>
-              </Grid>
+              </Grid> */}
 
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel>{resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.WEIGHTS.LABEL)}</InputLabel>
                   <Select
@@ -706,7 +706,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                     }}
                   />
                 </Grid>
-              )}
+              )} */}
 
               {/* Submit Button */}
               <Grid item xs={12}>
