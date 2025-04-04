@@ -18,12 +18,12 @@ const DISPLAY = {
     large: 60,
   },
   SCORE_DISPLAY_OPTIONS: [
-    { value: "normalized", label: "Normalized" },
-    { value: "raw", label: "Raw" },
+    { value: "normalized", label: {"en": "Normalized", "fr": "Normalisé"} },
+    { value: "raw", label: {"en": "Raw", "fr": "Bruts"} },
   ],
   RANKING_MODE_OPTIONS: [
-    { value: "static", label: "Static" },
-    { value: "dynamic", label: "Dynamic" },
+    { value: "static", label: {"en": "Static", "fr": "Statique"} },
+    { value: "dynamic", label: {"en": "Dynamic", "fr": "Dynamique"} },
   ],
 };
 
@@ -112,6 +112,11 @@ const SCORE : LocalizedString = {
     "fr": "Score moyen"
 }
 
+const PARAMETERS : LocalizedString = {
+    "en": "Parameters (B)",
+    "fr": "Paramètres (B)"
+}
+
 // Column definitions with organized structure
 const COLUMNS = {
   FIXED: {
@@ -160,50 +165,50 @@ const COLUMNS = {
       label: "BAC FR",
     },
   },
-//   MODEL_INFO: {
-//     "metadata.co2_cost": {
-//       group: "model_info",
-//       size: COLUMN_SIZES.CO2_COST,
-//       defaultVisible: true,
-//       label: "CO₂ Cost (kg)",
-//     },
-//     "metadata.hub_hearts": {
-//       group: "model_info",
-//       size: COLUMN_SIZES.HUB_HEARTS,
-//       defaultVisible: false,
-//       label: "Hub ❤️",
-//     },
-//     "model.architecture": {
-//       group: "model_info",
-//       size: COLUMN_SIZES.ARCHITECTURE,
-//       defaultVisible: false,
-//       label: "Architecture",
-//     },
-//     "model.precision": {
-//       group: "model_info",
-//       size: COLUMN_SIZES.PRECISION,
-//       defaultVisible: false,
-//       label: "Precision",
-//     },
-//     "metadata.params_billions": {
-//       group: "model_info",
-//       size: COLUMN_SIZES.PARAMS,
-//       defaultVisible: false,
-//       label: "Parameters (B)",
-//     },
-//     "metadata.hub_license": {
-//       group: "model_info",
-//       size: COLUMN_SIZES.LICENSE,
-//       defaultVisible: false,
-//       label: "License",
-//     },
-//     "model.has_chat_template": {
-//       group: "model_info",
-//       size: COLUMN_SIZES.CHAT_TEMPLATE,
-//       defaultVisible: false,
-//       label: "Chat Template",
-//     },
-//   },
+  MODEL_INFO: {
+    // "metadata.co2_cost": {
+    //   group: "model_info",
+    //   size: COLUMN_SIZES.CO2_COST,
+    //   defaultVisible: true,
+    //   label: "CO₂ Cost (kg)",
+    // },
+    // "metadata.hub_hearts": {
+    //   group: "model_info",
+    //   size: COLUMN_SIZES.HUB_HEARTS,
+    //   defaultVisible: false,
+    //   label: "Hub ❤️",
+    // },
+    // "model.architecture": {
+    //   group: "model_info",
+    //   size: COLUMN_SIZES.ARCHITECTURE,
+    //   defaultVisible: false,
+    //   label: "Architecture",
+    // },
+    // "model.precision": {
+    //   group: "model_info",
+    //   size: COLUMN_SIZES.PRECISION,
+    //   defaultVisible: false,
+    //   label: "Precision",
+    // },
+    "metadata.params_billions": {
+      group: "model_info",
+      size: COLUMN_SIZES.PARAMS,
+      defaultVisible: true,
+      label: {"en": "Parameters (B)", "fr": "Paramètres (M)"},
+    },
+    // "metadata.hub_license": {
+    //   group: "model_info",
+    //   size: COLUMN_SIZES.LICENSE,
+    //   defaultVisible: false,
+    //   label: "License",
+    // },
+    // "model.has_chat_template": {
+    //   group: "model_info",
+    //   size: COLUMN_SIZES.CHAT_TEMPLATE,
+    //   defaultVisible: false,
+    //   label: "Chat Template",
+    // },
+  },
 //   ADDITIONAL_INFO: {
 //     "metadata.upload_date": {
 //       group: "additional_info",
@@ -260,7 +265,7 @@ const COLUMNS = {
 const ALL_COLUMNS = {
   ...COLUMNS.FIXED,
   ...COLUMNS.EVALUATION,
-//   ...COLUMNS.MODEL_INFO,
+  ...COLUMNS.MODEL_INFO,
 //   ...COLUMNS.ADDITIONAL_INFO,
 };
 
@@ -268,8 +273,9 @@ const ALL_COLUMNS = {
 const COLUMN_DEFINITIONS = {
   ALL_COLUMNS,
   COLUMN_GROUPS: {
-    "Evaluation Scores": Object.keys(COLUMNS.EVALUATION),
+    "eval_scores": {displayName: {"en": "Evaluation Scores", "fr": "Scores d'évaluation"}, items: Object.keys(COLUMNS.EVALUATION)},
     // "Model Information": Object.keys(COLUMNS.MODEL_INFO),
+    "model_info": {displayName: { "en": "Model Information", "fr": "Informations sur le modèle"}, items: Object.keys(COLUMNS.MODEL_INFO)},
     // "Additional Information": Object.keys(COLUMNS.ADDITIONAL_INFO),
   },
   COLUMN_LABELS: Object.entries(ALL_COLUMNS).reduce((acc, [key, value]) => {
