@@ -616,7 +616,7 @@ export const createColumns = (
     },
     {
       accessorKey: "model.average_score",
-      header: createHeaderCell(headerNames.avg, COLUMN_TOOLTIPS.AVERAGE),
+      header: createHeaderCell(headerNames.avg, COLUMN_TOOLTIPS.AVERAGE()),
       cell: ({ row, getValue }) =>
         createScoreCell(getValue, row, "model.average_score"),
       size: TABLE_DEFAULTS.COLUMNS.COLUMN_SIZES["model.average_score"],
@@ -727,7 +727,7 @@ export const createColumns = (
   const evaluationColumns = [
     {
       accessorKey: "evaluations.ifeval_fr.normalized_score",
-      header: createHeaderCell("IFEval FR", COLUMN_TOOLTIPS.IFEVALFR),
+      header: createHeaderCell("IFEval FR", COLUMN_TOOLTIPS.IFEVALFR()),
       cell: ({ row, getValue }) =>
         createScoreCell(getValue, row, "evaluations.ifeval_fr.normalized_score"),
       size: TABLE_DEFAULTS.COLUMNS.COLUMN_SIZES[
@@ -736,7 +736,7 @@ export const createColumns = (
     },
     {
       accessorKey: "evaluations.gpqa_fr.normalized_score",
-      header: createHeaderCell("GPQA FR", COLUMN_TOOLTIPS.GPQAFR),
+      header: createHeaderCell("GPQA FR", COLUMN_TOOLTIPS.GPQAFR()),
       cell: ({ row, getValue }) =>
         createScoreCell(getValue, row, "evaluations.gpqa_fr.normalized_score"),
       size: TABLE_DEFAULTS.COLUMNS.COLUMN_SIZES[
@@ -745,7 +745,7 @@ export const createColumns = (
     },
     {
       accessorKey: "evaluations.bac_fr.normalized_score",
-      header: createHeaderCell("BAC FR", COLUMN_TOOLTIPS.BACFR),
+      header: createHeaderCell("BAC FR", COLUMN_TOOLTIPS.BACFR()),
       cell: ({ row, getValue }) =>
         createScoreCell(getValue, row, "evaluations.bac_fr.normalized_score"),
       size: TABLE_DEFAULTS.COLUMNS.COLUMN_SIZES[

@@ -8,6 +8,7 @@ import { TABLE_DEFAULTS } from "../../constants/defaults";
 import DropdownButton from "../shared/DropdownButton";
 import InfoIconWithTooltip from "../../../../../../components/shared/InfoIconWithTooltip";
 import { UI_TOOLTIPS } from "../../constants/tooltips";
+import { resolveLocalizedString, useResolveLocalizedString } from "i18n";
 
 const FilterGroup = ({ title, children, count, total }) => (
   <Box
@@ -64,6 +65,7 @@ const ColumnSelector = ({
 }) => {
   const { getState, setColumnVisibility } = table;
   const { columnVisibility } = getState();
+  const {resolveLocalizedString} = useResolveLocalizedString();
 
   // Filter columns to only show filterable ones
   const filterableColumns = [
@@ -104,9 +106,11 @@ const ColumnSelector = ({
     onColumnVisibilityChange?.(newVisibility);
   };
 
+  const label = resolveLocalizedString({"en": "column visibility", "fr": "affichage colonnes"});
+
   return (
     <DropdownButton
-      label="column visibility"
+      label={label}
       icon={ViewColumnIcon}
       closeIcon={CloseIcon}
       hasChanges={hasChanges}
@@ -126,10 +130,10 @@ const ColumnSelector = ({
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
           <Typography variant="body2" sx={{ fontWeight: 600 }}>
-            Column Visibility
+            {resolveLocalizedString({"en": "Column Visibility", "fr": "Visibilité des colonnes"})}
           </Typography>
           <InfoIconWithTooltip
-            tooltip={UI_TOOLTIPS.COLUMN_SELECTOR}
+            tooltip={resolveLocalizedString(UI_TOOLTIPS.COLUMN_SELECTOR)}
             iconProps={{ sx: { fontSize: "1rem" } }}
           />
         </Box>
@@ -165,16 +169,16 @@ const ColumnSelector = ({
               display: { xs: "none", sm: "block" },
             }}
           >
-            Reset
+            {resolveLocalizedString({"en": "Reset", "fr": "Réinitialiser"})}
           </Typography>
         </Box>
       </Box>
 
       {Object.entries(TABLE_DEFAULTS.COLUMNS.COLUMN_GROUPS).map(
-        ([groupTitle, columns]) => {
+        ([key, info]) => {
           // Calculer le nombre de colonnes cochées pour les évaluations
-          const isEvalGroup = groupTitle === "Evaluation Scores";
-          const filteredColumns = columns.filter((col) =>
+          const isEvalGroup = key === "eval_scores";
+          const filteredColumns = info.items.filter((col) =>
             filterableColumns.includes(col)
           );
           const checkedCount = isEvalGroup
@@ -184,8 +188,8 @@ const ColumnSelector = ({
 
           return (
             <FilterGroup
-              key={groupTitle}
-              title={groupTitle}
+              key={key}
+              title={resolveLocalizedString(info.displayName)}
               count={checkedCount}
               total={totalCount}
             >
