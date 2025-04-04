@@ -246,7 +246,9 @@ class EvalResult:
                         self.weight_type = WeightType[model["weight_type"]]
                         #self.license = request.get("license", "?")
                         #self.likes = request.get("likes", 0)
-                        #self.num_params = request.get("params", 0)
+                        print(model)
+                        if "params" in model:
+                            self.num_params = model["params"]
                         #self.date = request.get("submitted_time", "")
                         return
         print(
@@ -432,7 +434,9 @@ class LeaderboardService:
             #    "is_official_provider": data.get("Official Providers", False)
             #}
 
-            metadata = { }
+            metadata = { 
+                "params_billions": data.num_params,
+            }
 
             # FIXME
             #    "upload_date": data.get("Upload To Hub Date"),
