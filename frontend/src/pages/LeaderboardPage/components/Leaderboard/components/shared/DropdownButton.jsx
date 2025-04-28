@@ -13,6 +13,7 @@ const DropdownButton = ({
   paperProps = {},
   buttonSx = {},
   loading = false,
+  smallWidth = false,
 }) => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -34,7 +35,7 @@ const DropdownButton = ({
       <Skeleton
         variant="rounded"
         sx={{
-          width: label === "table options" ? 120 : 140,
+          width: smallWidth ? 120 : 140,
           height: 32,
           transform: "none",
           borderRadius: 1,

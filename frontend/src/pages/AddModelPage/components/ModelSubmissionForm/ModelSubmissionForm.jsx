@@ -24,7 +24,7 @@ import InfoIconWithTooltip from "../../../../components/shared/InfoIconWithToolt
 import { MODEL_TYPES } from "../../../LeaderboardPage/components/Leaderboard/constants/modelTypes";
 import { SUBMISSION_PRECISIONS } from "../../../LeaderboardPage/components/Leaderboard/constants/defaults";
 import AuthContainer from "../../../../components/shared/AuthContainer";
-import { useResolveLocalizedString } from "i18n";
+import { resolveLocalizedString, useResolveLocalizedString } from "i18n";
 
 const WEIGHT_TYPES = [
   { value: "Original", label: "Original" },
@@ -33,90 +33,118 @@ const WEIGHT_TYPES = [
 ];
 
 const HELP_TEXTS = {
-  modelName: (
+  modelName: () => (
     <Box sx={{ p: 1 }}>
       <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
-        Model Name on Hugging Face Hub
+        {resolveLocalizedString({"en": "Model Name on Hugging Face Hub", "fr": "Nom du modèle sur le Hub Hugging Face"})}
       </Typography>
       <Typography variant="body2" sx={{ opacity: 0.9, lineHeight: 1.4 }}>
-        Your model must be public and loadable with AutoClasses without
-        trust_remote_code. The model should be in Safetensors format for better
-        safety and loading performance. Example: mistralai/Mistral-7B-v0.1
+        {
+            resolveLocalizedString({
+                "en": "Your model must be public and loadable with AutoClasses without trust_remote_code. The model should be in Safetensors format for better safety and loading performance. Example: mistralai/Mistral-7B-v0.1",
+                "fr": "Votre modèle doit être public et chargeable avec AutoClasses sans trust_remote_dode. Le modèle doit être dans le format Safetensors pour une meilleure sécurité et une meilleure performace de chargement. Exemple: mistralai/Mistral-7B-v0.1"
+            })
+        }
       </Typography>
     </Box>
   ),
-  revision: (
+  revision: () => (
     <Box sx={{ p: 1 }}>
       <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
-        Model Revision
+        {resolveLocalizedString({"en": "Model Revision", "fr": "Révision du modèle"})}
       </Typography>
       <Typography variant="body2" sx={{ opacity: 0.9, lineHeight: 1.4 }}>
-        Git branch, tag or commit hash. The evaluation will be strictly tied to
-        this specific commit to ensure consistency. Make sure this version is
-        stable and contains all necessary files.
+        {
+            resolveLocalizedString({
+                "en": "Git branch, tag or commit hash. The evaluation will be strictly tied to this specific commit to ensure consistency. Make sure this version is stable and contains all necessary files.",
+                "fr": "Branche, tag ou hash de commit git. L'évaluation sera strictement liée à ce commit spécifique pour assurer une consistence. Assurez vous que cette version est stable et contient tous les fichiers nécessaires. "
+            })
+        }
       </Typography>
     </Box>
   ),
-  modelType: (
+  modelType: () => (
     <Box sx={{ p: 1 }}>
       <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
-        Model Category
+        {resolveLocalizedString({"en": "Model Category", "fr": "Catégorie de modèle"})}
       </Typography>
       <Typography variant="body2" sx={{ opacity: 0.9, lineHeight: 1.4 }}>
-        🟢 Pretrained: Base models trained on text using masked modeling 🟩
-        Continuously Pretrained: Extended training on additional corpus 🔶
-        Fine-tuned: Domain-specific optimization 💬 Chat: Models using RLHF,
-        DPO, or IFT for conversation 🤝 Merge: Combined weights without
-        additional training 🌸 Multimodal: Handles multiple input types
+        {
+          resolveLocalizedString({
+            "en": "🟢 Pretrained: Base models trained on text using masked modeling 🟩 Continuously Pretrained: Extended training on additional corpus 🔶 Fine-tuned: Domain-specific optimization 💬 Chat: Models using RLHF, DPO, or IFT for conversation 🤝 Merge: Combined weights without additional training 🌸 Multimodal: Handles multiple input types",
+            "fr": "🟢 Pretrained: Modèles de base entrainés sur du texte en utilisant du modeling masqué 🟩 Continuously Pretrained: Entrainement étendu sur un corpus additionel 🔶 Fine-tuned: Optimisation spéficique à un domaine  💬 Chat: Modèles utilisant RLHF, DPO, ou IFT pour de la conversation 🤝 Merge: Pondérations combinés sans entrainement additionel 🌸 Multimodal: Gère plusieurs types d'entrée"
+          })
+        }
       </Typography>
     </Box>
   ),
-  baseModel: (
+  baseModel: () => (
     <Box sx={{ p: 1 }}>
       <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
-        Base Model Reference
+        {resolveLocalizedString({"en": "Base Model Reference", "fr": "Référence du modèle de base"})}
       </Typography>
       <Typography variant="body2" sx={{ opacity: 0.9, lineHeight: 1.4 }}>
-        Required for delta weights or adapters. This information is used to
-        identify the original model and calculate the total parameter count by
-        combining base model and adapter/delta parameters.
+        {
+          resolveLocalizedString({
+            "en": "Required for delta weights or adapters. This information is used to identify the original model and calculate the total parameter count by combining base model and adapter/delta parameters.",
+            "fr": "Nécessaire pour les delta weights ou les adapteurs. Cette information est utilisée pour identifier le modèle original est calculer le nombre total de paramètres en combinant les paramètres du modèles de base et les paramètres adatpeur/delta."
+          })
+        }
       </Typography>
     </Box>
   ),
-  precision: (
+  precision:  () => (
     <Box sx={{ p: 1 }}>
       <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
-        Model Precision
+        {resolveLocalizedString({
+            "en": "Model Precision", "fr": "Précision du modèle"
+        })}
       </Typography>
       <Typography variant="body2" sx={{ opacity: 0.9, lineHeight: 1.4 }}>
-        Size limits vary by precision: • FP16/BF16: up to 100B parameters •
-        8-bit: up to 280B parameters (2x) • 4-bit: up to 560B parameters (4x)
-        Choose carefully as incorrect precision can cause evaluation errors.
+        {
+            resolveLocalizedString({
+                "en": "Size limits vary by precision: • FP16/BF16: up to 100B parameters • 8-bit: up to 280B parameters (2x) • 4-bit: up to 560B parameters (4x) Choose carefully as incorrect precision can cause evaluation errors.",
+                "fr": "Les limites de taille varient en fonction de la précision: • FP16/BF16: jusqu'à 100B paramètres • 8-bit: jusqu'à 280B paramètres (2x) • 4-bit: jusqu'à 560B paramètres (4x) Choisissez avec attention: une précision incorrecte peut provoquer des erreurs d'évaluation."
+            })
+        }
       </Typography>
     </Box>
   ),
-  weightsType: (
+  weightsType: () => (
     <Box sx={{ p: 1 }}>
       <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
-        Weights Format
+        {resolveLocalizedString({
+            "en": "Weights Format",
+            "fr": "Format de pondération"
+        })}
       </Typography>
       <Typography variant="body2" sx={{ opacity: 0.9, lineHeight: 1.4 }}>
-        Original: Complete model weights in safetensors format Delta: Weight
-        differences from base model (requires base model for size calculation)
-        Adapter: Lightweight fine-tuning layers (requires base model for size
-        calculation)
+        {
+            resolveLocalizedString({
+                "en": "Original: Complete model weights in safetensors format Delta: Weight differences from base model (requires base model for size calculation) Adapter: Lightweight fine-tuning layers (requires base model for size calculation)",
+                "fr": "Original: modèle de pondération complet en format safetensors, Delta: Différences de poids du modèle de base (nécessite un modèle de base pour calcul de la taille), Adapteur: Couches d'affinage légères (requeirt un modèle de base pour le calcul de la taille)"
+            })
+        }
       </Typography>
     </Box>
   ),
-  chatTemplate: (
+  chatTemplate: () => (
     <Box sx={{ p: 1 }}>
       <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
-        Chat Template Support
+        {resolveLocalizedString(
+            {
+                "en": "Chat Template Support",
+                "fr": "Support de template de chat"
+            }
+        )}
       </Typography>
       <Typography variant="body2" sx={{ opacity: 0.9, lineHeight: 1.4 }}>
-        Activates automatically for chat models. It uses the standardized Hugging
-        Face chat template for consistent prompt formatting during evaluation.
-        Required for models using RLHF, DPO, or instruction fine-tuning.
+        {
+            resolveLocalizedString({
+                "en": "Activates automatically for chat models. It uses the standardized Hugging Face chat template for consistent prompt formatting during evaluation. Required for models using RLHF, DPO, or instruction fine-tuning.",
+                "fr": "S'active automatiquement pour les modèles de chat. Utilise le template Hugging Face standardisé pour un formattage de prompt consistant durant l'évaluation. Nécessaire pour les modèles utilisant RLHF, DPO, ou un affinage d'instruction."
+            })
+        }
       </Typography>
     </Box>
   ),
@@ -258,8 +286,8 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
     modelType: "fine-tuned",
     isChatModel: false,
     useChatTemplate: false,
-    precision: "float16",
-    weightsType: "Original",
+    precision: "",
+    weightsType: "",
     baseModel: "",
   });
   const [error, setError] = useState(null);
@@ -521,7 +549,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
               <Grid item xs={12}>
                 <Stack direction="row" spacing={1} alignItems="center">
                   <Typography variant="h6">{resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_INFO.TITLE)}</Typography>
-                  <InfoIconWithTooltip tooltip={HELP_TEXTS.modelName} />
+                  <InfoIconWithTooltip tooltip={HELP_TEXTS.modelName()} />
                 </Stack>
               </Grid>
 
@@ -537,7 +565,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                   helperText="Example: meta-llama/Llama-3.2-1B"
                   InputProps={{
                     endAdornment: (
-                      <InfoIconWithTooltip tooltip={HELP_TEXTS.modelName} />
+                      <InfoIconWithTooltip tooltip={HELP_TEXTS.modelName()} />
                     ),
                   }}
                 />
@@ -553,7 +581,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                   helperText={resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_INFO.REVISION.HELPER_TEXT)}
                   InputProps={{
                     endAdornment: (
-                      <InfoIconWithTooltip tooltip={HELP_TEXTS.revision} />
+                      <InfoIconWithTooltip tooltip={HELP_TEXTS.revision()} />
                     ),
                   }}
                 />
@@ -576,7 +604,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                     label={resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.TYPE.LABEL)}
                     endAdornment={
                       <InfoIconWithTooltip
-                        tooltip={HELP_TEXTS.modelType}
+                        tooltip={HELP_TEXTS.modelType()}
                         sx={{ mr: 2 }}
                       />
                     }
@@ -590,7 +618,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <Stack
                   direction="row"
                   spacing={2}
@@ -607,11 +635,11 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                     }
                     label={resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.TEMPLATE.LABEL)}
                   />
-                  <InfoIconWithTooltip tooltip={HELP_TEXTS.chatTemplate} />
+                  <InfoIconWithTooltip tooltip={HELP_TEXTS.chatTemplate()} />
                 </Stack>
-              </Grid>
+              </Grid> */}
 
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel>{resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.PRECISION.LABEL)}</InputLabel>
                   <Select
@@ -621,7 +649,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                     label={resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.PRECISION.LABEL)}
                     endAdornment={
                       <InfoIconWithTooltip
-                        tooltip={HELP_TEXTS.precision}
+                        tooltip={HELP_TEXTS.precision()}
                         sx={{ mr: 2 }}
                       />
                     }
@@ -633,9 +661,9 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                     ))}
                   </Select>
                 </FormControl>
-              </Grid>
+              </Grid> */}
 
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel>{resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.WEIGHTS.LABEL)}</InputLabel>
                   <Select
@@ -645,7 +673,7 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                     label={resolveLocalizedString(INTERNATIONALISATION.FORM.MODEL_CONFIG.WEIGHTS.LABEL)}
                     endAdornment={
                       <InfoIconWithTooltip
-                        tooltip={HELP_TEXTS.weightsType}
+                        tooltip={HELP_TEXTS.weightsType()}
                         sx={{ mr: 2 }}
                       />
                     }
@@ -673,12 +701,12 @@ function ModelSubmissionForm({ user, isAuthenticated }) {
                     onChange={handleChange}
                     InputProps={{
                       endAdornment: (
-                        <InfoIconWithTooltip tooltip={HELP_TEXTS.baseModel} />
+                        <InfoIconWithTooltip tooltip={HELP_TEXTS.baseModel()} />
                       ),
                     }}
                   />
                 </Grid>
-              )}
+              )} */}
 
               {/* Submit Button */}
               <Grid item xs={12}>
