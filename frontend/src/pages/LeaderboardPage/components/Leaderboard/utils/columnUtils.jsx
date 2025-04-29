@@ -18,7 +18,7 @@ import {
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { alpha } from "@mui/material/styles";
 import InfoIconWithTooltip from "../../../../../components/shared/InfoIconWithTooltip";
-import { useResolveLocalizedString } from "i18n";
+import { resolveLocalizedString, useResolveLocalizedString } from "i18n";
 
 const DatabaseIcon = () => (
   <svg
@@ -779,7 +779,7 @@ export const createColumns = (
     },
     {
       accessorKey: "metadata.params_billions",
-      header: createHeaderCell("Parameters", COLUMN_TOOLTIPS.PARAMETERS),
+      header: createHeaderCell(resolveLocalizedString({"en": "Parameters", "fr": "Paramètres"}), COLUMN_TOOLTIPS.PARAMETERS()),
       cell: ({ row }) => (
         <Box
           sx={{
