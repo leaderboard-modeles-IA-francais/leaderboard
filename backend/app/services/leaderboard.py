@@ -91,7 +91,7 @@ class Task:
     col_name: str
 
 class Tasks(Enum):
-    task0 = Task("community|gpqa-fr|0", "acc", "GPQA-fr")  # On pourrait vouloir mettre "Connaissances"
+    task0 = Task("community|gpqa-fr|0", "new_acc", "GPQA-fr")  # On pourrait vouloir mettre "Connaissances"
     task1 = Task("community|ifeval-fr|0", "prompt_level_strict_acc", "IFEval-fr") # FIXME norm_acc should be acc # et "Suivi d'instructions"
     task2 = Task("community|bac-fr|0", "bac-fr-qem", "bac-fr") # et "Suivi d'instructions"
 
@@ -187,7 +187,7 @@ class EvalResult:
             #FIXME postprocessing of metrics is done here ftm
             display = True # Do not display models evaluation if something went wrong (missing task, 0 score, ...)
             if(task.col_name == "GPQA-fr"):
-                accs = np.array([v.get("acc", None) for k, v in data["results"].items() if task.benchmark == k])
+                accs = np.array([v.get("new_acc", None) for k, v in data["results"].items() if task.benchmark == k])
                 if accs.size == 0 or any([acc is None for acc in accs]):
                     display = False
                     continue
@@ -268,7 +268,8 @@ class LeaderboardService:
 
         for root, _, files in os.walk(results_path):
             #FIXME We will remove this check when results we be homogeneous
-            folderName = "clearML-sprint1-wr"
+            folderName = "clearML-sprint1.5"
+
             normalized_root = os.path.normpath(root)
             path_components = normalized_root.split(os.sep)
             if folderName in path_components:
