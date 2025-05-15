@@ -200,7 +200,7 @@ const ColumnSelector = ({
                   <FilterTag
                     key={columnName}
                     label={
-                      TABLE_DEFAULTS.COLUMNS.COLUMN_LABELS[columnName] ||
+                      resolveLocalizedString(TABLE_DEFAULTS.COLUMNS.COLUMN_LABELS[columnName]) ||
                       columnName
                     }
                     checked={columnVisibility[columnName]}

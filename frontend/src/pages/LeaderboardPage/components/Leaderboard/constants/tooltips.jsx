@@ -184,17 +184,17 @@ export const COLUMN_TOOLTIPS = {
 //     },
 //   ]),
 
-//   PARAMETERS: createTooltipContent("Model Parameters:", [
-//     {
-//       label: "Measurement",
-//       description: "Total number of trainable parameters in billions",
-//       subItems: [
-//         "Indicates model capacity and complexity",
-//         "Correlates with computational requirements",
-//         "Influences memory usage and inference speed",
-//       ],
-//     },
-//   ]),
+  PARAMETERS: () => createTooltipContent({"en": "Model Parameters:", "fr": "Paramètres du modèle:"}, [
+    {
+      label: {"en": "Measurement", "fr": "Mesures"},
+      description: {"en": "Total number of trainable parameters in billions", "fr": "Nombre total de paramètres en milliards"},
+      subItems: [
+        {"en": "Indicates model capacity and complexity", "fr": "Indique la capacité et la complexité du modèle"},
+        {"en": "Correlates with computational requirements", "fr": "Corrélée aux pré-requis de puissance computationelle"},
+        {"en": "Influences memory usage and inference speed", "fr": "Infulence l'usage de la mémoire et la vitesse d'inférence"},
+      ],
+    },
+  ]),
 
 //   LICENSE: createTooltipContent("Model License Information:", [
 //     {

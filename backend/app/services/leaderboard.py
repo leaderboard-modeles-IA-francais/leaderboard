@@ -2,6 +2,7 @@ from app.core.cache import cache_config
 from datetime import datetime
 from typing import List, Dict, Any
 import datasets
+import requests
 from fastapi import HTTPException
 import logging
 from app.config.base import HF_ORGANIZATION
@@ -246,7 +247,13 @@ class EvalResult:
                         self.weight_type = WeightType[model["weight_type"]]
                         #self.license = request.get("license", "?")
                         #self.likes = request.get("likes", 0)
-                        #self.num_params = request.get("params", 0)
+                        response = requests.get(
+                            "https://huggingface.co/api/models/%s" % model["name"],
+                            params={},
+                            headers={"Authorization":"Bearer %s" % HF_TOKEN}
+                        )
+                        data = response.json()
+                        self.num_params = data["safetensors"]["total"]
                         #self.date = request.get("submitted_time", "")
                         return
         print(
@@ -433,7 +440,9 @@ class LeaderboardService:
             #    "is_official_provider": data.get("Official Providers", False)
             #}
 
-            metadata = { }
+            metadata = { 
+                "params_billions": round(data.num_params / pow(10,9), 2),
+            }
 
             # FIXME
             #    "upload_date": data.get("Upload To Hub Date"),
